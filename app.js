@@ -92,6 +92,45 @@ app.post('/interactions', async function (req, res) {
         });
     }
     
+    // "environment" guild command
+    if (name === 'environment' && id) {
+        const userId = req.body.member.user.id;
+        const timestamp = Date.now();
+        // User's object choice
+        const env = req.body.data.options[0].value;
+        const task = req.body.data.options[1].value;
+
+        // Create active game using message ID as the game ID
+        activeGames[id] = {
+            id: userId,
+            timestamp,
+            env,
+            task
+        };
+
+        return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+            // Fetches a random emoji to send from a helper function
+            content: `D from <@${userId}>`,
+            components: [
+            {
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                {
+                    type: MessageComponentTypes.BUTTON,
+                    // Append the game ID to use later on
+                    custom_id: `accept_button_${req.body.id}`,
+                    label: 'Accept',
+                    style: ButtonStyleTypes.PRIMARY,
+                },
+                ],
+            },
+            ],
+        },
+        });
+    }
+    
     
   }
   
