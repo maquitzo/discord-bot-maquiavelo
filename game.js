@@ -101,3 +101,22 @@ export function getShuffledOptions() {
 
   return options.sort(() => Math.random() - 0.5);
 }
+
+const RPSEnvironments = {
+  dev : {
+    description: 'desarrollo'
+  },
+    test : {
+    description: 'Entorno de test'
+  },
+    staging : {
+    description: 'Staging'
+  },
+    prod : {
+    description: 'Entorno Productivo'
+  },
+}
+
+export function getEnvironments() {
+  return Object.keys(RPSEnvironments);
+}

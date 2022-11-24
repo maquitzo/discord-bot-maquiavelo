@@ -1,4 +1,4 @@
-import { getRPSChoices } from './game.js';
+import { getRPSChoices, getRPSEnvironments } from './game.js';
 import { capitalize, DiscordRequest } from './utils.js';
 
 export async function HasGuildCommands(appId, guildId, commands) {
@@ -58,6 +58,21 @@ function createCommandChoices() {
   return commandChoices;
 }
 
+// Get the game choices from game.js
+function createCommandEnvironments() {
+  const choices = getRPSEnvironments();
+  const commandChoices = [];
+
+  for (let choice of choices) {
+    commandChoices.push({
+      name: capitalize(choice),
+      value: choice.toLowerCase(),
+    });
+  }
+
+  return commandChoices;
+}
+
 // Simple test command
 export const TEST_COMMAND = {
   name: 'test',
@@ -74,6 +89,22 @@ export const CHALLENGE_COMMAND = {
       type: 3,
       name: 'object',
       description: 'Pick your object',
+      required: true,
+      choices: createCommandChoices(),
+    },
+  ],
+  type: 1,
+};
+
+// Command containing options
+export const ENVIRONMENTS_COMMAND = {
+  name: 'environments',
+  description: 'Describe los entornos disponibles',
+  options: [
+    {
+      type: 3,
+      name: 'entorno',
+      description: 'Elije tu aventura',
       required: true,
       choices: createCommandChoices(),
     },

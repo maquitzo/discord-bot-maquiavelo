@@ -11,6 +11,7 @@ import { getShuffledOptions, getResult } from './game.js';
 import {
   CHALLENGE_COMMAND,
   TEST_COMMAND,
+  ENVIRONMENTS_COMMAND,
   HasGuildCommands,
 } from './commands.js';
 
@@ -58,17 +59,6 @@ app.post('/interactions', async function (req, res) {
       });
     }
     
-    if (name === 'environment') {
-      // Send a message into the channel where command was triggered from
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          // Fetches a random emoji to send from a helper function
-          content: 'hello world ',
-        },
-      });
-    }
-    
     // "challenge" guild command
     if (name === 'challenge' && id) {
         const userId = req.body.member.user.id;
@@ -105,19 +95,19 @@ app.post('/interactions', async function (req, res) {
     }
     
     // "experta" guild command
-    if (name === 'experta' && id) {
-        //const userId = req.body.member.user.id;
-        //const timestamp = Date.now();
+    if (name === 'environments' && id) {
+        const userId = req.body.member.user.id;
+        const timestamp = Date.now();
         // User's object choice
         const env = req.body.data.options[0].value;
-        //const task = req.body.data.options[1].value;
+        const task = req.body.data.options[1].value;
 
         // Create active game using message ID as the game ID
         environments[id] = {
-            id: 1,
-            //timestamp,
+            id: userId,
+            timestamp,
             env,
-            //task
+            task
         };
 
         return res.send({
@@ -232,5 +222,6 @@ app.listen(PORT, () => {
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
     TEST_COMMAND,
     CHALLENGE_COMMAND,
+    ENVIRONMENTS_COMMAND
   ]);
 });
