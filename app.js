@@ -96,7 +96,7 @@ app.post('/interactions', async function (req, res) {
     }
     
     // "experta" guild command
-    if (name === 'environments' && id) {
+    if (name === 'experta' && id) {
         const userId = req.body.member.user.id;
         //const timestamp = Date.now();
         // User's object choice

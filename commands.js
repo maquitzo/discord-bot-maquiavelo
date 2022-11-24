@@ -23,7 +23,8 @@ async function HasGuildCommand(appId, guildId, command) {
         console.log(`Installing "${command['name']}"`);
         InstallGuildCommand(appId, guildId, command);
       } else {
-        console.log(`"${command['name']}" command already installed`);
+        console.log(`"${command['name']}" command already installed .. updating`);
+        InstallGuildCommand(appId, guildId, command);
       }
     }
   } catch (err) {
@@ -42,6 +43,7 @@ export async function InstallGuildCommand(appId, guildId, command) {
     console.error(err);
   }
 }
+
 
 // Get the game choices from game.js
 function createCommandChoices() {
@@ -113,7 +115,7 @@ export const ENV_COMMAND = {
       name: 'accion',
       description: 'Reservar o liberar',
       required: false,
-      choices: [{name:'RESERVA', value:1},{name:'LIBERO', value:0}],
+      choices: [{name:'RESERVA', value:"1"},{name:'LIBERO', value:"0"}],
     },
   ],
   type: 1,
@@ -126,16 +128,16 @@ export const EXPERTA_COMMAND = {
     {
       type: 3,
       name: 'entorno',
-      description: 'Definir entorno',
+      description: 'Entornos disponibles',
       required: false,
       choices: createCommandEnvironments(),
     },
     {
       type: 3,
       name: 'accion',
-      description: 'Reservar o liberar',
+      description: 'Acciones disponibles sobre los entornos',
       required: false,
-      choices: [{name:'RESERVA', value:1},{name:'LIBERO', value:0}],
+      choices: [{name:'RESERVA', value:"1"},{name:'LIBERO', value:"0"}],
     },
   ],
   type: 1,
