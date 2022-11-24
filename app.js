@@ -101,10 +101,10 @@ app.post('/interactions', async function (req, res) {
         //const timestamp = Date.now();
         // User's object choice
         const env = req.body.data.options[0].value;
-        //const task = req.body.data.options[1].value;
+        const task = req.body.data.options[1].value;
 
         // Create active game using message ID as the game ID
-        environments[id] = {
+        environments[env] = {
             id: userId,
             //timestamp,
             env,
@@ -115,7 +115,7 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
             // Fetches a random emoji to send from a helper function
-            content: `Reservando **${env}** environment para <@${userId}>`,
+            content: `**${task}** de **${env}** para <@${userId}>`,
             // components: [
             // {
             //     type: MessageComponentTypes.ACTION_ROW,

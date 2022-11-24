@@ -103,17 +103,25 @@ export function getShuffledOptions() {
 }
 
 const RPSEnvironments = {
-  dev : {
+  development : {
+    label: 'Development',
+    value: '0',
     description: 'desarrollo'
   },
-    test : {
-    description: 'Entorno de test'
+  testing : {
+    label: 'Testing',
+    value: '1',
+    description: 'Entorno del release'
   },
-    staging : {
+  staging : {
+    label: 'Staging',
+    value: '2',
     description: 'Staging'
   },
-    prod : {
-    description: 'Entorno Productivo'
+  production : {
+    label: 'Production',
+    value: '3',
+    description: 'Entorno Productivo generalmente no tocar'
   },
 }
 
