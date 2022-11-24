@@ -23,6 +23,7 @@ app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
 
 // Store for in-progress games. In production, you'd want to use a DB
 const activeGames = {};
+const environments = {};
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
@@ -57,6 +58,17 @@ app.post('/interactions', async function (req, res) {
       });
     }
     
+    if (name === 'environment') {
+      // Send a message into the channel where command was triggered from
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          // Fetches a random emoji to send from a helper function
+          content: 'hello world ',
+        },
+      });
+    }
+    
     // "challenge" guild command
     if (name === 'challenge' && id) {
         const userId = req.body.member.user.id;
@@ -73,7 +85,7 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
             // Fetches a random emoji to send from a helper function
-            content: `Rock papers scissors challenge from <@${userId}>`,
+            content: `Rock papers scissors test challenge from <@${userId}>`,
             components: [
             {
                 type: MessageComponentTypes.ACTION_ROW,
@@ -92,27 +104,27 @@ app.post('/interactions', async function (req, res) {
         });
     }
     
-    // "environment" guild command
-    if (name === 'environment' && id) {
-        const userId = req.body.member.user.id;
-        const timestamp = Date.now();
+    // "experta" guild command
+    if (name === 'experta' && id) {
+        //const userId = req.body.member.user.id;
+        //const timestamp = Date.now();
         // User's object choice
         const env = req.body.data.options[0].value;
-        const task = req.body.data.options[1].value;
+        //const task = req.body.data.options[1].value;
 
         // Create active game using message ID as the game ID
-        activeGames[id] = {
-            id: userId,
-            timestamp,
+        environments[id] = {
+            id: 1,
+            //timestamp,
             env,
-            task
+            //task
         };
 
         return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
             // Fetches a random emoji to send from a helper function
-            content: `D from <@${userId}>`,
+            content: `Reservando environment para <@${1}>`,
             components: [
             {
                 type: MessageComponentTypes.ACTION_ROW,
