@@ -99,14 +99,21 @@ export const CHALLENGE_COMMAND = {
 // Command containing options
 export const ENVIRONMENTS_COMMAND = {
   name: 'environments',
-  description: 'Describe los entornos disponibles',
+  description: 'Reserva y visualizacion de Entornos',
   options: [
     {
       type: 3,
       name: 'entorno',
-      description: 'Elije tu aventura',
-      required: true,
-      choices: createCommandChoices(),
+      description: 'Definir entorno',
+      required: false,
+      choices: createCommandEnvironments(),
+    },
+    {
+      type: 3,
+      name: 'accion',
+      description: 'Reservar o liberar',
+      required: false,
+      choices: [{name:'RESERVA', value:1},{name:'LIBERO', value:0}],
     },
   ],
   type: 1,

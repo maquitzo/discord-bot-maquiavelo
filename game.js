@@ -117,6 +117,6 @@ const RPSEnvironments = {
   },
 }
 
-export function getEnvironments() {
+export function getRPSEnvironments() {
   return Object.keys(RPSEnvironments);
 }
