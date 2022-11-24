@@ -11,7 +11,8 @@ import { getShuffledOptions, getResult } from './game.js';
 import {
   CHALLENGE_COMMAND,
   TEST_COMMAND,
-  ENVIRONMENTS_COMMAND,
+  ENV_COMMAND,
+  EXPERTA_COMMAND,
   HasGuildCommands,
 } from './commands.js';
 
@@ -114,7 +115,7 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
             // Fetches a random emoji to send from a helper function
-            content: `Reservando ${env} environment para <@${userId}>`,
+            content: `Reservando **${env}** environment para <@${userId}>`,
             // components: [
             // {
             //     type: MessageComponentTypes.ACTION_ROW,
@@ -222,6 +223,7 @@ app.listen(PORT, () => {
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
     TEST_COMMAND,
     CHALLENGE_COMMAND,
-    ENVIRONMENTS_COMMAND
+    ENV_COMMAND,
+    EXPERTA_COMMAND
   ]);
 });
