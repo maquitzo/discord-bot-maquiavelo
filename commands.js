@@ -96,7 +96,7 @@ export const CHALLENGE_COMMAND = {
   type: 1,
 };
 
-// Command containing options
+
 export const ENVIRONMENTS_COMMAND = {
   name: 'environments',
   description: 'Reserva y visualizacion de Entornos',
