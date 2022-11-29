@@ -128,3 +128,25 @@ const RPSEnvironments = {
 export function getRPSEnvironments() {
   return Object.keys(RPSEnvironments);
 }
+
+const RPSOptions = {
+  list : {
+    label: 'list',
+    value: '0',
+    description: 'Retrieve the environment s list'
+  },
+  set : {
+    label: 'set',
+    value: '1',
+    description: 'Booking the environment'
+  },
+  release : {
+    label: 'release',
+    value: '2',
+    description: 'Release the environment'
+  },
+}
+
+export function getRPSOptions() {
+  return Object.keys(RPSOptions);
+}

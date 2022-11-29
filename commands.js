@@ -80,6 +80,20 @@ function createCommandEnvironments() {
   return commandChoices;
 }
 
+function createCommandEnvironments() {
+  const choices = getRPSEnvironments();
+  const commandChoices = [];
+
+  for (let choice of choices) {
+    commandChoices.push({
+      name: capitalize(choice),
+      value: choice.toLowerCase(),
+    });
+  }
+
+  return commandChoices;
+}
+
 // Simple test command
 export const TEST_COMMAND = {
   name: 'test',
@@ -108,20 +122,21 @@ export const ENV_COMMAND = {
   name: 'environments',
   description: 'Environments Papu',
   options: [
+      {
+      type: 3,
+      name: 'action',
+      description: 'Opciones',
+      required: false,
+      choices: [{name:'Reservar', value:"1"},{name:'Liberar', value:"0"}, {}],
+    },
     {
       type: 3,
       name: 'env',
       description: 'Entornos disponibles',
-      required: false,
+      required: true,
       choices: createCommandEnvironments(),
     },
-    {
-      type: 3,
-      name: 'action',
-      description: 'Acciones disponibles sobre los entornos',
-      required: false,
-      choices: [{name:'Reservar', value:"1"},{name:'Liberar', value:"0"}],
-    },
+
   ],
   type: 1,
 };
