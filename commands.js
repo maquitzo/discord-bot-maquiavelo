@@ -162,3 +162,10 @@ export const EXPERTA_COMMAND = {
   ],
   type: 1,
 };
+
+export const INPUT_COMMAND = {
+  name: 'input',
+  description: 'Just your average command',
+  // chat command (see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types)
+  type: 1,
+};
