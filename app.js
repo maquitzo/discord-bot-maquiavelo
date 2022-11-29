@@ -101,46 +101,48 @@ app.post('/interactions', async function (req, res) {
         //const timestamp = Date.now();
         // User's object choice
         const task = req.body.data.options[0].value;
+        const tasks = ['LIBERO', 'RESERVA'];
         let env = "";
       
+        console.log(environments);
+      
         switch(task) {
-          case 0:
+          case 'list':
             
             let content = "";
             
-            for(let i=0;i<4;i++) {
-              
-              content += `**${tasks[task]}** de **${env}** para <@${userId}>`;
+            for(let i=0;i<environments.length;i++) {
+              let e = environments[i];
+              content += `:robot + ${e.env} + ${e.task}`;
             }
             
+            if (content == "") 
+              content = "no environments "
             
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content: ,
-              },
+              data: { content: content },
             });
+            
             break;
-          case 1:
+            
+          case 'set':
             env = req.body.data.options[1].value;
             break;
-          case 2:
+            
+          case 'staging':
+            env = "";
             break;
         }
            
-      
-        // Create active game using message ID as the game ID
+                          // Create active game using message ID as the game ID
         environments[env] = {
             id: userId,
-            //timestamp,
             env,
             task
         };
 
-        //log
-        //console.log(environments);
-        //console.log(req.body.data.options[1]);
-        const tasks = ['LIBERO', 'RESERVA'];
+        //
       
         return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
