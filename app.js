@@ -105,10 +105,19 @@ app.post('/interactions', async function (req, res) {
       
         switch(task) {
           case 0:
+            
+            let content = "";
+            
+            for(let i=0;i<4;i++) {
+              
+              content += `**${tasks[task]}** de **${env}** para <@${userId}>`;
+            }
+            
+            
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
-                content: `**${tasks[task]}** de **${env}** para <@${userId}>`,
+                content: ,
               },
             });
             break;
