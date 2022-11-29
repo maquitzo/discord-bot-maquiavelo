@@ -122,11 +122,20 @@ app.post('/interactions', async function (req, res) {
             
             for(let i = 0; i < envs.length; i++) {
               let e = environments[envs[i]];
+              let icon = ':blue_heart:';
               
               console.log(i, e);
+              
               if (e) {
-                let icon = e.task == 'set')
-                content += `:robot: ${e.env} => <@${e.id}> `;
+                switch (e.task) {
+                  case 'set':
+                    icon = ':broken_heart:';
+                    break;
+                  case 'release':
+                    icon = ':blue_heart:';
+                    break;
+                }
+                content += `:robot: ${e.env} => <@${e.id}> ${icon} \n`;
               }
                 
             };
@@ -147,8 +156,8 @@ app.post('/interactions', async function (req, res) {
             console.log('env', environments);
             break;
             
-          case 'staging':
-            env = "";
+          case 'release':
+            env = req.body.data.options[1].value;
             action = "Liberando";
             console.log('env', environments);
             break;
