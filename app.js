@@ -101,8 +101,10 @@ app.post('/interactions', async function (req, res) {
         //const timestamp = Date.now();
         // User's object choice
         const task = req.body.data.options[0].value;
-        const tasks = ['Listando', 'Liberando', 'Reservando'];
+        //const tasks = ['Listando', 'Liberando', 'Reservando'];
+      
         let env = "";
+        let action = "";
       
         console.log('env', environments);
         console.log('task', task);
@@ -110,12 +112,20 @@ app.post('/interactions', async function (req, res) {
         switch(task) {
           case 'list':
             
+            env {
+            5:44 PM
+              development: { id: '808483336548253706', env: 'development', task: 'set' },
+            5:44 PM
+              testing: { id: '808483336548253706', env: 'testing', task: 'set' }
+            5:44 PM
+            }
+            
             let content = "";
             
-            for(let i=0;i<environments.length;i++) {
-              let e = environments[i];
+            for(let i = 0; i <= 4; i++) {
+              e = environments[]
               content += `:robot: + ${e.env} + ${e.task}`;
-            }
+            };
             
             if (content == "") 
               content = ":space_invader: No Environments";
@@ -129,29 +139,27 @@ app.post('/interactions', async function (req, res) {
             
           case 'set':
             env = req.body.data.options[1].value;
+            action = "Reservando";
             break;
             
           case 'staging':
             env = "";
+            action = "Liberando";
             break;
         }
            
-                          // Create active game using message ID as the game ID
         environments[env] = {
             id: userId,
             env,
             task
         };
 
-        console.log('env', environments);
-        console.log('task', task);
-      
       
         return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
             // Fetches a random emoji to send from a helper function
-            content: `**${tasks[task]}** de **${env}** para <@${userId}>`,
+            content: `${action} **${env}** para <@${userId}>`,
             
             // components: [
             // {
