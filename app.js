@@ -101,6 +101,7 @@ app.post('/interactions', async function (req, res) {
         //const timestamp = Date.now();
         // User's object choice
         const task = req.body.data.options[0].value;
+        const envs = ['development', 'testing', 'staging', 'production'];
         //const tasks = ['Listando', 'Liberando', 'Reservando'];
       
         let env = "";
@@ -112,18 +113,16 @@ app.post('/interactions', async function (req, res) {
         switch(task) {
           case 'list':
             
-            env {
-            5:44 PM
-              development: { id: '808483336548253706', env: 'development', task: 'set' },
-            5:44 PM
-              testing: { id: '808483336548253706', env: 'testing', task: 'set' }
-            5:44 PM
-            }
+            // env {
+            //   development: { id: '808483336548253706', env: 'development', task: 'set' },
+            //   testing: { id: '808483336548253706', env: 'testing', task: 'set' }
+            // }
             
             let content = "";
             
-            for(let i = 0; i <= 4; i++) {
-              e = environments[]
+            for(let i = 0; i < envs.length; i++) {
+              let e = environments[envs[i]];
+              console.log(i, e);
               content += `:robot: + ${e.env} + ${e.task}`;
             };
             
