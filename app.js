@@ -122,8 +122,13 @@ app.post('/interactions', async function (req, res) {
             
             for(let i = 0; i < envs.length; i++) {
               let e = environments[envs[i]];
+              
               console.log(i, e);
-              content += `:robot: + ${e.env} + ${e.task}`;
+              if (e) {
+                let icon = e.task == 'set')
+                content += `:robot: ${e.env} => <@${e.id}> `;
+              }
+                
             };
             
             if (content == "") 
@@ -139,11 +144,13 @@ app.post('/interactions', async function (req, res) {
           case 'set':
             env = req.body.data.options[1].value;
             action = "Reservando";
+            console.log('env', environments);
             break;
             
           case 'staging':
             env = "";
             action = "Liberando";
+            console.log('env', environments);
             break;
         }
            
