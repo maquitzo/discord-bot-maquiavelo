@@ -101,10 +101,11 @@ app.post('/interactions', async function (req, res) {
         //const timestamp = Date.now();
         // User's object choice
         const task = req.body.data.options[0].value;
-        const tasks = ['LIBERO', 'RESERVA'];
+        const tasks = ['Listando', 'Liberando', 'Reservando'];
         let env = "";
       
-        console.log(environments);
+        console.log('env', environments);
+        console.log('task', task);
       
         switch(task) {
           case 'list':
@@ -113,11 +114,11 @@ app.post('/interactions', async function (req, res) {
             
             for(let i=0;i<environments.length;i++) {
               let e = environments[i];
-              content += `:robot + ${e.env} + ${e.task}`;
+              content += `:robot: + ${e.env} + ${e.task}`;
             }
             
             if (content == "") 
-              content = "no environments "
+              content = ":space_invader: No Environments";
             
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -142,7 +143,9 @@ app.post('/interactions', async function (req, res) {
             task
         };
 
-        //
+        console.log('env', environments);
+        console.log('task', task);
+      
       
         return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
