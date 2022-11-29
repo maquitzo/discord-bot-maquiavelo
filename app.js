@@ -334,14 +334,19 @@ app.post('/interactions', async function (req, res) {
                   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                   options: [
                     {
-                      label: 'Opt ',
-                      value: 'option_1',
-                      description: 'The very first option',
+                      label: 'Listing',
+                      value: 'optList',
+                      description: 'Listar la disponibilidad',
                     },
                     {
-                      label: 'Second option',
-                      value: 'option_2',
-                      description: 'The second AND last option',
+                      label: 'Booking',
+                      value: 'optSet',
+                      description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
+                    },
+                    {
+                      label: 'UnBooking',
+                      value: 'optRelease',
+                      description: 'FreeWilly pero con el ambiente',
                     },
                   ],
                 },
