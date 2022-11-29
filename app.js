@@ -321,7 +321,7 @@ app.post('/interactions', async function (req, res) {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: 'A message with a button',
+          content: 'Seleccioname un entorno Mompirri !!!',
           // Selects are inside of action rows
           components: [
             {
@@ -334,7 +334,7 @@ app.post('/interactions', async function (req, res) {
                   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                   options: [
                     {
-                      label: 'Option #1',
+                      label: 'Opt ',
                       value: 'option_1',
                       description: 'The very first option',
                     },
@@ -387,6 +387,7 @@ app.listen(PORT, () => {
     TEST_COMMAND,
     CHALLENGE_COMMAND,
     ENV_COMMAND,
-    EXPERTA_COMMAND
+    EXPERTA_COMMAND,
+    INPUT_COMMAND
   ]);
 });
