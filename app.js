@@ -96,13 +96,30 @@ app.post('/interactions', async function (req, res) {
     }
     
     // "experta" guild command
-    if (name === 'experta' && id) {
+    if (name === 'environments' && id) {
         const userId = req.body.member.user.id;
         //const timestamp = Date.now();
         // User's object choice
-        const env = req.body.data.options[0].value;
-        const task = req.body.data.options[1].value;
-
+        const task = req.body.data.options[0].value;
+        let env = "";
+      
+        switch(task) {
+          case 0:
+            return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: `**${tasks[task]}** de **${env}** para <@${userId}>`,
+              },
+            });
+            break;
+          case 1:
+            env = req.body.data.options[1].value;
+            break;
+          case 2:
+            break;
+        }
+           
+      
         // Create active game using message ID as the game ID
         environments[env] = {
             id: userId,

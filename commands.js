@@ -1,4 +1,4 @@
-import { getRPSChoices, getRPSEnvironments } from './game.js';
+import { getRPSChoices, getRPSEnvironments, getRPSOptions } from './game.js';
 import { capitalize, DiscordRequest } from './utils.js';
 
 export async function HasGuildCommands(appId, guildId, commands) {
@@ -80,8 +80,8 @@ function createCommandEnvironments() {
   return commandChoices;
 }
 
-function createCommandEnvironments() {
-  const choices = getRPSEnvironments();
+function createCommandOptions() {
+  const choices = getRPSOptions();
   const commandChoices = [];
 
   for (let choice of choices) {
@@ -126,14 +126,14 @@ export const ENV_COMMAND = {
       type: 3,
       name: 'action',
       description: 'Opciones',
-      required: false,
-      choices: [{name:'Reservar', value:"1"},{name:'Liberar', value:"0"}, {}],
+      required: true,
+      choices: createCommandOptions(),
     },
     {
       type: 3,
       name: 'env',
       description: 'Entornos disponibles',
-      required: true,
+      required: false,
       choices: createCommandEnvironments(),
     },
 
@@ -157,7 +157,7 @@ export const EXPERTA_COMMAND = {
       name: 'accion',
       description: 'Acciones disponibles sobre los entornos',
       required: false,
-      choices: [{name:'RESERVA', value:"1"},{name:'LIBERO', value:"0"}],
+      choices: createCommandOptions(),
     },
   ],
   type: 1,
