@@ -101,24 +101,26 @@ app.post('/interactions', async function (req, res) {
         //const timestamp = Date.now();
         // User's object choice
         const env = req.body.data.options[0].value;
-        const task = req.body.data.options[1].name;
+        const task = req.body.data.options[1].value;
 
         // Create active game using message ID as the game ID
         environments[env] = {
             id: userId,
             //timestamp,
             env,
-            //task
+            task
         };
 
         //log
-        console.log(environments);
+        //console.log(environments);
+        //console.log(req.body.data.options[1]);
+        const tasks = ['LIBERO', 'RESERVA'];
       
         return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
             // Fetches a random emoji to send from a helper function
-            content: `**${task}** de **${env}** para <@${userId}>`,
+            content: `**${tasks[task]}** de **${env}** para <@${userId}>`,
             
             // components: [
             // {
