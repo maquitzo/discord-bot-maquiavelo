@@ -140,7 +140,7 @@ app.post('/interactions', async function (req, res) {
         //const timestamp = Date.now();
         // User's object choice
         const task = req.body.data.options[0].value;
-        const envs = ['development', 'testing', 'staging', 'production'];
+        
         //const tasks = ['Listando', 'Liberando', 'Reservando'];
       
         let env = "";
@@ -156,31 +156,7 @@ app.post('/interactions', async function (req, res) {
             //   development: { id: '808483336548253706', env: 'development', task: 'set' },
             //   testing: { id: '808483336548253706', env: 'testing', task: 'set' }
             // }
-            
-            let content = "";
-            
-            for(let i = 0; i < envs.length; i++) {
-              let e = environments[envs[i]];
-              let icon = ':blue_heart:';
-              
-              console.log(i, e);
-              
-              if (e) {
-                switch (e.task) {
-                  case 'set':
-                    icon = ':broken_heart:';
-                    break;
-                  case 'release':
-                    icon = ':blue_heart:';
-                    break;
-                }
-                content += `:robot: ${e.env} => <@${e.id}> ${icon} \n`;
-              }
-                
-            };
-            
-            if (content == "") 
-              content = ":space_invader: No Environments";
+            const content = getEnvironmentsInfo();
             
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -191,22 +167,24 @@ app.post('/interactions', async function (req, res) {
             
           case 'set':
             env = req.body.data.options[1].value;
+            setEnvironment(userId, env, task);
             action = "Reservando";
             console.log('env', environments);
             break;
             
           case 'release':
             env = req.body.data.options[1].value;
+            setEnvironment(userId, env, task);
             action = "Liberando";
             console.log('env', environments);
             break;
         }
            
-        environments[env] = {
-            id: userId,
-            env,
-            task
-        };
+        // environments[env] = {
+        //     id: userId,
+        //     env,
+        //     task
+        // };
 
       
         return res.send({
@@ -372,15 +350,65 @@ app.post('/interactions', async function (req, res) {
       const selectedOption = data.values[0];
       const userId = req.body.member.user.id;
 
-      // Send results
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: { content: `<@${userId}> selected ${selectedOption}` },
-      });
+      switch(selectedOption) {
+        case 'optList':
+          const content = getEnvironmentsInfo();
+          // Send results
+          return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { content: `<@${userId}> selected ${selectedOption}` },
+          });
+          break;
+        case 'optSet':
+          setEnvironment(userId, env, 'set');
+          break;
+        case 'optRelease':
+          setEnvironment(userId, env, 'release');
+          break;
+          
+      }
+
     }
   }
   
+  function getEnvironmentsInfo() {
+    
+    const envs = ['development', 'testing', 'staging', 'production'];
+
+    let content = "";
+
+    for(let i = 0; i < envs.length; i++) {
+      let e = environments[envs[i]];
+      let icon = ':blue_heart:';
+
+      console.log(i, e);
+
+      if (e) {
+        switch (e.task) {
+          case 'set':
+            icon = ':broken_heart:';
+            break;
+          case 'release':
+            icon = ':blue_heart:';
+            break;
+        }
+        content += `:robot: ${e.env} => <@${e.id}> ${icon} \n`;
+      }
+
+    };
+
+    if (content == "") 
+      content = ":space_invader: No Environments";
+  }
   
+  function setEnvironment(userId,env,task) {
+    
+      environments[env] = {
+          id: userId,
+          env,
+          task
+      };
+  }
   
 });
 
