@@ -132,10 +132,8 @@ app.post('/interactions', async function (req, res) {
     }
 
     
-    
-    
     // "experta" guild command
-    if (name === 'environments' && id) {
+    if (name === 'input' && id) {
         const userId = req.body.member.user.id;
         //const timestamp = Date.now();
         // User's object choice
@@ -294,7 +292,7 @@ app.post('/interactions', async function (req, res) {
   
   if (type === InteractionType.APPLICATION_COMMAND) {
     // Slash command with name of "test"
-    if (data.name === 'input') {
+    if (data.name === 'environments') {
       // Send a message with a button
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -422,11 +420,11 @@ app.post('/interactions', async function (req, res) {
       
       console.log("optionss", options);
 
-      if(options[1]) {
-          setEnvironment(userId, options[0], 'set');
+      if(options[0]) {
+          setEnvironment(userId, options[1], 'set');
       }
        else {
-          setEnvironment(userId, options[0], 'release');
+          setEnvironment(userId, options[1], 'release');
       }
       
       const content = getEnvironmentsInfo();
@@ -460,7 +458,7 @@ app.post('/interactions', async function (req, res) {
             icon = ':blue_heart:';
             break;
         }
-        content += `:robot: ${e.env} => <@${e.id}> ${icon} \n`;
+        content += `:robot: ${envs[i]} => <@${e.id}> ${icon} \n`;
       }
 
     };
@@ -480,6 +478,8 @@ app.post('/interactions', async function (req, res) {
           //env,
           task
       };
+    
+    console.log("after setting", environments);
   }
   
 });
