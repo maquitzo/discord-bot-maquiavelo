@@ -356,16 +356,75 @@ app.post('/interactions', async function (req, res) {
           // Send results
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: `<@${userId}> selected ${selectedOption}` },
+            data: { content: content },
           });
           break;
         case 'optSet':
-          setEnvironment(userId, env, 'set');
-          break;
         case 'optRelease':
-          setEnvironment(userId, env, 'release');
+          
+          return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: 'Selecciona el ambiente !',
+              // Selects are inside of action rows
+              components: [
+                {
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                    {
+                      type: MessageComponentTypes.STRING_SELECT,
+                      // Value for your app to identify the select menu interactions
+                      custom_id: 'my_environment',
+                      // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
+                      options: [
+                        {
+                          label: 'Development',
+                          value: `${selectedOption}-optDev`,
+                          description: 'Listar la disponibilidad',
+                        },
+                        {
+                          label: 'Testing',
+                          value: `${selectedOption}-optTest`,
+                          description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
+                        },
+                        {
+                          label: 'Production',
+                          value: `${selectedOption}-optProd`,
+                          description: 'FreeWilly pero con el ambiente',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          });
+          
           break;
           
+      }
+
+    }
+  }
+  
+  if (type === InteractionType.MESSAGE_COMPONENT) {
+    // custom_id set in payload when sending message component
+    const componentId = data.custom_id;
+
+    if (componentId === 'my_environment') {
+      console.log(req.body);
+
+      // Get selected option from payload
+      const selectedOption = data.values[0];
+      const userId = req.body.member.user.id;
+      
+      const options = selectedOption.split("-");
+
+      if(options[1]) {
+          setEnvironment(userId, options[0], 'set');
+      }
+       else {
+          setEnvironment(userId, options[0], 'release');
       }
 
     }
@@ -399,6 +458,10 @@ app.post('/interactions', async function (req, res) {
 
     if (content == "") 
       content = ":space_invader: No Environments";
+    
+    console.log(content);
+    
+    return content;
   }
   
   function setEnvironment(userId,env,task) {
