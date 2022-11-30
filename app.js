@@ -379,18 +379,18 @@ app.post('/interactions', async function (req, res) {
                       options: [
                         {
                           label: 'Development',
-                          value: `${selectedOption}-optDev`,
-                          description: 'Listar la disponibilidad',
+                          value: `${selectedOption}-development`,
+                          description: 'Listar',
                         },
                         {
                           label: 'Testing',
-                          value: `${selectedOption}-optTest`,
-                          description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
+                          value: `${selectedOption}-testing`,
+                          description: 'Reservalo',
                         },
                         {
                           label: 'Production',
-                          value: `${selectedOption}-optProd`,
-                          description: 'FreeWilly pero con el ambiente',
+                          value: `${selectedOption}-production`,
+                          description: 'FreeWilly',
                         },
                       ],
                     },
@@ -412,13 +412,15 @@ app.post('/interactions', async function (req, res) {
     const componentId = data.custom_id;
 
     if (componentId === 'my_environment') {
-      console.log(req.body);
+      console.log("my_environment", data.values[0]);
 
       // Get selected option from payload
       const selectedOption = data.values[0];
       const userId = req.body.member.user.id;
       
       const options = selectedOption.split("-");
+      
+      console.log("optionss", options);
 
       if(options[1]) {
           setEnvironment(userId, options[0], 'set');
@@ -426,6 +428,13 @@ app.post('/interactions', async function (req, res) {
        else {
           setEnvironment(userId, options[0], 'release');
       }
+      
+      const content = getEnvironmentsInfo();
+      // Send results
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: { content: content },
+      });
 
     }
   }
@@ -468,7 +477,7 @@ app.post('/interactions', async function (req, res) {
     
       environments[env] = {
           id: userId,
-          env,
+          //env,
           task
       };
   }
