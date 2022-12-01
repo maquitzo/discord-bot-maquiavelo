@@ -51,7 +51,7 @@ app.post('/interactions', async function (req, res) {
     const { name } = data;
 
     // "test" guild command
-    if (name === 'testX') {
+    if (name === 'test') {
       // Send a message into the channel where command was triggered from
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -74,7 +74,7 @@ app.post('/interactions', async function (req, res) {
     }
     
     // "challenge" guild command
-    if (name === 'challengeX' && id) {
+    if (name === 'challenge' && id) {
         const userId = req.body.member.user.id;
         // User's object choice
         const objectName = req.body.data.options[0].value;
@@ -109,7 +109,7 @@ app.post('/interactions', async function (req, res) {
     }
     
 
-    if (name === 'expertaX' && id) {
+    if (name === 'experta' && id) {
         const userId = req.body.member.user.id;
         // User's object choice
         const objectName = req.body.data.options[0].value;
@@ -144,7 +144,7 @@ app.post('/interactions', async function (req, res) {
 
     
     // "experta" guild command
-    if (name === 'inputX' && id) {
+    if (name === 'input' && id) {
         const userId = req.body.member.user.id;
         // User's object choice
         const task = req.body.data.options[0].value;
