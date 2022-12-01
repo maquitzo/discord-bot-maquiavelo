@@ -326,7 +326,7 @@ app.post('/interactions', async function (req, res) {
     const componentId = data.custom_id;
 
     if (componentId === 'options_environment_select') {
-      console.log(req.body);
+      //console.log(req.body);
 
       // Get selected option from payload
       const selectedOption = data.values[0];
@@ -397,7 +397,7 @@ app.post('/interactions', async function (req, res) {
         await DiscordRequest(endpoint, {
           method: 'PATCH',
           body: {
-            content: '> Selected ! ' + getRandomEmoji(),
+            content: '> Selected something ! ' + getRandomEmoji(),
             components: []
           }
         });
@@ -459,7 +459,9 @@ app.post('/interactions', async function (req, res) {
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
     
-    let content = `> We got this environments registered <@${UserId}> :\n`;
+    let content = `> \n`;
+    content += `> We got this environments registered <@${UserId}> :\n`;
+    
     let icon = ICON_NOENV;
 
     for(let i = 0; i < envs.length; i++) {
@@ -475,6 +477,8 @@ app.post('/interactions', async function (req, res) {
       }
 
     };
+    
+    content += `> \n`;
 
     if (content == "") 
       content = ":man_facepalming: I Haven't any environment registered";
