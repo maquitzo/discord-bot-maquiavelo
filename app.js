@@ -321,6 +321,20 @@ app.post('/interactions', async function (req, res) {
       const userId = req.body.member.user.id;
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
+      try {
+        //await DiscordRequest(endpoint, { method: 'DELETE' });
+        await DiscordRequest(endpoint, {
+          method: 'PATCH',
+          body: {
+            content: '> Selected ! ' + getRandomEmoji(),
+            components: []
+          }
+        });
+        
+      } catch (err) {
+        console.error('Error sending message:', err);
+      }
+      
       switch(selectedOption) {
         case 'list':
 
@@ -378,20 +392,6 @@ app.post('/interactions', async function (req, res) {
           });
           break;
           
-      }
-      
-      try {
-        //await DiscordRequest(endpoint, { method: 'DELETE' });
-        await DiscordRequest(endpoint, {
-          method: 'PATCH',
-          body: {
-            content: '> Selected ! ' + getRandomEmoji(),
-            components: []
-          }
-        });
-        
-      } catch (err) {
-        console.error('Error sending message:', err);
       }
 
     }
