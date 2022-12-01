@@ -284,17 +284,17 @@ app.post('/interactions', async function (req, res) {
                   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                   options: [
                     {
-                      label: 'LIST',
+                      label: 'LISTA',
                       value: 'list',
                       description: 'Listar la disponibilidad',
                     },
                     {
-                      label: 'BOOKING',
+                      label: 'RESERVAR',
                       value: 'set',
                       description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
                     },
                     {
-                      label: 'UN_BOOKING ?',
+                      label: 'LIBERAR',
                       value: 'release',
                       description: 'FreeWilly pero con el ambiente',
                     },
@@ -326,7 +326,7 @@ app.post('/interactions', async function (req, res) {
           // Send results
           await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: getEnvironmentsInfo() },
+            data: { content: getEnvironmentsInfo(userId) },
           });
           break;
           
@@ -379,11 +379,11 @@ app.post('/interactions', async function (req, res) {
           
       }
       
-      try {
-        await DiscordRequest(endpoint, { method: 'DELETE' });
-      } catch (err) {
-        console.error('Error sending message:', err);
-      }
+      // try {
+      //   await DiscordRequest(endpoint, { method: 'DELETE' });
+      // } catch (err) {
+      //   console.error('Error sending message:', err);
+      // }
 
     }
   
@@ -401,17 +401,17 @@ app.post('/interactions', async function (req, res) {
           // Send results
           await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: getEnvironmentsInfo() },
+            data: { content: getEnvironmentsInfo(userId) },
           });
           
           // Update ephemeral message
-          await DiscordRequest(endpoint, {
-            method: 'PATCH',
-            body: {
-              content: 'Nice choice ' + getRandomEmoji(),
-              components: []
-            }
-          });
+          // await DiscordRequest(endpoint, {
+          //   method: 'PATCH',
+          //   body: {
+          //     content: 'Nice choice ' + getRandomEmoji(),
+          //     components: []
+          //   }
+          // });
           
         } catch (err) {
           console.error('Error sending message:', err);
@@ -431,14 +431,14 @@ app.post('/interactions', async function (req, res) {
     
   }
   
-  function getEnvironmentsInfo() {
+  function getEnvironmentsInfo(UserId) {
     
     const envs = ['development', 'testing', 'staging', 'production'];
     
     const ICON_NOENV = ':blue_heart:';
-    const ICON_ENV = ':space_invader:';
+    const ICON_ENV = ':heart:';
     
-    let content = "> We got this environments registered:\n";
+    let content = `> <@${UserId}> We got this environments registered:\n`;
     let icon = ICON_NOENV;
 
     for(let i = 0; i < envs.length; i++) {
@@ -447,7 +447,7 @@ app.post('/interactions', async function (req, res) {
       
       if (e) {
         icon = (e.task == 'set'? ICON_ENV : ICON_NOENV);
-        content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}, please be gentle\n`;
+        content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
       }
       else {
         content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
