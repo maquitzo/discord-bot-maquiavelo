@@ -333,9 +333,7 @@ app.post('/interactions', async function (req, res) {
     }
   }
 
-  /**
-   * Handle requests from interactive components
-   */
+  // Selected environment
   if (type === InteractionType.MESSAGE_COMPONENT) {
     // custom_id set in payload when sending message component
     const componentId = data.custom_id;
@@ -346,20 +344,22 @@ app.post('/interactions', async function (req, res) {
       // Get selected option from payload
       const selectedOption = data.values[0];
       const userId = req.body.member.user.id;
+      const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
       switch(selectedOption) {
         case 'optList':
-          const content = getEnvironmentsInfo();
+
           // Send results
-          return res.send({
+          await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: content },
+            data: { content: getEnvironmentsInfo() },
           });
           break;
+          
         case 'optSet':
         case 'optRelease':
           
-          return res.send({
+          await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
               content: 'Selecciona el ambiente !',
@@ -397,6 +397,12 @@ app.post('/interactions', async function (req, res) {
             },
           });
           
+          try {
+            await DiscordRequest(endpoint, { method: 'DELETE' });
+          } catch (err) {
+            console.error('Error sending message:', err);
+          }
+          
           break;
           
       }
@@ -409,9 +415,7 @@ app.post('/interactions', async function (req, res) {
     const componentId = data.custom_id;
 
     if (componentId === 'my_environment') {
-      //console.log("my_environment", data.values[0]);
 
-      // Get selected option from payload
       const selectedOption = data.values[0];
       const userId = req.body.member.user.id;
       
