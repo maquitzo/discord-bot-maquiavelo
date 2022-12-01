@@ -134,12 +134,9 @@ app.post('/interactions', async function (req, res) {
     // "experta" guild command
     if (name === 'input' && id) {
         const userId = req.body.member.user.id;
-        //const timestamp = Date.now();
         // User's object choice
         const task = req.body.data.options[0].value;
-        
-        //const tasks = ['Listando', 'Liberando', 'Reservando'];
-      
+
         let env = "";
         let action = "";
       
@@ -166,54 +163,31 @@ app.post('/interactions', async function (req, res) {
             env = req.body.data.options[1].value;
             setEnvironment(userId, env, task);
             action = "Reservando";
-            console.log('env', environments);
             break;
             
           case 'release':
             env = req.body.data.options[1].value;
             setEnvironment(userId, env, task);
             action = "Liberando";
-            console.log('env', environments);
             break;
         }
-           
-        // environments[env] = {
-        //     id: userId,
-        //     env,
-        //     task
-        // };
 
-      
         return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-            // Fetches a random emoji to send from a helper function
-            content: `${action} **${env}** para <@${userId}>`,
-            
-            // components: [
-            // {
-            //     type: MessageComponentTypes.ACTION_ROW,
-            //     components: [
-            //     {
-            //         type: MessageComponentTypes.BUTTON,
-            //         // Append the game ID to use later on
-            //         custom_id: `accept_button_${req.body.id}`,
-            //         label: 'Accept',
-            //         style: ButtonStyleTypes.PRIMARY,
-            //     },
-            //     ],
-            // },
-            // ],
-        },
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+              // Fetches a random emoji to send from a helper function
+              content: `${action} **${env}** para <@${userId}>`,
+          },
         });
     }
     
     
   }
   
+
   if (type === InteractionType.MESSAGE_COMPONENT) {
-  // custom_id set in payload when sending message component
-  const componentId = data.custom_id;
+    // custom_id set in payload when sending message component
+    const componentId = data.custom_id;
 
     if (componentId.startsWith('accept_button_')) {
       // get the associated game ID
@@ -288,16 +262,17 @@ app.post('/interactions', async function (req, res) {
     }
   }
   
-  // Menu environments
+  // BEGIN environments
+  
   if (type === InteractionType.APPLICATION_COMMAND) {
-    // Slash command with name of "test"
+    
     if (data.name === 'environments') {
-      // Send a message with a button
+      
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: 'Opciones de Entornos',
-          // Selects are inside of action rows
+          content: 'Available options',
+          
           components: [
             {
               type: MessageComponentTypes.ACTION_ROW,
@@ -309,18 +284,18 @@ app.post('/interactions', async function (req, res) {
                   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                   options: [
                     {
-                      label: 'Listing',
-                      value: 'optList',
+                      label: 'LIST',
+                      value: 'list',
                       description: 'Listar la disponibilidad',
                     },
                     {
-                      label: 'Booking',
-                      value: 'optSet',
+                      label: 'BOOKING',
+                      value: 'set',
                       description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
                     },
                     {
-                      label: 'UnBooking',
-                      value: 'optRelease',
+                      label: 'UN_BOOKING ?',
+                      value: 'release',
                       description: 'FreeWilly pero con el ambiente',
                     },
                   ],
@@ -333,13 +308,12 @@ app.post('/interactions', async function (req, res) {
     }
   }
 
-  // Selected environment
   if (type === InteractionType.MESSAGE_COMPONENT) {
     // custom_id set in payload when sending message component
     const componentId = data.custom_id;
 
     if (componentId === 'onEnvironmentsChange') {
-      //console.log(req.body);
+      console.log(req.body);
 
       // Get selected option from payload
       const selectedOption = data.values[0];
@@ -347,7 +321,7 @@ app.post('/interactions', async function (req, res) {
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
       switch(selectedOption) {
-        case 'optList':
+        case 'list':
 
           // Send results
           await res.send({
@@ -356,8 +330,8 @@ app.post('/interactions', async function (req, res) {
           });
           break;
           
-        case 'optSet':
-        case 'optRelease':
+        case 'set':
+        case 'release':
           
           await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -397,48 +371,53 @@ app.post('/interactions', async function (req, res) {
             },
           });
           
-          try {
-            await DiscordRequest(endpoint, { method: 'DELETE' });
-          } catch (err) {
-            console.error('Error sending message:', err);
-          }
           
           break;
           
       }
+      
+      try {
+        await DiscordRequest(endpoint, { method: 'DELETE' });
+      } catch (err) {
+        console.error('Error sending message:', err);
+      }
 
     }
-  }
   
-  if (type === InteractionType.MESSAGE_COMPONENT) {
-    // custom_id set in payload when sending message component
-    const componentId = data.custom_id;
-
     if (componentId === 'my_environment') {
 
-      const selectedOption = data.values[0];
-      const userId = req.body.member.user.id;
-      
-      const options = selectedOption.split("-");
-      
-      //console.log("optionss", options);
+        const selectedOption = data.values[0];
+        const userId = req.body.member.user.id;
+        const options = selectedOption.split("-");
+        // Keep selection
+        setEnvironment(userId, options[1], options[0]);
 
-      if(options[0]) {
-          setEnvironment(userId, options[1], 'set');
-      }
-       else {
-          setEnvironment(userId, options[1], 'release');
-      }
-      
-      const content = getEnvironmentsInfo();
-      // Send results
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: { content: content },
-      });
+        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
-    }
+        try {
+          // Send results
+          return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { content: getEnvironmentsInfo() },
+          });
+          // Update ephemeral message
+          await DiscordRequest(endpoint, {
+            method: 'PATCH',
+            body: {
+              content: 'Nice choice ' + getRandomEmoji(),
+              components: []
+            }
+          });
+        } catch (err) {
+          console.error('Error sending message:', err);
+        }
+
+      }
+  
   }
+  
+  // END environments
+  
   
   function getTimestamp (timestamp) {
     
