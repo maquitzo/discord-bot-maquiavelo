@@ -461,14 +461,9 @@ app.post('/interactions', async function (req, res) {
   }
   
   function getTimestamp (timestamp) {
-    const pad = (n,s=2) => (`${new Array(s).fill(0)}${n}`).slice(-s);
-    //const d = new Date(timestamp);
-    const thedate = new Date();
-    const d = new Date(timestamp)
-
-    //return `${pad(d.getFullYear(),4)}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
     
-    return new Date(timestamp).toUTCString();
+    return new Date(timestamp).toUTCString().replace( / GMT$/, "" );
+    
   }
   
   function getEnvironmentsInfo() {
@@ -508,7 +503,10 @@ app.post('/interactions', async function (req, res) {
   function setEnvironment(userId,env,task) {
     
       var now = new Date();
-      var timestamp = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
+      var offset = -3 * 3600 * 1000; //now.getTimezoneOffset();
+      //let d = new Date(new Date().toLocaleString("en-US", {timeZone: "timezone id"}));
+
+      var timestamp = new Date(now.getTime() + offset);
     
       environments[env] = {
           id: userId,
