@@ -68,40 +68,62 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           // Fetches a random emoji to send from a helper function
-          content: 'Hice este lindo emoji para vos ... ' + getRandomEmoji(),
+          content: ',
+          embeds: [
+            {
+              "type": "rich",
+              "title": `Hice este lindo emoji para vos ... ' + getRandomEmoji()`,
+              "description": ``,
+              "color": 0x00FFFF,
+              "fields": [
+                {
+                  "name": `development`,
+                  "value": `free`,
+                  "inline": true
+                },
+                {
+                  "name": `testing`,
+                  "value": `busy`
+                }
+              ],
+              "footer": {
+                "text": `Se puede usar el comando /environment para tomar alguno`
+              }
+            }
+          ]
         },
       });
     }
     
     const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});
 
-await lib.discord.channels['@0.3.2'].messages.create({
-  "channel_id": `${context.params.event.channel_id}`,
-  "content": "",
-  "tts": false,
-  "embeds": [
-    {
-      "type": "rich",
-      "title": `Environments`,
-      "description": `These are all your Environments mompirri !`,
-      "color": 0x00FFFF,
-      "fields": [
-        {
-          "name": `development`,
-          "value": `free`,
-          "inline": true
-        },
-        {
-          "name": `testing`,
-          "value": `busy`
-        }
-      ],
-      "footer": {
-        "text": `Se puede usar el comando /environment para tomar alguno`
-      }
-    }
-  ]
-});
+// await lib.discord.channels['@0.3.2'].messages.create({
+//   "channel_id": `${context.params.event.channel_id}`,
+//   "content": "",
+//   "tts": false,
+//   "embeds": [
+//     {
+//       "type": "rich",
+//       "title": `Environments`,
+//       "description": `These are all your Environments mompirri !`,
+//       "color": 0x00FFFF,
+//       "fields": [
+//         {
+//           "name": `development`,
+//           "value": `free`,
+//           "inline": true
+//         },
+//         {
+//           "name": `testing`,
+//           "value": `busy`
+//         }
+//       ],
+//       "footer": {
+//         "text": `Se puede usar el comando /environment para tomar alguno`
+//       }
+//     }
+//   ]
+// });
     
     // "challenge" guild command
     if (name === 'challenge' && id) {
