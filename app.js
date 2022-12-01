@@ -319,21 +319,67 @@ app.post('/interactions', async function (req, res) {
     
     if (data.name === 'environments') {
       
+      
+//       const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});
+
+// await lib.discord.channels['@0.3.2'].messages.create({
+//   "channel_id": `${context.params.event.channel_id}`,
+//   "content": "",
+//   "tts": false,
+//   "components": [
+//     {
+//       "type": 1,
+//       "components": [
+//         {
+//           "custom_id": `row_0_select_0`,
+//           "placeholder": `Choose and option`,
+//           "options": [
+//             {
+//               "label": `List`,
+//               "value": `list`,
+//               "description": `Show environment's states`,
+//               "default": false
+//             },
+//             {
+//               "label": `Reserve`,
+//               "value": `set`,
+//               "description": `Get an environment`,
+//               "default": false
+//             }
+//           ],
+//           "min_values": 1,
+//           "max_values": 1,
+//           "type": 3
+//         }
+//       ]
+//     }
+//   ],
+//   "embeds": [
+//     {
+//       "type": "rich",
+//       "title": `Environments options`,
+//       "description": `Anything to do`,
+//       "color": 0x00FFFF,
+//       "timestamp": `0001-01-20T00:00:00.000Z`,
+//       "footer": {
+//         "text": `Remember to use /environment and next Reservar to change any`
+//       }
+//     }
+//   ]
+// });
+      
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: '> Available Environment Options \n',
-          
+          content: '',
           components: [
             {
               type: MessageComponentTypes.ACTION_ROW,
               components: [
                 {
                   type: MessageComponentTypes.STRING_SELECT,
-                  // Value for your app to identify the select menu interactions
                   custom_id: 'options_environment_select',
-                  "placeholder": "Choose an environment",
-                  // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
+                  "placeholder": "Choose and option",
                   options: [
                     {
                       label: 'LIST',
@@ -355,6 +401,18 @@ app.post('/interactions', async function (req, res) {
               ],
             }
           ],
+          "embeds": [
+            {
+              "type": "rich",
+              "title": `Environments options`,
+              "description": `Anything to do`,
+              "color": 0x00FFFF,
+              "timestamp": getTimeStamp(),
+              "footer": {
+                "text": `Remember to use /environment and next Reservar to change any`
+              }
+            }
+          ]
         },
       });
     }
