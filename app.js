@@ -9,11 +9,12 @@ import {
 import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
 import { getShuffledOptions, getResult } from './game.js';
 import {
-  CHALLENGE_COMMAND,
-  TEST_COMMAND,
+  // CHALLENGE_COMMAND,
+  // TEST_COMMAND,
   ENV_COMMAND,
-  EXPERTA_COMMAND,
-  INPUT_COMMAND,
+  // EXPERTA_COMMAND,
+  // INPUT_COMMAND,
+  MAQUITZO_COMMAND,
   HasGuildCommands,
 } from './commands.js';
 
@@ -50,7 +51,7 @@ app.post('/interactions', async function (req, res) {
     const { name } = data;
 
     // "test" guild command
-    if (name === 'test') {
+    if (name === 'testX') {
       // Send a message into the channel where command was triggered from
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -61,8 +62,19 @@ app.post('/interactions', async function (req, res) {
       });
     }
     
+    if (name === 'maquitzo') {
+      // Send a message into the channel where command was triggered from
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          // Fetches a random emoji to send from a helper function
+          content: 'Hice este lindo emoji para vos ... ' + getRandomEmoji(),
+        },
+      });
+    }
+    
     // "challenge" guild command
-    if (name === 'challenge' && id) {
+    if (name === 'challengeX' && id) {
         const userId = req.body.member.user.id;
         // User's object choice
         const objectName = req.body.data.options[0].value;
@@ -97,7 +109,7 @@ app.post('/interactions', async function (req, res) {
     }
     
 
-    if (name === 'experta' && id) {
+    if (name === 'expertaX' && id) {
         const userId = req.body.member.user.id;
         // User's object choice
         const objectName = req.body.data.options[0].value;
@@ -132,7 +144,7 @@ app.post('/interactions', async function (req, res) {
 
     
     // "experta" guild command
-    if (name === 'input' && id) {
+    if (name === 'inputX' && id) {
         const userId = req.body.member.user.id;
         // User's object choice
         const task = req.body.data.options[0].value;
@@ -494,10 +506,11 @@ app.listen(PORT, () => {
 
   // Check if guild commands from commands.json are installed (if not, install them)
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
-    TEST_COMMAND,
-    CHALLENGE_COMMAND,
+    //TEST_COMMAND,
+    //CHALLENGE_COMMAND,
     ENV_COMMAND,
-    EXPERTA_COMMAND,
-    INPUT_COMMAND
+    //EXPERTA_COMMAND,
+    //INPUT_COMMAND,
+    MAQUITZO_COMMAND
   ]);
 });

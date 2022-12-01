@@ -95,77 +95,82 @@ function createCommandOptions() {
 }
 
 // Simple test command
-export const TEST_COMMAND = {
-  name: 'test',
-  description: 'Basic guild command',
+// export const TEST_COMMAND = {
+//   name: 'test',
+//   description: 'Basic guild command',
+//   type: 1,
+// };
+
+export const MAQUITZO_COMMAND = {
+  name: 'maquitzo',
+  description: 'Random',
   type: 1,
 };
 
 // Command containing options
-export const CHALLENGE_COMMAND = {
-  name: 'challenge',
-  description: 'Challenge to a match of rock paper scissors',
-  options: [
-    {
-      type: 3,
-      name: 'object',
-      description: 'Pick your object',
-      required: true,
-      choices: createCommandChoices(),
-    },
-  ],
-  type: 1,
-};
+// export const CHALLENGE_COMMAND = {
+//   name: 'challenge',
+//   description: 'Challenge to a match of rock paper scissors',
+//   options: [
+//     {
+//       type: 3,
+//       name: 'object',
+//       description: 'Pick your object',
+//       required: true,
+//       choices: createCommandChoices(),
+//     },
+//   ],
+//   type: 1,
+// };
 
+
+// export const INPUT_COMMAND = {
+//   name: 'input',
+//   description: 'Environments Papu',
+//   options: [
+//       {
+//       type: 3,
+//       name: 'action',
+//       description: 'Opciones',
+//       required: true,
+//       choices: createCommandOptions(),
+//     },
+//     {
+//       type: 3,
+//       name: 'env',
+//       description: 'Entornos disponibles',
+//       required: false,
+//       choices: createCommandEnvironments(),
+//     },
+
+//   ],
+//   type: 1,
+// };
+
+// export const EXPERTA_COMMAND = {
+//   name: 'experta',
+//   description: 'Reserva y visualizacion de Entornos',
+//   options: [
+//     {
+//       type: 3,
+//       name: 'entorno',
+//       description: 'Entornos disponibles',
+//       required: false,
+//       choices: createCommandEnvironments(),
+//     },
+//     {
+//       type: 3,
+//       name: 'accion',
+//       description: 'Acciones disponibles sobre los entornos',
+//       required: false,
+//       choices: createCommandOptions(),
+//     },
+//   ],
+//   type: 1,
+// };
 
 export const ENV_COMMAND = {
-  name: 'input',
-  description: 'Environments Papu',
-  options: [
-      {
-      type: 3,
-      name: 'action',
-      description: 'Opciones',
-      required: true,
-      choices: createCommandOptions(),
-    },
-    {
-      type: 3,
-      name: 'env',
-      description: 'Entornos disponibles',
-      required: false,
-      choices: createCommandEnvironments(),
-    },
-
-  ],
-  type: 1,
-};
-
-export const EXPERTA_COMMAND = {
-  name: 'experta',
-  description: 'Reserva y visualizacion de Entornos',
-  options: [
-    {
-      type: 3,
-      name: 'entorno',
-      description: 'Entornos disponibles',
-      required: false,
-      choices: createCommandEnvironments(),
-    },
-    {
-      type: 3,
-      name: 'accion',
-      description: 'Acciones disponibles sobre los entornos',
-      required: false,
-      choices: createCommandOptions(),
-    },
-  ],
-  type: 1,
-};
-
-export const INPUT_COMMAND = {
   name: 'environments',
-  description: 'Just your average command',
-  // chat command (see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types)
+  description: 'Available environments',
   type: 1,
 };
