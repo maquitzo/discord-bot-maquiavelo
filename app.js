@@ -365,7 +365,7 @@ app.post('/interactions', async function (req, res) {
     const componentId = data.custom_id;
 
     if (componentId === 'my_select') {
-      console.log(req.body);
+      //console.log(req.body);
 
       // Get selected option from payload
       const selectedOption = data.values[0];
@@ -433,7 +433,7 @@ app.post('/interactions', async function (req, res) {
     const componentId = data.custom_id;
 
     if (componentId === 'my_environment') {
-      console.log("my_environment", data.values[0]);
+      //console.log("my_environment", data.values[0]);
 
       // Get selected option from payload
       const selectedOption = data.values[0];
@@ -441,7 +441,7 @@ app.post('/interactions', async function (req, res) {
       
       const options = selectedOption.split("-");
       
-      console.log("optionss", options);
+      //console.log("optionss", options);
 
       if(options[0]) {
           setEnvironment(userId, options[1], 'set');
@@ -460,6 +460,15 @@ app.post('/interactions', async function (req, res) {
     }
   }
   
+  function getTimestamp (timestamp) {
+    const pad = (n,s=2) => (`${new Array(s).fill(0)}${n}`).slice(-s);
+    //const d = new Date(timestamp);
+    const thedate = new Date();
+    const d = new Date(timestamp + thedate.getTimezoneOffset() * 60000)
+
+    return `${pad(d.getFullYear(),4)}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  }
+  
   function getEnvironmentsInfo() {
     
     const envs = ['development', 'testing', 'staging', 'production'];
@@ -470,12 +479,10 @@ app.post('/interactions', async function (req, res) {
       
       const e = environments[envs[i]];
       
-      //console.log(i, e);
-
       if (e) {
         
         let icon = ':blue_heart:';
-        const timestamp = Date(e.timestamp);
+        const timestamp = getTimestamp(e.timestamp);
         
         switch (e.task) {
           case 'set':
@@ -506,7 +513,7 @@ app.post('/interactions', async function (req, res) {
           task
       };
     
-      console.log("after setting", environments);
+      //console.log("after setting", environments);
   }
   
 });
