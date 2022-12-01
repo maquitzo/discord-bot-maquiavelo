@@ -336,7 +336,7 @@ app.post('/interactions', async function (req, res) {
           await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: 'Selecciona el ambiente !',
+              content: 'Choose Environment',
               // Selects are inside of action rows
               components: [
                 {
@@ -351,17 +351,22 @@ app.post('/interactions', async function (req, res) {
                         {
                           label: 'Development',
                           value: `${selectedOption}-development`,
-                          description: 'Listar',
+                          description: 'Deployamos ramas particulares para testear funcionalidades',
+                        },
+                        {
+                          label: 'Staging',
+                          value: `${selectedOption}-staging`,
+                          description: 'Deployamos ramas particulares para testear funcionalidades',
                         },
                         {
                           label: 'Testing',
                           value: `${selectedOption}-testing`,
-                          description: 'Reservalo',
+                          description: 'Deployamos el Release del sprint en curso',
                         },
                         {
                           label: 'Production',
                           value: `${selectedOption}-production`,
-                          description: 'FreeWilly',
+                          description: 'No deberia usarse, solo deployamos el release finalizado',
                         },
                       ],
                     },
@@ -370,8 +375,6 @@ app.post('/interactions', async function (req, res) {
               ],
             },
           });
-          
-          
           break;
           
       }
@@ -419,6 +422,7 @@ app.post('/interactions', async function (req, res) {
   // END environments
   
   
+  // TODO poner todo esto en utils
   function getTimestamp (timestamp) {
     
     return new Date(timestamp).toUTCString().replace( / GMT$/, "" );
@@ -428,33 +432,29 @@ app.post('/interactions', async function (req, res) {
   function getEnvironmentsInfo() {
     
     const envs = ['development', 'testing', 'staging', 'production'];
-
+    
+    const ICON_NOENV = ':blue_heart:';
+    const ICON_ENV = ':robot:';
+    
     let content = "";
+    let icon = ICON_NOENV;
 
     for(let i = 0; i < envs.length; i++) {
       
       const e = environments[envs[i]];
       
       if (e) {
-        
-        let icon = ':blue_heart:';
-        const timestamp = getTimestamp(e.timestamp);
-        
-        switch (e.task) {
-          case 'set':
-            icon = ':robot:';
-            break;
-          case 'release':
-            icon = ':blue_heart:';
-            break;
-        }
-        content += `${icon} **${envs[i]}** is being using by <@${e.id}> since ${timestamp}, please be gentle  \n`;
+        icon = (e.task == 'set'? ICON_ENV : ICON_NOENV);
+        content += `${icon} **${envs[i]}** is being using by <@${e.id}> since ${getTimestamp(e.timestamp)}, please be gentle  \n`;
+      }
+      else {
+        content += `${ICON_NOENV} **${envs[i]}** \n`;
       }
 
     };
 
     if (content == "") 
-      content = ":space_invader: No Environments";
+      content = ":man_facepalming: I Haven't any environment registered";
     
     return content;
   }
