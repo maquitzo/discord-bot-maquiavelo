@@ -171,6 +171,6 @@ export const MAQUITZO_COMMAND = {
 
 export const ENV_COMMAND = {
   name: 'environments',
-  description: 'Available environments',
+  description: 'This command is not visible',
   type: 1,
 };
