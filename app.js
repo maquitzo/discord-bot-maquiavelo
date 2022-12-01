@@ -452,7 +452,7 @@ app.post('/interactions', async function (req, res) {
                   "type": "rich",
                   "title": `Environments`,
                   "description": `Choose an environment <@${userId}>`,
-                  "color": 0xff2200,
+                  "color": 0x1eff00,
                   "timestamp": getTimeStamp(),
                   "footer": {
                     "text": `Remember to use /environment and next Reservar to change any`
@@ -501,7 +501,7 @@ app.post('/interactions', async function (req, res) {
               {
                 "type": "rich",
                 "title": `Environments`,
-                "description": `These are the states of each environment registered in me.`,
+                "description": `These are the states of each environment registered in me <@${userId}>.`,
                 "color": 0x00FFFF,
                 "fields": getEnvironmentsInfo(userId),
                 "footer": {
