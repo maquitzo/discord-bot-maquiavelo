@@ -478,7 +478,6 @@ app.post('/interactions', async function (req, res) {
 
     };
     
-    content += `> \n`;
 
     if (content == "") 
       content = ":man_facepalming: I Haven't any environment registered";
