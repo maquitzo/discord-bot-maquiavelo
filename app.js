@@ -469,7 +469,7 @@ app.post('/interactions', async function (req, res) {
         // Keep selection
         setEnvironment(userId, options[1], options[0]);
 
-        //const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
         try {
           // Send results
@@ -491,16 +491,15 @@ app.post('/interactions', async function (req, res) {
             ]
             },
           });
-          break;
           
           // Update ephemeral message
-          // await DiscordRequest(endpoint, {
-          //   method: 'PATCH',
-          //   body: {
-          //     content: '> Nice choice ' + getRandomEmoji(),
-          //     components: []
-          //   }
-          // });
+          await DiscordRequest(endpoint, {
+            method: 'PATCH',
+            body: {
+              content: '> Nice choice ' + getRandomEmoji(),
+              components: []
+            }
+          });
           
         } catch (err) {
           console.error('Error sending message:', err);
@@ -604,19 +603,26 @@ app.post('/interactions', async function (req, res) {
     return content;
   }
   
-  function setEnvironment(userId,env,task) {
+  function getTimeStamp(){
     
       var now = new Date();
       var offset = -3 * 3600 * 1000; //now.getTimezoneOffset();
       //let d = new Date(new Date().toLocaleString("en-US", {timeZone: "timezone id"}));
 
-      var timestamp = new Date(now.getTime() + offset);
+      return new Date(now.getTime() + offset);
+  }
+  
+  function setEnvironment(userId,env,task) {
     
-      environments[env] = {
-          id: userId,
-          timestamp,
-          task
-      };
+      if (task == 'release')
+        delete environments[env];
+        
+      else
+        environments[env] = {
+            id: userId,
+            getTimeStamp(),
+            task
+        };
     
       //console.log("after setting", environments);
   }
