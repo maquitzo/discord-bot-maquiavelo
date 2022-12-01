@@ -319,54 +319,7 @@ app.post('/interactions', async function (req, res) {
     
     if (data.name === 'environments') {
       
-      
-//       const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});
-
-// await lib.discord.channels['@0.3.2'].messages.create({
-//   "channel_id": `${context.params.event.channel_id}`,
-//   "content": "",
-//   "tts": false,
-//   "components": [
-//     {
-//       "type": 1,
-//       "components": [
-//         {
-//           "custom_id": `row_0_select_0`,
-//           "placeholder": `Choose and option`,
-//           "options": [
-//             {
-//               "label": `List`,
-//               "value": `list`,
-//               "description": `Show environment's states`,
-//               "default": false
-//             },
-//             {
-//               "label": `Reserve`,
-//               "value": `set`,
-//               "description": `Get an environment`,
-//               "default": false
-//             }
-//           ],
-//           "min_values": 1,
-//           "max_values": 1,
-//           "type": 3
-//         }
-//       ]
-//     }
-//   ],
-//   "embeds": [
-//     {
-//       "type": "rich",
-//       "title": `Environments options`,
-//       "description": `Anything to do`,
-//       "color": 0x00FFFF,
-//       "timestamp": `0001-01-20T00:00:00.000Z`,
-//       "footer": {
-//         "text": `Remember to use /environment and next Reservar to change any`
-//       }
-//     }
-//   ]
-// });
+      const userId = req.body.member.user.id;
       
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -404,9 +357,9 @@ app.post('/interactions', async function (req, res) {
           "embeds": [
             {
               "type": "rich",
-              "title": `Environments options`,
-              "description": `Anything to do`,
-              "color": 0x00FFFF,
+              "title": `Environments`,
+              "description": `What should you do right now <@${userId}> ?`,
+              "color": 0xff2200,
               "timestamp": getTimeStamp(),
               "footer": {
                 "text": `Remember to use /environment and next Reservar to change any`
@@ -460,17 +413,14 @@ app.post('/interactions', async function (req, res) {
           await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: '> Choose Environment \n',
-              // Selects are inside of action rows
+              content: '',
               components: [
                 {
                   type: MessageComponentTypes.ACTION_ROW,
                   components: [
                     {
                       type: MessageComponentTypes.STRING_SELECT,
-                      // Value for your app to identify the select menu interactions
                       custom_id: 'environment_select',
-                      // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                       options: [
                         {
                           label: 'DEVELOPMENT',
@@ -497,6 +447,18 @@ app.post('/interactions', async function (req, res) {
                   ],
                 },
               ],
+              "embeds": [
+                {
+                  "type": "rich",
+                  "title": `Environments`,
+                  "description": `Choose an environment <@${userId}>`,
+                  "color": 0xff2200,
+                  "timestamp": getTimeStamp(),
+                  "footer": {
+                    "text": `Remember to use /environment and next Reservar to change any`
+                  }
+                }
+              ]
             },
           });
           break;
@@ -504,14 +466,14 @@ app.post('/interactions', async function (req, res) {
       }
       
       try {
-        //await DiscordRequest(endpoint, { method: 'DELETE' });
-        await DiscordRequest(endpoint, {
-          method: 'PATCH',
-          body: {
-            content: '> Selected something ! ' + getRandomEmoji(),
-            components: []
-          }
-        });
+        await DiscordRequest(endpoint, { method: 'DELETE' });
+        // await DiscordRequest(endpoint, {
+        //   method: 'PATCH',
+        //   body: {
+        //     content: '> Selected something ! ' + getRandomEmoji(),
+        //     components: []
+        //   }
+        // });
         
       } catch (err) {
         console.error('Error sending message:', err);
@@ -551,13 +513,14 @@ app.post('/interactions', async function (req, res) {
           });
           
           // Update ephemeral message
-          await DiscordRequest(endpoint, {
-            method: 'PATCH',
-            body: {
-              content: '> Nice choice ' + getRandomEmoji(),
-              components: []
-            }
-          });
+          await DiscordRequest(endpoint, { method: 'DELETE' });
+          // await DiscordRequest(endpoint, {
+          //   method: 'PATCH',
+          //   body: {
+          //     content: '> Nice choice ' + getRandomEmoji(),
+          //     components: []
+          //   }
+          // });
           
         } catch (err) {
           console.error('Error sending message:', err);
