@@ -280,7 +280,7 @@ app.post('/interactions', async function (req, res) {
                 {
                   type: MessageComponentTypes.STRING_SELECT,
                   // Value for your app to identify the select menu interactions
-                  custom_id: 'onEnvironmentsChange',
+                  custom_id: 'options_environment_select',
                   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                   options: [
                     {
@@ -312,7 +312,7 @@ app.post('/interactions', async function (req, res) {
     // custom_id set in payload when sending message component
     const componentId = data.custom_id;
 
-    if (componentId === 'onEnvironmentsChange') {
+    if (componentId === 'options_environment_select') {
       console.log(req.body);
 
       // Get selected option from payload
@@ -345,7 +345,7 @@ app.post('/interactions', async function (req, res) {
                     {
                       type: MessageComponentTypes.STRING_SELECT,
                       // Value for your app to identify the select menu interactions
-                      custom_id: 'my_environment',
+                      custom_id: 'environment_select',
                       // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                       options: [
                         {
@@ -387,7 +387,7 @@ app.post('/interactions', async function (req, res) {
 
     }
   
-    if (componentId === 'my_environment') {
+    if (componentId === 'environment_select') {
 
         const selectedOption = data.values[0];
         const userId = req.body.member.user.id;
@@ -399,10 +399,11 @@ app.post('/interactions', async function (req, res) {
 
         try {
           // Send results
-          return res.send({
+          await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: { content: getEnvironmentsInfo() },
           });
+          
           // Update ephemeral message
           await DiscordRequest(endpoint, {
             method: 'PATCH',
@@ -411,6 +412,7 @@ app.post('/interactions', async function (req, res) {
               components: []
             }
           });
+          
         } catch (err) {
           console.error('Error sending message:', err);
         }
@@ -434,7 +436,7 @@ app.post('/interactions', async function (req, res) {
     const envs = ['development', 'testing', 'staging', 'production'];
     
     const ICON_NOENV = ':blue_heart:';
-    const ICON_ENV = ':robot:';
+    const ICON_ENV = ':space_invaders:';
     
     let content = "";
     let icon = ICON_NOENV;
