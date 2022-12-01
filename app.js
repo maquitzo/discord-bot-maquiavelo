@@ -475,8 +475,23 @@ app.post('/interactions', async function (req, res) {
           // Send results
           await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: getEnvironmentsInfo(userId) },
+            data: { 
+              content: '',
+              embeds : [
+              {
+                "type": "rich",
+                "title": `Environments`,
+                "description": `These are the states of each environment registered in me.`,
+                "color": 0x00FFFF,
+                "fields": getEnvironmentsInfo(userId),
+                "footer": {
+                  "text": `Remember to use /environment and next Reservar to change any`
+                }
+              }
+            ]
+            },
           });
+          break;
           
           // Update ephemeral message
           // await DiscordRequest(endpoint, {
@@ -527,9 +542,8 @@ app.post('/interactions', async function (req, res) {
         content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
         
         fields.push({
-            "name": envs[i],
-            "value": icon,
-            "inline": false
+            "name": `${envs[i]}  ${icon}`,
+            "value": `used by <@${e.id}> since ${getTimestamp(e.timestamp)}`
         });
         
       }
@@ -537,14 +551,49 @@ app.post('/interactions', async function (req, res) {
         content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
         
         fields.push({
-            "name": envs[i],
-            "value": ICON_NOENV,
-            "inline": false
+            "name": `${envs[i]}  ${ICON_NOENV}`,
+            "value": "\u200B"
         });
       }
 
     };
     
+    //const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});
+
+// await lib.discord.channels['@0.3.2'].messages.create({
+//   "channel_id": `${context.params.event.channel_id}`,
+//   "content": "",
+//   "tts": false,
+//   "embeds": [
+//     {
+//       "type": "rich",
+//       "title": `Environments`,
+//       "description": `These are the states of each environment registered in me.`,
+//       "color": 0x00FFFF,
+//       "fields": [
+//         {
+//           "name": `Development :heart:`,
+//           "value": "\u200B"
+//         },
+//         {
+//           "name": `Staging`,
+//           "value": "\u200B"
+//         },
+//         {
+//           "name": `Testing`,
+//           "value": "\u200B"
+//         },
+//         {
+//           "name": `Production`,
+//           "value": "\u200B"
+//         }
+//       ],
+//       "footer": {
+//         "text": `Remember to use /environment and next Reservar to change any`
+//       }
+//     }
+//   ]
+// });
 
     if (content == "") 
       content = ":man_facepalming: I Haven't any environment registered";
