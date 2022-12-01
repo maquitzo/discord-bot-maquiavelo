@@ -351,22 +351,26 @@ app.post('/interactions', async function (req, res) {
                         {
                           label: 'Development',
                           value: `${selectedOption}-development`,
-                          description: 'Deployamos ramas particulares para testear funcionalidades',
+                          description: 'Ramas particulares para testear funcionalidades',
                         },
                         {
                           label: 'Staging',
                           value: `${selectedOption}-staging`,
-                          description: 'Deployamos ramas particulares para testear funcionalidades',
+                          description: 'Ramas particulares para testear funcionalidades',
                         },
                         {
                           label: 'Testing',
                           value: `${selectedOption}-testing`,
-                          description: 'Deployamos el Release del sprint en curso',
+                          description: 'Release del sprint en curso',
                         },
                         {
                           label: 'Production',
                           value: `${selectedOption}-production`,
                           description: 'No deberia usarse, solo deployamos el release finalizado',
+                          emoji: {
+                              "name": "rogue",
+                              "id": "625891304148303894"
+                          }
                         },
                       ],
                     },
@@ -379,11 +383,19 @@ app.post('/interactions', async function (req, res) {
           
       }
       
-      // try {
-      //   await DiscordRequest(endpoint, { method: 'DELETE' });
-      // } catch (err) {
-      //   console.error('Error sending message:', err);
-      // }
+      try {
+        //await DiscordRequest(endpoint, { method: 'DELETE' });
+        await DiscordRequest(endpoint, {
+          method: 'PATCH',
+          body: {
+            content: '> Selected ! ' + getRandomEmoji(),
+            components: []
+          }
+        });
+        
+      } catch (err) {
+        console.error('Error sending message:', err);
+      }
 
     }
   
@@ -405,13 +417,13 @@ app.post('/interactions', async function (req, res) {
           });
           
           // Update ephemeral message
-          // await DiscordRequest(endpoint, {
-          //   method: 'PATCH',
-          //   body: {
-          //     content: 'Nice choice ' + getRandomEmoji(),
-          //     components: []
-          //   }
-          // });
+          await DiscordRequest(endpoint, {
+            method: 'PATCH',
+            body: {
+              content: '> Nice choice ' + getRandomEmoji(),
+              components: []
+            }
+          });
           
         } catch (err) {
           console.error('Error sending message:', err);
@@ -438,7 +450,7 @@ app.post('/interactions', async function (req, res) {
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
     
-    let content = `> <@${UserId}> We got this environments registered:\n`;
+    let content = `> We got this environments registered <@${UserId}> :\n`;
     let icon = ICON_NOENV;
 
     for(let i = 0; i < envs.length; i++) {
