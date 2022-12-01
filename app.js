@@ -307,20 +307,20 @@ app.post('/interactions', async function (req, res) {
                 {
                   type: MessageComponentTypes.STRING_SELECT,
                   custom_id: 'options_environment_select',
-                  "placeholder": "Choose an option",
+                  "placeholder": "Seleccionar opción",
                   options: [
                     {
-                      label: 'LIST',
+                      label: 'LISTAR',
                       value: 'list',
                       description: 'Disponibilidad de los ambientes',
                     },
                     {
-                      label: 'RESERVE',
+                      label: 'RESERVAR',
                       value: 'set',
-                      description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
+                      description: 'Reserválo con pesos, si lo liberáss en un rato te devuelvo la guita',
                     },
                     {
-                      label: 'CANCEL',
+                      label: 'LIBERAR',
                       value: 'release',
                       description: 'FreeWilly pero con el ambiente',
                     },
