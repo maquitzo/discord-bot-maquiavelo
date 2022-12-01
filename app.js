@@ -395,7 +395,7 @@ app.post('/interactions', async function (req, res) {
               {
                 "type": "rich",
                 "title": `Entornos`,
-                "description": `Acá se muestra el estado de cada ambiente.`,
+                "description": `Acá se muestra el estado de cada ambiente`,
                 "color": 0x00FFFF,
                 "fields": getEnvironmentsInfo(userId),
                 "footer": {
@@ -425,12 +425,12 @@ app.post('/interactions', async function (req, res) {
                         {
                           label: 'DEVELOPMENT',
                           value: `${selectedOption}-development`,
-                          description: 'Features branchs',
+                          description: 'Features branches',
                         },
                         {
                           label: 'STAGING',
                           value: `${selectedOption}-staging`,
-                          description: 'Features branchs',
+                          description: 'Features branches',
                         },
                         {
                           label: 'TESTING',
@@ -501,7 +501,7 @@ app.post('/interactions', async function (req, res) {
               {
                 "type": "rich",
                 "title": `Entornos`,
-                "description": `These are the states of each environment registered in me <@${userId}>.`,
+                "description": `Acá se muestra el estado de cada ambiente <@${userId}>.`,
                 "color": 0x00FFFF,
                 "fields": getEnvironmentsInfo(userId),
                 "footer": {
