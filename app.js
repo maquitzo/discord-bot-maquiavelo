@@ -436,9 +436,9 @@ app.post('/interactions', async function (req, res) {
     const envs = ['development', 'testing', 'staging', 'production'];
     
     const ICON_NOENV = ':blue_heart:';
-    const ICON_ENV = ':space_invaders:';
+    const ICON_ENV = ':space_invader:';
     
-    let content = "";
+    let content = "> We got this environments registered:\n";
     let icon = ICON_NOENV;
 
     for(let i = 0; i < envs.length; i++) {
@@ -447,10 +447,10 @@ app.post('/interactions', async function (req, res) {
       
       if (e) {
         icon = (e.task == 'set'? ICON_ENV : ICON_NOENV);
-        content += `${icon} **${envs[i]}** is being using by <@${e.id}> since ${getTimestamp(e.timestamp)}, please be gentle  \n`;
+        content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}, please be gentle\n`;
       }
       else {
-        content += `${ICON_NOENV} **${envs[i]}** \n`;
+        content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
       }
 
     };
