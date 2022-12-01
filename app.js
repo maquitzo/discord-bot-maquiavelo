@@ -84,8 +84,6 @@ app.post('/interactions', async function (req, res) {
       });
     }
     
-    const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});
-
 // await lib.discord.channels['@0.3.2'].messages.create({
 //   "channel_id": `${context.params.event.channel_id}`,
 //   "content": "",
@@ -380,7 +378,21 @@ app.post('/interactions', async function (req, res) {
           // Send results
           await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: getEnvironmentsInfo(userId) },
+            data: { 
+              content: '',
+              embeds : [
+              {
+                "type": "rich",
+                "title": `Environments`,
+                "description": `These are the states of each environment registered in me.`,
+                "color": 0x00FFFF,
+                "fields": getEnvironmentsInfo(userId),
+                "footer": {
+                  "text": `Remember to use /environment and next Reservar to change any`
+                }
+              }
+            ]
+            },
           });
           break;
           
@@ -457,7 +469,7 @@ app.post('/interactions', async function (req, res) {
         // Keep selection
         setEnvironment(userId, options[1], options[0]);
 
-        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+        //const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
         try {
           // Send results
@@ -467,13 +479,13 @@ app.post('/interactions', async function (req, res) {
           });
           
           // Update ephemeral message
-          await DiscordRequest(endpoint, {
-            method: 'PATCH',
-            body: {
-              content: '> Nice choice ' + getRandomEmoji(),
-              components: []
-            }
-          });
+          // await DiscordRequest(endpoint, {
+          //   method: 'PATCH',
+          //   body: {
+          //     content: '> Nice choice ' + getRandomEmoji(),
+          //     components: []
+          //   }
+          // });
           
         } catch (err) {
           console.error('Error sending message:', err);
@@ -504,6 +516,7 @@ app.post('/interactions', async function (req, res) {
     content += `> We got this environments registered <@${UserId}> :\n`;
     
     let icon = ICON_NOENV;
+    let fields = [];
 
     for(let i = 0; i < envs.length; i++) {
       
@@ -512,9 +525,22 @@ app.post('/interactions', async function (req, res) {
       if (e) {
         icon = (e.task == 'set'? ICON_ENV : ICON_NOENV);
         content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
+        
+        fields.push({
+            "name": envs[i],
+            "value": icon,
+            "inline": false
+        });
+        
       }
       else {
         content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
+        
+        fields.push({
+            "name": envs[i],
+            "value": ICON_NOENV,
+            "inline": false
+        });
       }
 
     };
@@ -522,6 +548,9 @@ app.post('/interactions', async function (req, res) {
 
     if (content == "") 
       content = ":man_facepalming: I Haven't any environment registered";
+    
+    return fields;
+    
     
     return content;
   }
