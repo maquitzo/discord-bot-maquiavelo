@@ -68,26 +68,15 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           // Fetches a random emoji to send from a helper function
-          content: ',
+          content: '',
           embeds: [
             {
               "type": "rich",
-              "title": `Hice este lindo emoji para vos ... ' + getRandomEmoji()`,
+              "title": `Hice este lindo emoji ${getRandomEmoji()} pensando en vos ... `,
               "description": ``,
               "color": 0x00FFFF,
-              "fields": [
-                {
-                  "name": `development`,
-                  "value": `free`,
-                  "inline": true
-                },
-                {
-                  "name": `testing`,
-                  "value": `busy`
-                }
-              ],
               "footer": {
-                "text": `Se puede usar el comando /environment para tomar alguno`
+                "text": `(es mentira lo busque en fontawesome, copy paste, pero la intencion es lo que vale)`
               }
             }
           ]
