@@ -74,25 +74,25 @@ app.post('/interactions', async function (req, res) {
         };
 
         return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-            // Fetches a random emoji to send from a helper function
-            content: `Rock papers scissors test challenge from <@${userId}>`,
-            components: [
-            {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                {
-                    type: MessageComponentTypes.BUTTON,
-                    // Append the game ID to use later on
-                    custom_id: `accept_button_${req.body.id}`,
-                    label: 'Accept',
-                    style: ButtonStyleTypes.PRIMARY,
-                },
-                ],
-            },
-            ],
-        },
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+              // Fetches a random emoji to send from a helper function
+              content: `Rock papers scissors test challenge from <@${userId}>`,
+              components: [
+              {
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                  {
+                      type: MessageComponentTypes.BUTTON,
+                      // Append the game ID to use later on
+                      custom_id: `accept_button_${req.body.id}`,
+                      label: 'Accept',
+                      style: ButtonStyleTypes.PRIMARY,
+                  },
+                  ],
+              },
+              ],
+          },
         });
     }
     
@@ -117,13 +117,12 @@ app.post('/interactions', async function (req, res) {
             {
                 type: MessageComponentTypes.ACTION_ROW,
                 components: [
-                {
-                    type: MessageComponentTypes.BUTTON,
-                    // Append the game ID to use later on
-                    custom_id: `accept_button_${req.body.id}`,
-                    label: 'Accept',
-                    style: ButtonStyleTypes.PRIMARY,
-                },
+                  {
+                      type: MessageComponentTypes.BUTTON,
+                      custom_id: `accept_button_${req.body.id}`,
+                      label: 'Accept',
+                      style: ButtonStyleTypes.PRIMARY,
+                  },
                 ],
             },
             ],
@@ -289,7 +288,7 @@ app.post('/interactions', async function (req, res) {
     }
   }
   
-  
+  // Menu environments
   if (type === InteractionType.APPLICATION_COMMAND) {
     // Slash command with name of "test"
     if (data.name === 'environments') {
@@ -306,7 +305,7 @@ app.post('/interactions', async function (req, res) {
                 {
                   type: MessageComponentTypes.STRING_SELECT,
                   // Value for your app to identify the select menu interactions
-                  custom_id: 'my_select',
+                  custom_id: 'onEnvironmentsChange',
                   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                   options: [
                     {
@@ -326,31 +325,8 @@ app.post('/interactions', async function (req, res) {
                     },
                   ],
                 },
-                // {
-                //   type: MessageComponentTypes.STRING_SELECT,
-                //   // Value for your app to identify the select menu interactions
-                //   custom_id: 'optEnvironments',
-                //   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
-                //   options: [
-                //     {
-                //       label: 'dev',
-                //       value: 'optList',
-                //       description: 'Listar la disponibilidad',
-                //     },
-                //     {
-                //       label: 'test',
-                //       value: 'optSet',
-                //       description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
-                //     },
-                //     {
-                //       label: 'prod',
-                //       value: 'optRelease',
-                //       description: 'FreeWilly pero con el ambiente',
-                //     },
-                //   ],
-                // },
               ],
-            },
+            }
           ],
         },
       });
@@ -364,7 +340,7 @@ app.post('/interactions', async function (req, res) {
     // custom_id set in payload when sending message component
     const componentId = data.custom_id;
 
-    if (componentId === 'my_select') {
+    if (componentId === 'onEnvironmentsChange') {
       //console.log(req.body);
 
       // Get selected option from payload
