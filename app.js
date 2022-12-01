@@ -467,21 +467,25 @@ app.post('/interactions', async function (req, res) {
     let content = "";
 
     for(let i = 0; i < envs.length; i++) {
-      let e = environments[envs[i]];
-      let icon = ':blue_heart:';
-
-      console.log(i, e);
+      
+      const e = environments[envs[i]];
+      
+      //console.log(i, e);
 
       if (e) {
+        
+        let icon = ':blue_heart:';
+        const timestamp = Date(e.timestamp);
+        
         switch (e.task) {
           case 'set':
-            icon = ':broken_heart:';
+            icon = ':robot:';
             break;
           case 'release':
             icon = ':blue_heart:';
             break;
         }
-        content += `:robot: ${envs[i]} => <@${e.id}> ${icon} \n`;
+        content += `${icon} **${envs[i]}** is being using by <@${e.id}> since ${timestamp}, please be gentle  \n`;
       }
 
     };
@@ -489,20 +493,20 @@ app.post('/interactions', async function (req, res) {
     if (content == "") 
       content = ":space_invader: No Environments";
     
-    console.log(content);
-    
     return content;
   }
   
   function setEnvironment(userId,env,task) {
     
+      const timestamp = Date.now();
+    
       environments[env] = {
           id: userId,
-          //env,
+          timestamp,
           task
       };
     
-    console.log("after setting", environments);
+      console.log("after setting", environments);
   }
   
 });
