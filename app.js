@@ -337,7 +337,7 @@ app.post('/interactions', async function (req, res) {
               "color": 0xff2200,
               "timestamp": getTimeStamp(),
               "footer": {
-                "text": `Remember to use /environment and next Reservar to change any`
+                "text": `Recordá usar "/environment" y luego "Listar" para ver disponibilidad.`
               }
             }
           ]
@@ -399,7 +399,7 @@ app.post('/interactions', async function (req, res) {
                 "color": 0x00FFFF,
                 "fields": getEnvironmentsInfo(userId),
                 "footer": {
-                  "text": `Remember to use /environment and next Reservar to change any`
+                  "text": `Recordá usar "/environment" y luego "Listar" para ver disponibilidad.`
                 }
               }
             ]
@@ -437,11 +437,11 @@ app.post('/interactions', async function (req, res) {
                           value: `${selectedOption}-testing`,
                           description: 'Sprint Release',
                         },
-                        {
+                        /*{
                           label: 'PRODUCTION',
                           value: `${selectedOption}-production`,
                           description: 'Release ended, master branch',
-                        },
+                        },*/
                       ],
                     },
                   ],
@@ -451,11 +451,11 @@ app.post('/interactions', async function (req, res) {
                 {
                   "type": "rich",
                   "title": `Environments`,
-                  "description": `Choose an environment <@${userId}>`,
+                  "description": `Seleccionar un ambiente <@${userId}>`,
                   "color": 0x1eff00,
                   "timestamp": getTimeStamp(),
                   "footer": {
-                    "text": `Remember to use /environment and next Reservar to change any`
+                    "text": `Recordá usar "/environment" y luego "Listar" para ver disponibilidad.`
                   }
                 }
               ]
@@ -505,7 +505,7 @@ app.post('/interactions', async function (req, res) {
                 "color": 0x00FFFF,
                 "fields": getEnvironmentsInfo(userId),
                 "footer": {
-                  "text": `Remember to use /environment and next Reservar to change any`
+                  "text": `Recordá usar "/environment" y luego "Listar" para ver disponibilidad.`
                 }
               }
             ]
@@ -542,7 +542,7 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsInfo(UserId) {
     
-    const envs = ['development', 'testing', 'staging', 'production'];
+    const envs = ['development', 'testing', 'staging'];
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
