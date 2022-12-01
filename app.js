@@ -332,12 +332,12 @@ app.post('/interactions', async function (req, res) {
           "embeds": [
             {
               "type": "rich",
-              "title": `Environments`,
-              "description": `What should you do right now <@${userId}> ?`,
+              "title": `Entornos`,
+              "description": `¿Qué harás ahora <@${userId}> ?`,
               "color": 0xff2200,
               "timestamp": getTimeStamp(),
               "footer": {
-                "text": `Recordá usar "/environment" y luego "Listar" para ver disponibilidad.`
+                "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
               }
             }
           ]
@@ -394,12 +394,12 @@ app.post('/interactions', async function (req, res) {
               embeds : [
               {
                 "type": "rich",
-                "title": `Environments`,
-                "description": `These are the states of each environment registered in me.`,
+                "title": `Entornos`,
+                "description": `Acá se muestra el estado de cada ambiente.`,
                 "color": 0x00FFFF,
                 "fields": getEnvironmentsInfo(userId),
                 "footer": {
-                  "text": `Recordá usar "/environment" y luego "Listar" para ver disponibilidad.`
+                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
                 }
               }
             ]
@@ -450,12 +450,12 @@ app.post('/interactions', async function (req, res) {
               "embeds": [
                 {
                   "type": "rich",
-                  "title": `Environments`,
-                  "description": `Seleccionar un ambiente <@${userId}>`,
+                  "title": `Entornos`,
+                  "description": `Seleccioná un ambiente <@${userId}>`,
                   "color": 0x1eff00,
                   "timestamp": getTimeStamp(),
                   "footer": {
-                    "text": `Recordá usar "/environment" y luego "Listar" para ver disponibilidad.`
+                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
                   }
                 }
               ]
@@ -500,12 +500,12 @@ app.post('/interactions', async function (req, res) {
               embeds : [
               {
                 "type": "rich",
-                "title": `Environments`,
+                "title": `Entornos`,
                 "description": `These are the states of each environment registered in me <@${userId}>.`,
                 "color": 0x00FFFF,
                 "fields": getEnvironmentsInfo(userId),
                 "footer": {
-                  "text": `Recordá usar "/environment" y luego "Listar" para ver disponibilidad.`
+                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
                 }
               }
             ]

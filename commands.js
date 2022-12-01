@@ -171,7 +171,7 @@ export const MAQUITZO_COMMAND = {
 
 export const ENV_COMMAND = {
   name: 'environments',
-  description: 'Reserve or release an environment',
+  description: 'Listar, reservar o liberar ambientes',
   type: 1,
 };
 
