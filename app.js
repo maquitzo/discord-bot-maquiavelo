@@ -336,17 +336,17 @@ app.post('/interactions', async function (req, res) {
                   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                   options: [
                     {
-                      label: 'Listar',
+                      label: 'LIST',
                       value: 'list',
                       description: 'Disponibilidad de los ambientes',
                     },
                     {
-                      label: 'Reservar',
+                      label: 'RESERVE',
                       value: 'set',
                       description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
                     },
                     {
-                      label: 'Liberar',
+                      label: 'CANCEL',
                       value: 'release',
                       description: 'FreeWilly pero con el ambiente',
                     },
@@ -415,24 +415,24 @@ app.post('/interactions', async function (req, res) {
                       // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                       options: [
                         {
-                          label: 'Development',
+                          label: 'DEVELOPMENT',
                           value: `${selectedOption}-development`,
-                          description: 'Ramas particulares para testear funcionalidades',
+                          description: 'Features branchs',
                         },
                         {
-                          label: 'Staging',
+                          label: 'STAGING',
                           value: `${selectedOption}-staging`,
-                          description: 'Ramas particulares para testear funcionalidades',
+                          description: 'Features branchs',
                         },
                         {
-                          label: 'Testing',
+                          label: 'TESTING',
                           value: `${selectedOption}-testing`,
-                          description: 'Release del sprint en curso',
+                          description: 'Sprint Release',
                         },
                         {
-                          label: 'Production',
+                          label: 'PRODUCTION',
                           value: `${selectedOption}-production`,
-                          description: 'No deberia usarse, solo deployamos el release finalizado',
+                          description: 'Release ended, master branch',
                         },
                       ],
                     },
@@ -513,7 +513,7 @@ app.post('/interactions', async function (req, res) {
   
   
   // TODO poner todo esto en utils
-  function getTimestamp (timestamp) {
+  function getTimestampFormat (timestamp) {
     
     return new Date(timestamp).toUTCString().replace( / GMT$/, "" );
     
@@ -526,8 +526,8 @@ app.post('/interactions', async function (req, res) {
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
     
-    let content = `> \n`;
-    content += `> We got this environments registered <@${UserId}> :\n`;
+    // let content = `> \n`;
+    // content += `> We got this environments registered <@${UserId}> :\n`;
     
     let icon = ICON_NOENV;
     let fields = [];
@@ -538,16 +538,16 @@ app.post('/interactions', async function (req, res) {
       
       if (e) {
         icon = (e.task == 'set'? ICON_ENV : ICON_NOENV);
-        content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
+        //content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
         
         fields.push({
             "name": `${envs[i]}  ${icon}`,
-            "value": `used by <@${e.id}> since ${getTimestamp(e.timestamp)}`
+            "value": `used by <@${e.id}> since ${getTimestampFormat(e.timestamp)}`
         });
         
       }
       else {
-        content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
+        //content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
         
         fields.push({
             "name": `${envs[i]}  ${ICON_NOENV}`,
@@ -557,50 +557,12 @@ app.post('/interactions', async function (req, res) {
 
     };
     
-    //const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});
 
-// await lib.discord.channels['@0.3.2'].messages.create({
-//   "channel_id": `${context.params.event.channel_id}`,
-//   "content": "",
-//   "tts": false,
-//   "embeds": [
-//     {
-//       "type": "rich",
-//       "title": `Environments`,
-//       "description": `These are the states of each environment registered in me.`,
-//       "color": 0x00FFFF,
-//       "fields": [
-//         {
-//           "name": `Development :heart:`,
-//           "value": "\u200B"
-//         },
-//         {
-//           "name": `Staging`,
-//           "value": "\u200B"
-//         },
-//         {
-//           "name": `Testing`,
-//           "value": "\u200B"
-//         },
-//         {
-//           "name": `Production`,
-//           "value": "\u200B"
-//         }
-//       ],
-//       "footer": {
-//         "text": `Remember to use /environment and next Reservar to change any`
-//       }
-//     }
-//   ]
-// });
-
-    if (content == "") 
-      content = ":man_facepalming: I Haven't any environment registered";
+//     if (content == "") 
+//       content = ":man_facepalming: I Haven't any environment registered";
     
     return fields;
     
-    
-    return content;
   }
   
   function getTimeStamp(){
@@ -617,12 +579,14 @@ app.post('/interactions', async function (req, res) {
       if (task == 'release')
         delete environments[env];
         
-      else
+      else 
         environments[env] = {
             id: userId,
-            getTimeStamp(),
-            task
+            timestamp: getTimeStamp(),
+            task: task
         };
+      
+
     
       //console.log("after setting", environments);
   }
