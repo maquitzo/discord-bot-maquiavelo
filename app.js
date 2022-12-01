@@ -612,6 +612,19 @@ app.post('/interactions', async function (req, res) {
       //console.log("after setting", environments);
   }
   
+  function getGiphy() {
+    
+    const gifs = [
+      'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt0bf817df67665b1d/60dd2709fd14d30f3eb31356/09707a11ec4943062b5446f04ebe7a3a4959c2c9.jpg?auto=webp&fit=crop&format=jpg&height=800&quality=60&width=1200',
+      'https://pm1.narvii.com/6617/90112fae9b68e6c7dbee4768ab23998099e3d2e7_hq.jpg',
+      'https://media.giphy.com/media/spHCUbRqG4cjS/giphy.gif',
+    ];
+
+    const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+  
+    return randomGif;
+  }
+  
 });
 
 app.listen(PORT, () => {
