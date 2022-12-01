@@ -171,6 +171,12 @@ export const MAQUITZO_COMMAND = {
 
 export const ENV_COMMAND = {
   name: 'environments',
-  description: 'This command is not visible',
+  description: 'Reserve or release an environment',
+  type: 1,
+};
+
+export const IND_COMMAND = {
+  name: 'independiente',
+  description: 'sin palabras',
   type: 1,
 };

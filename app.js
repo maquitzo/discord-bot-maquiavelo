@@ -15,6 +15,7 @@ import {
   // EXPERTA_COMMAND,
   // INPUT_COMMAND,
   MAQUITZO_COMMAND,
+  IND_COMMAND,
   HasGuildCommands,
 } from './commands.js';
 
@@ -83,34 +84,7 @@ app.post('/interactions', async function (req, res) {
         },
       });
     }
-    
-// await lib.discord.channels['@0.3.2'].messages.create({
-//   "channel_id": `${context.params.event.channel_id}`,
-//   "content": "",
-//   "tts": false,
-//   "embeds": [
-//     {
-//       "type": "rich",
-//       "title": `Environments`,
-//       "description": `These are all your Environments mompirri !`,
-//       "color": 0x00FFFF,
-//       "fields": [
-//         {
-//           "name": `development`,
-//           "value": `free`,
-//           "inline": true
-//         },
-//         {
-//           "name": `testing`,
-//           "value": `busy`
-//         }
-//       ],
-//       "footer": {
-//         "text": `Se puede usar el comando /environment para tomar alguno`
-//       }
-//     }
-//   ]
-// });
+  
     
     // "challenge" guild command
     if (name === 'challenge' && id) {
@@ -313,6 +287,7 @@ app.post('/interactions', async function (req, res) {
     }
   }
   
+  
   // BEGIN environments
   
   if (type === InteractionType.APPLICATION_COMMAND) {
@@ -363,6 +338,31 @@ app.post('/interactions', async function (req, res) {
               "timestamp": getTimeStamp(),
               "footer": {
                 "text": `Remember to use /environment and next Reservar to change any`
+              }
+            }
+          ]
+        },
+      });
+    }
+    
+    if (data.name === 'independiente') {
+      
+      const userId = req.body.member.user.id;
+      
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: '',
+          embeds: [
+            {
+              "type": "rich",
+              "title": `No es por ahí rey !! `,
+              "description": `Mi corazonzito tiene otros colores`,
+              "color": 0x0099ff,
+              "image": {
+                "url": getGiphy(),
+                "height": null,
+                "width": null
               }
             }
           ]
@@ -617,7 +617,8 @@ app.post('/interactions', async function (req, res) {
     const gifs = [
       'https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt0bf817df67665b1d/60dd2709fd14d30f3eb31356/09707a11ec4943062b5446f04ebe7a3a4959c2c9.jpg?auto=webp&fit=crop&format=jpg&height=800&quality=60&width=1200',
       'https://pm1.narvii.com/6617/90112fae9b68e6c7dbee4768ab23998099e3d2e7_hq.jpg',
-      'https://media.giphy.com/media/spHCUbRqG4cjS/giphy.gif',
+      'https://www.ole.com.ar/images/2022/04/02/Jbg5N_LoQ_340x340__1.jpg',
+      'https://media.tycsports.com/files/2021/08/24/323286/estadio-racing-cilindro_862x485.jpg'
     ];
 
     const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
@@ -637,6 +638,7 @@ app.listen(PORT, () => {
     ENV_COMMAND,
     //EXPERTA_COMMAND,
     //INPUT_COMMAND,
-    MAQUITZO_COMMAND
+    MAQUITZO_COMMAND,
+    IND_COMMAND
   ]);
 });
