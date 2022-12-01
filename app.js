@@ -271,7 +271,7 @@ app.post('/interactions', async function (req, res) {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: 'Available options',
+          content: '> Available Environment Options \n',
           
           components: [
             {
@@ -281,20 +281,21 @@ app.post('/interactions', async function (req, res) {
                   type: MessageComponentTypes.STRING_SELECT,
                   // Value for your app to identify the select menu interactions
                   custom_id: 'options_environment_select',
+                  "placeholder": "Choose an environment",
                   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
                   options: [
                     {
-                      label: 'LISTA',
+                      label: 'Listar',
                       value: 'list',
-                      description: 'Listar la disponibilidad',
+                      description: 'Disponibilidad de los ambientes',
                     },
                     {
-                      label: 'RESERVAR',
+                      label: 'Reservar',
                       value: 'set',
                       description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
                     },
                     {
-                      label: 'LIBERAR',
+                      label: 'Liberar',
                       value: 'release',
                       description: 'FreeWilly pero con el ambiente',
                     },
@@ -336,7 +337,7 @@ app.post('/interactions', async function (req, res) {
           await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: 'Choose Environment',
+              content: '> Choose Environment \n',
               // Selects are inside of action rows
               components: [
                 {
@@ -367,10 +368,6 @@ app.post('/interactions', async function (req, res) {
                           label: 'Production',
                           value: `${selectedOption}-production`,
                           description: 'No deberia usarse, solo deployamos el release finalizado',
-                          emoji: {
-                              "name": "rogue",
-                              "id": "625891304148303894"
-                          }
                         },
                       ],
                     },
