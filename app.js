@@ -307,7 +307,7 @@ app.post('/interactions', async function (req, res) {
                 {
                   type: MessageComponentTypes.STRING_SELECT,
                   custom_id: 'options_environment_select',
-                  "placeholder": "Choose and option",
+                  "placeholder": "Choose an option",
                   options: [
                     {
                       label: 'LIST',
