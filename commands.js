@@ -119,7 +119,7 @@ export const CHALLENGE_COMMAND = {
 
 
 export const ENV_COMMAND = {
-  name: 'environments',
+  name: 'input',
   description: 'Environments Papu',
   options: [
       {
@@ -164,7 +164,7 @@ export const EXPERTA_COMMAND = {
 };
 
 export const INPUT_COMMAND = {
-  name: 'input',
+  name: 'environments',
   description: 'Just your average command',
   // chat command (see https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-types)
   type: 1,

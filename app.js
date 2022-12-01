@@ -297,7 +297,7 @@ app.post('/interactions', async function (req, res) {
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: 'Seleccioname un entorno Mompirri !!!',
+          content: 'Opciones de Entornos',
           // Selects are inside of action rows
           components: [
             {
@@ -326,6 +326,29 @@ app.post('/interactions', async function (req, res) {
                     },
                   ],
                 },
+                // {
+                //   type: MessageComponentTypes.STRING_SELECT,
+                //   // Value for your app to identify the select menu interactions
+                //   custom_id: 'optEnvironments',
+                //   // Select options - see https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
+                //   options: [
+                //     {
+                //       label: 'dev',
+                //       value: 'optList',
+                //       description: 'Listar la disponibilidad',
+                //     },
+                //     {
+                //       label: 'test',
+                //       value: 'optSet',
+                //       description: 'Reservalo con pesos, si lo liberas en un rato te devuelvo la guita',
+                //     },
+                //     {
+                //       label: 'prod',
+                //       value: 'optRelease',
+                //       description: 'FreeWilly pero con el ambiente',
+                //     },
+                //   ],
+                // },
               ],
             },
           ],
