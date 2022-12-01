@@ -73,6 +73,36 @@ app.post('/interactions', async function (req, res) {
       });
     }
     
+    const lib = require('lib')({token: process.env.STDLIB_SECRET_TOKEN});
+
+await lib.discord.channels['@0.3.2'].messages.create({
+  "channel_id": `${context.params.event.channel_id}`,
+  "content": "",
+  "tts": false,
+  "embeds": [
+    {
+      "type": "rich",
+      "title": `Environments`,
+      "description": `These are all your Environments mompirri !`,
+      "color": 0x00FFFF,
+      "fields": [
+        {
+          "name": `development`,
+          "value": `free`,
+          "inline": true
+        },
+        {
+          "name": `testing`,
+          "value": `busy`
+        }
+      ],
+      "footer": {
+        "text": `Se puede usar el comando /environment para tomar alguno`
+      }
+    }
+  ]
+});
+    
     // "challenge" guild command
     if (name === 'challenge' && id) {
         const userId = req.body.member.user.id;
