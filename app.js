@@ -596,7 +596,8 @@ app.post('/interactions', async function (req, res) {
   }
   
   function setEnvironment(userId,env,task) {
-    
+      console.log("Ambiente: ", environments[env]);
+      
       if (task == 'release')
         delete environments[env];
         
