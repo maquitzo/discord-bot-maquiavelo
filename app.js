@@ -129,26 +129,18 @@ app.post('/interactions', async function (req, res) {
         // User's object choice
         const objectName = req.body.data.options[0].value;
 
-        // Create active game using message ID as the game ID
-        activeGames[id] = {
-            id: userId,
-            objectName,
-        };
-
         return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-            // Fetches a random emoji to send from a helper function
-            content: `Rock papers scissors test challenge from <@${userId}>`,
+            content: `User content`,
             components: [
             {
                 type: MessageComponentTypes.ACTION_ROW,
                 components: [
                   {
-                      type: MessageComponentTypes.BUTTON,
-                      custom_id: `accept_button_${req.body.id}`,
-                      label: 'Accept',
-                      style: ButtonStyleTypes.PRIMARY,
+                      type: 5,
+                      custom_id: 'userselect',
+                      label: 'Users',
                   },
                 ],
             },
