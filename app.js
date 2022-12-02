@@ -127,6 +127,73 @@ app.post('/interactions', async function (req, res) {
       
         console.log('experta ');
       
+      return res.send({
+        type: InteractionResponseType.APPLICATION_MODAL,
+        data: {
+          custom_id: 'my_modal',
+          title: 'Modal title',
+          components: [
+            {
+              // Text inputs must be inside of an action component
+              type: MessageComponentTypes.ACTION_ROW,
+              components: [
+                {
+                  // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                  type: MessageComponentTypes.INPUT_TEXT,
+                  custom_id: 'my_text',
+                  style: 1,
+                  label: 'Type some text',
+                },
+              ],
+            },
+            {
+              type: MessageComponentTypes.ACTION_ROW,
+              components: [
+                {
+                  type: MessageComponentTypes.INPUT_TEXT,
+                  custom_id: 'my_longer_text',
+                  // Bigger text box for input
+                  style: 2,
+                  label: 'Type some (longer) text',
+                },
+              ],
+            },
+          ],
+        },
+      });
+      
+      return res.send({
+        type: InteractionResponseType.APPLICATION_MODAL,
+        data: {
+          custom_id: 'reserva_modal',
+          title: 'Reserva',
+          components: [
+            {
+              type: MessageComponentTypes.ACTION_ROW,
+              components: [
+                {
+                  type: 5,
+                  custom_id: 'user_environment'
+                },
+              ],
+            }
+          ],
+          "embeds": [
+            {
+              "type": "rich",
+              "title": `Entornos`,
+              "description": `¿Qué harás ahora`,
+              "color": 0xff2200,
+              "timestamp": getTimeStamp(),
+              "footer": {
+                "text": `Si te pide una tarjeta de credito, pone la que tenga mas disponible`
+              }
+            }
+          ]
+        },
+      });
+      
+      /*
         return res.send({
           type: InteractionResponseType.APPLICATION_MODAL,
           data: {
@@ -144,18 +211,16 @@ app.post('/interactions', async function (req, res) {
                   },
                 ],
               },
-              
-              /*{
+              {
                 type: MessageComponentTypes.ACTION_ROW,
                 components: [
                   {
                     type: 5,
-                    custom_id: 'reserva_tester',
-                    style: 2,
-                    label: 'Quien lo prueba',
+                    custom_id: 'reserva_tester'
                   },
                 ],
               },
+              
              {
                 type: MessageComponentTypes.ACTION_ROW,
                 components: [
@@ -188,10 +253,10 @@ app.post('/interactions', async function (req, res) {
                     }
                   }
                 ],
-              }*/
+              }
             ]
           },
-        });
+        });*/
     }
 
     
