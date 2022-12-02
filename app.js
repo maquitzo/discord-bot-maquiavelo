@@ -153,7 +153,40 @@ app.post('/interactions', async function (req, res) {
                   },
                 ],
               },
-            ],
+             {
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                   "type": 2,
+                    "label": getTimeStamp(),
+                    "style": 1,
+                    "custom_id": "timestmap_reserva",
+                     emoji : {
+                        "id": "41771983429993937",
+                        "name": "LUL",
+                        "animated": true
+                    },
+                    disabled: true
+                  }
+                ],
+              },
+              {
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                   "type": 2,
+                    "label": "Dale Murra",
+                    "style": 1,
+                    "custom_id": "timestmap_reserva",
+                     emoji : {
+                        "id": "41771983429993937",
+                        "name": "LUL",
+                        "animated": true
+                    }
+                  }
+                ],
+              }
+            ]
           },
         });
     }
