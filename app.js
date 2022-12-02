@@ -603,12 +603,8 @@ app.post('/interactions', async function (req, res) {
         if (environments[env]) {
             delete environments[env]; 
           }
-          else {
-            /*return res.send({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: { content: 'Error: El ambiente NO se encuentra ocupado!' },
-            });*/
-            showMessage('Error: El ambiente NO se encuentra ocupado!');
+          else { 
+            showMessage('El ambiente NO se encuentra ocupado!');
           }
       }
       else {
@@ -616,13 +612,13 @@ app.post('/interactions', async function (req, res) {
           if (environments[env]) {
             console.log("ESTA OCUPADO!");
           }
-          else {
-            console.log("ESTA LIBRE, SETEAR!");
+          else {            
             environments[env] = {
               id: userId,
               timestamp: getTimeStamp(),
               task: task
             };
+            showMessage(`El ambiente "${ env }" fue reservado por <@${userId}>.`);
           }
         }
         /* original maqui
