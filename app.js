@@ -175,6 +175,11 @@ app.post('/interactions', async function (req, res) {
             //   development: { id: '808483336548253706', env: 'development', task: 'set' },
             //   testing: { id: '808483336548253706', env: 'testing', task: 'set' }
             // }
+            
+            
+            //guild = discord.get_guild(ID)
+            //memberList = guild.members
+            
             const content = getEnvironmentsInfo();
             
             return res.send({
