@@ -596,17 +596,42 @@ app.post('/interactions', async function (req, res) {
   }
   
   function setEnvironment(userId,env,task) {
-      console.log("Ambiente: ", environments[env]);
+      //console.log("Ambiente: ", environments[env]);
       
-      if (task == 'release')
-        delete environments[env];
-        
-      else 
+      if (task == 'release') {
+        // delete environments[env]; original maqui
+        if (environments[env]) {
+            console.log("ESTA OCUPADO, liberar!");
+            delete environments[env]; 
+          }
+          else {
+            console.log("ESTA LIBRE, error!");
+          }
+      }
+      else {
+        if (task == 'set') {
+          if (environments[env]) {
+            console.log("ESTA OCUPADO!");
+          }
+          else {
+            console.log("ESTA LIBRE, SETEAR!");
+            environments[env] = {
+              id: userId,
+              timestamp: getTimeStamp(),
+              task: task
+            };
+          }
+        }
+        /* original maqui
         environments[env] = {
             id: userId,
             timestamp: getTimeStamp(),
             task: task
         };
+        */ 
+      } 
+        
+        
       
 
     
