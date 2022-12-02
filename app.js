@@ -177,8 +177,26 @@ app.post('/interactions', async function (req, res) {
             // }
             
             
-            //guild = discord.get_guild(ID)
-            //memberList = guild.members
+            return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                content: '',
+                components: [
+                  {
+                    type: MessageComponentTypes.ACTION_ROW,
+                    components: [
+                      {
+                        type: MessageComponentTypes.USER_SELECT,
+                        custom_id: 'users_select',
+                        //"placeholder": "Seleccionar opción",
+                        //options: [],
+                      },
+                    ],
+                  }
+                ]
+                
+              },
+            });
             
             const content = getEnvironmentsInfo();
             
