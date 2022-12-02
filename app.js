@@ -123,7 +123,9 @@ app.post('/interactions', async function (req, res) {
     }
     
 
-    if (name === 'experta' && id) {
+    if (name === 'experta') {
+      
+        console.log('experta ');
       
         return res.send({
           type: InteractionResponseType.APPLICATION_MODAL,
@@ -142,7 +144,8 @@ app.post('/interactions', async function (req, res) {
                   },
                 ],
               },
-              {
+              
+              /*{
                 type: MessageComponentTypes.ACTION_ROW,
                 components: [
                   {
@@ -159,7 +162,7 @@ app.post('/interactions', async function (req, res) {
                   {
                    "type": 2,
                     "label": getTimeStamp(),
-                    "style": 1,
+                    "style": 5,
                     "custom_id": "timestmap_reserva",
                      emoji : {
                         "id": "41771983429993937",
@@ -177,7 +180,7 @@ app.post('/interactions', async function (req, res) {
                    "type": 2,
                     "label": "Dale Murra",
                     "style": 1,
-                    "custom_id": "timestmap_reserva",
+                    "custom_id": "ok",
                      emoji : {
                         "id": "41771983429993937",
                         "name": "LUL",
@@ -185,7 +188,7 @@ app.post('/interactions', async function (req, res) {
                     }
                   }
                 ],
-              }
+              }*/
             ]
           },
         });
