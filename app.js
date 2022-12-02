@@ -606,6 +606,27 @@ app.post('/interactions', async function (req, res) {
           }
           else {
             console.log("ESTA LIBRE, error!");
+                return res.send({
+                  type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                  data: {
+                    content: 'A message with a button',
+                    // Buttons are inside of action rows
+                    components: [
+                      {
+                        type: MessageComponentTypes.ACTION_ROW,
+                        components: [
+                          {
+                            type: MessageComponentTypes.BUTTON,
+                            // Value for your app to identify the button
+                            custom_id: 'my_button',
+                            label: 'Click',
+                            style: ButtonStyleTypes.PRIMARY,
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                });
           }
       }
       else {
