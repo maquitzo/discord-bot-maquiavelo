@@ -601,32 +601,14 @@ app.post('/interactions', async function (req, res) {
       if (task == 'release') {
         // delete environments[env]; original maqui
         if (environments[env]) {
-            console.log("ESTA OCUPADO, liberar!");
             delete environments[env]; 
           }
           else {
-            console.log("ESTA LIBRE, error!");
-                return res.send({
-                  type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                  data: {
-                    content: 'A message with a button',
-                    // Buttons are inside of action rows
-                    components: [
-                      {
-                        type: MessageComponentTypes.ACTION_ROW,
-                        components: [
-                          {
-                            type: MessageComponentTypes.BUTTON,
-                            // Value for your app to identify the button
-                            custom_id: 'my_button',
-                            label: 'Click',
-                            style: ButtonStyleTypes.PRIMARY,
-                          },
-                        ],
-                      },
-                    ],
-                  },
-                });
+            /*return res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: { content: 'Error: El ambiente NO se encuentra ocupado!' },
+            });*/
+            showMessage('Error: El ambiente NO se encuentra ocupado!');
           }
       }
       else {
@@ -651,12 +633,14 @@ app.post('/interactions', async function (req, res) {
         };
         */ 
       } 
-        
-        
-      
-
-    
       //console.log("after setting", environments);
+  }
+  
+  function showMessage(message) {
+    return res.send({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: { content: message },
+    });
   }
   
   function getGiphy() {
