@@ -183,7 +183,9 @@ app.post('/interactions', async function (req, res) {
                 content: '',
                 components: [
                   {
-                    type: MessageComponentTypes.ACTION_ROW,
+                    type: MessageComponentTypes.USER_SELECT,
+                    custom_id: 'users_select'
+                    /*
                     components: [
                       {
                         type: MessageComponentTypes.USER_SELECT,
@@ -192,6 +194,7 @@ app.post('/interactions', async function (req, res) {
                         //options: [],
                       },
                     ],
+                    */
                   }
                 ]
                 
