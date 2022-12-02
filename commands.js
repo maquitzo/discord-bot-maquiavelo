@@ -107,6 +107,13 @@ export const MAQUITZO_COMMAND = {
   type: 1,
 };
 
+export const TINCHO_COMMAND = {
+  name: 'tincho',
+  description: 'Pruebas varias',
+  type: 1,
+};
+
+
 // Command containing options
 // export const CHALLENGE_COMMAND = {
 //   name: 'challenge',

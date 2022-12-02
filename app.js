@@ -15,6 +15,7 @@ import {
   // EXPERTA_COMMAND,
   // INPUT_COMMAND,
   MAQUITZO_COMMAND,
+  TINCHO_COMMAND,
   IND_COMMAND,
   HasGuildCommands,
 } from './commands.js';
@@ -175,32 +176,7 @@ app.post('/interactions', async function (req, res) {
             //   development: { id: '808483336548253706', env: 'development', task: 'set' },
             //   testing: { id: '808483336548253706', env: 'testing', task: 'set' }
             // }
-            
-            
-            return res.send({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                content: 'Probando users',
-                components: [
-                  {
-                    type: MessageComponentTypes.USER_SELECT,
-                    custom_id: 'users_select'
-                    /*
-                    components: [
-                      {
-                        type: MessageComponentTypes.USER_SELECT,
-                        custom_id: 'users_select',
-                        //"placeholder": "Seleccionar opción",
-                        //options: [],
-                      },
-                    ],
-                    */
-                  }
-                ]
-                
-              },
-            });
-            
+                        
             const content = getEnvironmentsInfo();
             
             return res.send({
@@ -372,6 +348,32 @@ app.post('/interactions', async function (req, res) {
     }
     
     if (data.name === 'independiente') {
+      
+      const userId = req.body.member.user.id;
+      
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: '',
+          embeds: [
+            {
+              "type": "rich",
+              "title": `No es por ahí rey !! `,
+              "description": `Mi corazonzito tiene otros colores`,
+              "color": 0x0099ff,
+              "image": {
+                "url": getGiphy(),
+                "height": null,
+                "width": null
+              }
+            }
+          ]
+        },
+      });
+    }
+    
+    // Tincho
+    if (data.name === 'tincho') {
       
       const userId = req.body.member.user.id;
       
@@ -692,6 +694,7 @@ app.listen(PORT, () => {
     //EXPERTA_COMMAND,
     //INPUT_COMMAND,
     MAQUITZO_COMMAND,
+    TINCHO_COMMAND,
     IND_COMMAND
   ]);
 });
