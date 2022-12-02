@@ -12,7 +12,7 @@ import {
   // CHALLENGE_COMMAND,
   // TEST_COMMAND,
   ENV_COMMAND,
-  // EXPERTA_COMMAND,
+  EXPERTA_COMMAND,
   // INPUT_COMMAND,
   MAQUITZO_COMMAND,
   TINCHO_COMMAND,
@@ -125,10 +125,6 @@ app.post('/interactions', async function (req, res) {
 
     if (name === 'experta' && id) {
       
-        const userId = req.body.member.user.id;
-        // User's object choice
-        const objectName = req.body.data.options[0].value;
-
         return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -768,7 +764,7 @@ app.listen(PORT, () => {
     //TEST_COMMAND,
     //CHALLENGE_COMMAND,
     ENV_COMMAND,
-    //EXPERTA_COMMAND,
+    EXPERTA_COMMAND,
     //INPUT_COMMAND,
     MAQUITZO_COMMAND,
     TINCHO_COMMAND,

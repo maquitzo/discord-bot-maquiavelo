@@ -187,3 +187,9 @@ export const IND_COMMAND = {
   description: 'sin palabras',
   type: 1,
 };
+
+export const EXPERTA_COMMAND = {
+  name: 'experta',
+  description: 'sin palabras',
+  type: 1,
+};
