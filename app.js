@@ -126,22 +126,35 @@ app.post('/interactions', async function (req, res) {
     if (name === 'experta' && id) {
       
         return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-            content: `User content`,
+          type: InteractionResponseType.APPLICATION_MODAL,
+          data: {
+            custom_id: 'modal_environment',
+            title: 'Reserva',
             components: [
-            {
+              {
                 type: MessageComponentTypes.ACTION_ROW,
                 components: [
                   {
-                      type: 5,
-                      custom_id: 'userselect',
-                      label: 'Users',
+                    type: MessageComponentTypes.INPUT_TEXT,
+                    custom_id: 'reserva_branch',
+                    style: 1,
+                    label: 'Branch',
                   },
                 ],
-            },
+              },
+              {
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                    type: 5,
+                    custom_id: 'reserva_tester',
+                    style: 2,
+                    label: 'Quien lo prueba',
+                  },
+                ],
+              },
             ],
-        },
+          },
         });
     }
 
