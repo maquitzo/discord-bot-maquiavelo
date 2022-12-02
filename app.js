@@ -375,7 +375,7 @@ app.post('/interactions', async function (req, res) {
     // Tincho
     if (data.name === 'tincho') {
       
-      const userId = req.body.member.user.id;
+      //const userId = req.body.member.user.id;
       /*
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -402,6 +402,26 @@ app.post('/interactions', async function (req, res) {
       
       console.log(content);
       
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: content,
+          embeds: [
+            {
+              "type": "rich",
+              "title": `No es por ahí rey !! `,
+              "description": `Mi corazonzito tiene otros colores`,
+              "color": 0x0099ff,
+              "image": {
+                "url": getGiphy(),
+                "height": null,
+                "width": null
+              }
+            }
+          ]
+        },
+      });      
+      /*
       return res.send({
         type: InteractionResponseType.APPLICATION_MODAL,
         data: {
@@ -436,7 +456,7 @@ app.post('/interactions', async function (req, res) {
           ],
         },
       });
-      
+      */
     }
   }
 
