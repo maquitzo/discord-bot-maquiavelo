@@ -125,6 +125,26 @@ app.post('/interactions', async function (req, res) {
 
     if (name === 'experta') {
       
+        /*return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            custom_id: 'inputuser',
+            title: 'inputconuser',
+            components: [
+              {
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                    type: 5,
+                    custom_id: 'reserva_user',
+                    label: 'User',
+                  },
+                ],
+              }
+            ],
+          },
+        });*/
+      
       return res.send({
         type: InteractionResponseType.APPLICATION_MODAL,
         data: {
@@ -157,11 +177,15 @@ app.post('/interactions', async function (req, res) {
                 type: MessageComponentTypes.ACTION_ROW,
                 components: [
                   {
-                    type: MessageComponentTypes.INPUT_TEXT,
-                    label: 'Now()',
-                    style: 1,
-                    value: getTimestampFormat(getTimeStamp()),
-                    custom_id: "timestmap_reserva",
+                      type: MessageComponentTypes.STRING_SELECT,
+                      custom_id: 'environment_select',
+                      options: [
+                        {
+                          label: 'DEVELOPMENT',
+                          value: `development`,
+                          description: 'Features branches',
+                        },
+                      ]
                   }
                 ],
               },
@@ -169,10 +193,9 @@ app.post('/interactions', async function (req, res) {
                 type: MessageComponentTypes.ACTION_ROW,
                 components: [
                   {
-                    type: 8,
-                    label: 'mentionable',
-                    style: 1,
-                    custom_id: "timestmap_reserva",
+                    type: 5,
+                    label: 'user',
+                    custom_id: "user_rserva",
                   }
                 ],
               },*/
@@ -180,94 +203,7 @@ app.post('/interactions', async function (req, res) {
         },
       });
       
-      
-        /*return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            custom_id: 'inputuser',
-            title: 'inputconuser',
-            components: [
-              {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                    type: 5,
-                    custom_id: 'reserva_branch',
-                    style: 1,
-                    label: 'Branch',
-                  },
-                ],
-              }
-            ],
-          },
-        });*/
-
-
-      
-      /*
-        return res.send({
-          type: InteractionResponseType.APPLICATION_MODAL,
-          data: {
-            custom_id: 'modal_environment',
-            title: 'Reserva',
-            components: [
-              {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                    type: MessageComponentTypes.INPUT_TEXT,
-                    custom_id: 'reserva_branch',
-                    style: 1,
-                    label: 'Branch',
-                  },
-                ],
-              },
-              {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                    type: 5,
-                    custom_id: 'reserva_tester'
-                  },
-                ],
-              },
-              
-             {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                   "type": 2,
-                    "label": getTimeStamp(),
-                    "style": 5,
-                    "custom_id": "timestmap_reserva",
-                     emoji : {
-                        "id": "41771983429993937",
-                        "name": "LUL",
-                        "animated": true
-                    },
-                    disabled: true
-                  }
-                ],
-              },
-              {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                   "type": 2,
-                    "label": "Dale Murra",
-                    "style": 1,
-                    "custom_id": "ok",
-                     emoji : {
-                        "id": "41771983429993937",
-                        "name": "LUL",
-                        "animated": true
-                    }
-                  }
-                ],
-              }
-            ]
-          },
-        });*/
+    
     }
 
     
