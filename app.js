@@ -509,8 +509,6 @@ app.post('/interactions', async function (req, res) {
     // custom_id set in payload when sending message component
     const componentId = data.custom_id;
 
-    console.log('componentId', componentId);
-    
     if (componentId === 'options_environment_select') {
       //console.log(req.body);
 
