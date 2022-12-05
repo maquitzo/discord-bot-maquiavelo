@@ -779,71 +779,34 @@ app.post('/interactions', async function (req, res) {
 
         try {
           // Send results
-          await res.send({            
-            type: InteractionResponseType.APPLICATION_MODAL,
-            data: {
-              custom_id: 'modal_reserva',
-              title: 'Reserva',
-              components: [
-                  {
-                    type: MessageComponentTypes.ACTION_ROW,
-                    components: [
-                      {
-                        type: MessageComponentTypes.INPUT_TEXT,
-                        custom_id: 'reserva_branch',
-                        style: 1,
-                        label: 'Branch a desplegar',
-                      },
-                    ],
-                  },
-                  {
-                    type: MessageComponentTypes.ACTION_ROW,
-                    components: [
-                      {
-                        type: MessageComponentTypes.INPUT_TEXT,
-                        custom_id: 'reserva_user_test',
-                        style: 1,
-                        label: 'Quien lo va a probar',
-                      },
-                    ],
-                  },
-                  {
-                    type: MessageComponentTypes.ACTION_ROW,
-                    components: [
-                      {
-                          type: MessageComponentTypes.STRING_SELECT,
-                          custom_id: 'environment_select',
-                          options: [
-                            {
-                              label: 'DEVELOPMENT',
-                              value: `development`,
-                              description: 'Features branches',
-                            },
-                          ]
-                      }
-                    ],
-                  },              
-                ],
-              /*
-              embeds : [
+          
+          
+          return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            custom_id: 'inputuser',
+            title: 'inputconuser',
+            components: [
               {
-                "type": "rich",
-                "title": `Entornos`,
-                "description": `Acá se muestra el estado de cada ambiente <@${userId}>.`,
-                "color": 0x00FFFF,
-                "fields": getEnvironmentsInfo(userId),
-                "footer": {
-                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                }
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                    type: 5,
+                    custom_id: 'reserva_user',
+                    label: 'User',
+                  },
+                ],
               }
-              ]
-              */
-            },
-            
-            /*
+            ],
+          },
+        });
+          
+          
+           await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: { 
               content: '',
+              components
               embeds : [
               {
                 "type": "rich",
@@ -857,7 +820,6 @@ app.post('/interactions', async function (req, res) {
               }
             ]
             },
-            */
           });
           
           // Update ephemeral message
