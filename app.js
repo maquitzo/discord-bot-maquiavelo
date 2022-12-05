@@ -855,6 +855,7 @@ app.post('/interactions', async function (req, res) {
       
       console.log('selectedOption', selectedOption);
       console.log('userId', userId);
+      console.log('environments', environments);
       
       try {
         await res.send({
