@@ -427,53 +427,7 @@ app.post('/interactions', async function (req, res) {
       
       const userId = req.body.member.user.id;
       
-      await res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: { 
-          content: '',
-          components: [
-            {
-              type: MessageComponentTypes.ACTION_ROW,
-              components: [
-                {
-                  type: MessageComponentTypes.STRING_SELECT,
-                  custom_id: 'options_environment_select',
-                  "placeholder": "Seleccionar opción",
-                  options: [
-                    {
-                      label: 'LISTAR',
-                      value: 'list',
-                      description: 'Disponibilidad de los ambientes',
-                    },
-                    {
-                      label: 'RESERVAR',
-                      value: 'set',
-                      description: 'Reserválo con pesos, si lo liberáss en un rato te devuelvo la guita',
-                    },
-                    {
-                      label: 'LIBERAR',
-                      value: 'release',
-                      description: 'FreeWilly pero con el ambiente',
-                    },
-                  ],
-                },
-              ],
-            }
-          ],
-          embeds : [
-            {
-            "type": "rich",
-            "title": `Entornos`,
-            "description": `Estado II de los ambientes`,
-            "color": 0x00FFFF,
-            "fields": getEnvironmentsInfo(userId),
-            "footer": {
-              "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-              }
-            }
-          ]
-        },
-      });		
+      console.log(userId);
       
     }
   }
