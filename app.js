@@ -427,6 +427,61 @@ app.post('/interactions', async function (req, res) {
       
       const userId = req.body.member.user.id;
       
+      return res.send({
+        type: InteractionResponseType.APPLICATION_MODAL,
+        data: {
+          custom_id: 'my_modal',
+          title: 'Modal title',
+          components: [
+            {
+              // Text inputs must be inside of an action component
+              type: MessageComponentTypes.ACTION_ROW,
+              components: [
+                {
+                  // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                  type: MessageComponentTypes.INPUT_TEXT,
+                  custom_id: 'my_text',
+                  style: 1,
+                  label: 'Type some text',
+                },
+              ],
+            },
+            {
+              type: MessageComponentTypes.ACTION_ROW,
+              components: [
+                {
+                  type: MessageComponentTypes.INPUT_TEXT,
+                  custom_id: 'my_longer_text',
+                  // Bigger text box for input
+                  style: 2,
+                  label: 'Type some (longer) text',
+                },
+              ],
+            },
+            {
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                custom_id: 'inputuser',
+                title: 'inputconuser',
+                components: [
+                  {
+                    type: MessageComponentTypes.ACTION_ROW,
+                    components: [
+                      {
+                        type: 5,
+                        custom_id: 'reserva_user',
+                        label: 'User',
+                      },
+                    ],
+                  }
+                ],
+              },
+            }
+          ],
+        },
+      });
+      
+      
       // Send results
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
