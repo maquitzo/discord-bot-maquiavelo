@@ -425,63 +425,8 @@ app.post('/interactions', async function (req, res) {
     // Tincho
     if (data.name === 'tincho') {
       
-      const userId = req.body.member.user.id;
-      
-      return res.send({
-        type: InteractionResponseType.APPLICATION_MODAL,
-        data: {
-          custom_id: 'my_modal',
-          title: 'Modal title',
-          components: [
-            {
-              // Text inputs must be inside of an action component
-              type: MessageComponentTypes.ACTION_ROW,
-              components: [
-                {
-                  // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-                  type: MessageComponentTypes.INPUT_TEXT,
-                  custom_id: 'my_text',
-                  style: 1,
-                  label: 'Type some text',
-                },
-              ],
-            },
-            {
-              type: MessageComponentTypes.ACTION_ROW,
-              components: [
-                {
-                  type: MessageComponentTypes.INPUT_TEXT,
-                  custom_id: 'my_longer_text',
-                  // Bigger text box for input
-                  style: 2,
-                  label: 'Type some (longer) text',
-                },
-              ],
-            },
-            {
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                custom_id: 'inputuser',
-                title: 'inputconuser',
-                components: [
-                  {
-                    type: MessageComponentTypes.ACTION_ROW,
-                    components: [
-                      {
-                        type: 5,
-                        custom_id: 'reserva_user',
-                        label: 'User',
-                      },
-                    ],
-                  }
-                ],
-              },
-            }
-          ],
-        },
-      });
-      
-      
+      const userId = req.body.member.user.id;      
+    
       // Send results
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -493,7 +438,7 @@ app.post('/interactions', async function (req, res) {
               components: [
                 {
                   type: MessageComponentTypes.STRING_SELECT,
-                  custom_id: 'options_environment_select',
+                  custom_id: 'tincho_options_environment_select',
                   "placeholder": "Seleccionar opción",
                   options: [
                     /*
@@ -572,6 +517,116 @@ app.post('/interactions', async function (req, res) {
       const userId = req.body.member.user.id;
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
+      switch(selectedOption) {
+        case 'list':
+
+          // Send results
+          await res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { 
+              content: '',
+              embeds : [
+              {
+                "type": "rich",
+                "title": `Entornos`,
+                "description": `Acá se muestra el estado de cada ambiente`,
+                "color": 0x00FFFF,
+                "fields": getEnvironmentsInfo(userId),
+                "footer": {
+                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                }
+              }
+            ]
+            },
+          });
+          break;
+          
+        case 'set':
+        case 'release':
+          
+          await res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: '',
+              components: [
+                {
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                    {
+                      type: MessageComponentTypes.STRING_SELECT,
+                      custom_id: 'environment_select',
+                      options: [
+                        {
+                          label: 'DEVELOPMENT',
+                          value: `${selectedOption}-development`,
+                          description: 'Features branches',
+                        },
+                        {
+                          label: 'STAGING',
+                          value: `${selectedOption}-staging`,
+                          description: 'Features branches',
+                        },
+                        {
+                          label: 'TESTING',
+                          value: `${selectedOption}-testing`,
+                          description: 'Sprint Release',
+                        },
+                        /*{
+                          label: 'PRODUCTION',
+                          value: `${selectedOption}-production`,
+                          description: 'Release ended, master branch',
+                        },*/
+                        
+                      ],
+                    },
+                  ],
+                },
+              ],
+              "embeds": [
+                {
+                  "type": "rich",
+                  "title": `Entornos`,
+                  "description": `Seleccioná un ambiente <@${userId}>`,
+                  "color": 0x1eff00,
+                  "timestamp": getTimeStamp(),
+                  "footer": {
+                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                  }
+                }
+              ]
+            },
+          });
+          break;
+          
+      }
+      
+      try {
+        await DiscordRequest(endpoint, { method: 'DELETE' });
+        // await DiscordRequest(endpoint, {
+        //   method: 'PATCH',
+        //   body: {
+        //     content: '> Selected something ! ' + getRandomEmoji(),
+        //     components: []
+        //   }
+        // });
+        
+      } catch (err) {
+        console.error('Error sending message:', err);
+      }
+
+    }
+    
+    
+     if (componentId === 'tincho_options_environment_select') {
+      //console.log(req.body);
+
+      // Get selected option from payload
+      const selectedOption = data.values[0];
+      const userId = req.body.member.user.id;
+      const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+      
+      console.log('tincho_options_environment_select');
+       
       switch(selectedOption) {
         case 'list':
 
