@@ -438,9 +438,16 @@ app.post('/interactions', async function (req, res) {
                 {
                   type: MessageComponentTypes.BUTTON,
                   // Value for your app to identify the button
-                  custom_id: 'my_button',
-                  label: 'Click',
+                  custom_id: 'my_button_1',
+                  label: 'Click 1',
                   style: ButtonStyleTypes.PRIMARY,
+                },
+                {
+                  type: MessageComponentTypes.BUTTON,
+                  // Value for your app to identify the button
+                  custom_id: 'my_button_2',
+                  label: 'Click 2',
+                  style: ButtonStyleTypes.SUCCESS,
                 },
               ],
             },
