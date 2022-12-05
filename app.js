@@ -425,29 +425,6 @@ app.post('/interactions', async function (req, res) {
     // Tincho
     if (data.name === 'tincho') {
       
-      //const userId = req.body.member.user.id;
-      /*
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: '',
-          embeds: [
-            {
-              "type": "rich",
-              "title": `No es por ahí rey !! `,
-              "description": `Mi corazonzito tiene otros colores`,
-              "color": 0x0099ff,
-              "image": {
-                "url": getGiphy(),
-                "height": null,
-                "width": null
-              }
-            }
-          ]
-        },
-      });
-      */
-      
       const content = getEnvironmentsInfo();
       
       console.log(content);
