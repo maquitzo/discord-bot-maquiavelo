@@ -464,47 +464,7 @@ app.post('/interactions', async function (req, res) {
               }
             }
           ]
-        },
-        
-      },
-      {
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: { 
-          content: '',
-          components: [
-            {
-              type: MessageComponentTypes.ACTION_ROW,
-              components: [
-                {
-                  type: MessageComponentTypes.BUTTON,
-                  // Value for your app to identify the button
-                  custom_id: 'my_button_3',
-                  label: 'Click 3',
-                  style: ButtonStyleTypes.PRIMARY,
-                },
-                {
-                  type: MessageComponentTypes.BUTTON,
-                  // Value for your app to identify the button
-                  custom_id: 'my_button_4',
-                  label: 'Click 4',
-                  style: 1 + 1 !== 2 ? ButtonStyleTypes.SUCCESS : ButtonStyleTypes.DANGER,
-                },
-              ],
-            },
-          ],
-          embeds : [
-            {
-            "type": "rich",
-            "title": `Entornos`,
-            "description": `Estado II de los ambientes`,
-            "color": 0x00FFFF,
-            "fields": getEnvironmentsInfo(userId),
-            "footer": {
-              "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-              }
-            }
-          ]
-        },
+        }
       });		
       /*
       return res.send({
