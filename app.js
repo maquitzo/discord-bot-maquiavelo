@@ -425,29 +425,25 @@ app.post('/interactions', async function (req, res) {
     // Tincho
     if (data.name === 'tincho') {
       
-      const content = getEnvironmentsInfo();
-      
-      console.log(content);
-      
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: content,
-          embeds: [
-            {
-              "type": "rich",
-              "title": `No es por ahí rey !! `,
-              "description": `Mi corazonzito tiene otros colores`,
-              "color": 0x0099ff,
-              "image": {
-                "url": getGiphy(),
-                "height": null,
-                "width": null
-              }
-            }
-          ]
-        },
-      });      
+      const userId = req.body.member.user.id;
+      await res.send({
+      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+      data: { 
+        content: '',
+        embeds : [
+        {
+        "type": "rich",
+        "title": `Entornos`,
+        "description": `Acá se muestra el estado de cada ambiente`,
+        "color": 0x00FFFF,
+        "fields": getEnvironmentsInfo(userId),
+        "footer": {
+          "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+        }
+        }
+      ]
+      },
+      });		
       /*
       return res.send({
         type: InteractionResponseType.APPLICATION_MODAL,
