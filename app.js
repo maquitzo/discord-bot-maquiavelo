@@ -664,7 +664,7 @@ app.post('/interactions', async function (req, res) {
                   components: [
                     {
                       type: MessageComponentTypes.STRING_SELECT,
-                      custom_id: 'environment_select',
+                      custom_id: 'tincho_environment_select',
                       options: [
                         {
                           label: 'DEVELOPMENT',
@@ -681,12 +681,6 @@ app.post('/interactions', async function (req, res) {
                           value: `${selectedOption}-testing`,
                           description: 'Sprint Release',
                         },
-                        /*{
-                          label: 'PRODUCTION',
-                          value: `${selectedOption}-production`,
-                          description: 'Release ended, master branch',
-                        },*/
-                        
                       ],
                     },
                   ],
@@ -772,7 +766,117 @@ app.post('/interactions', async function (req, res) {
         }
 
       }
+    
+    if (componentId === 'tincho_environment_select') {
+
+        const selectedOption = data.values[0];
+        const userId = req.body.member.user.id;
+        const options = selectedOption.split("-");
+        // Keep selection
+        setEnvironment(userId, options[1], options[0]);
+
+        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+
+        try {
+          // Send results
+          await res.send({            
+            type: InteractionResponseType.APPLICATION_MODAL,
+            data: {
+              custom_id: 'modal_reserva',
+              title: 'Reserva',
+              components: [
+                  {
+                    type: MessageComponentTypes.ACTION_ROW,
+                    components: [
+                      {
+                        type: MessageComponentTypes.INPUT_TEXT,
+                        custom_id: 'reserva_branch',
+                        style: 1,
+                        label: 'Branch a desplegar',
+                      },
+                    ],
+                  },
+                  {
+                    type: MessageComponentTypes.ACTION_ROW,
+                    components: [
+                      {
+                        type: MessageComponentTypes.INPUT_TEXT,
+                        custom_id: 'reserva_user_test',
+                        style: 1,
+                        label: 'Quien lo va a probar',
+                      },
+                    ],
+                  },
+                  {
+                    type: MessageComponentTypes.ACTION_ROW,
+                    components: [
+                      {
+                          type: MessageComponentTypes.STRING_SELECT,
+                          custom_id: 'environment_select',
+                          options: [
+                            {
+                              label: 'DEVELOPMENT',
+                              value: `development`,
+                              description: 'Features branches',
+                            },
+                          ]
+                      }
+                    ],
+                  },              
+                ],
+              /*
+              embeds : [
+              {
+                "type": "rich",
+                "title": `Entornos`,
+                "description": `Acá se muestra el estado de cada ambiente <@${userId}>.`,
+                "color": 0x00FFFF,
+                "fields": getEnvironmentsInfo(userId),
+                "footer": {
+                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                }
+              }
+              ]
+              */
+            },
+            
+            /*
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { 
+              content: '',
+              embeds : [
+              {
+                "type": "rich",
+                "title": `Entornos`,
+                "description": `Acá se muestra el estado de cada ambiente <@${userId}>.`,
+                "color": 0x00FFFF,
+                "fields": getEnvironmentsInfo(userId),
+                "footer": {
+                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                }
+              }
+            ]
+            },
+            */
+          });
+          
+          // Update ephemeral message
+          await DiscordRequest(endpoint, { method: 'DELETE' });
+          // await DiscordRequest(endpoint, {
+          //   method: 'PATCH',
+          //   body: {
+          //     content: '> Nice choice ' + getRandomEmoji(),
+          //     components: []
+          //   }
+          // });
+          
+        } catch (err) {
+          console.error('Error sending message:', err);
+        }
+
+      }
   
+    
   }
   
   // END environments
