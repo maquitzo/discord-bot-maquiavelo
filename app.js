@@ -426,23 +426,24 @@ app.post('/interactions', async function (req, res) {
     if (data.name === 'tincho') {
       
       const userId = req.body.member.user.id;
+      
       await res.send({
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: { 
-        content: '',
-        embeds : [
-        {
-        "type": "rich",
-        "title": `Entornos`,
-        "description": `Acá se muestra el estado de cada ambiente`,
-        "color": 0x00FFFF,
-        "fields": getEnvironmentsInfo(userId),
-        "footer": {
-          "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-        }
-        }
-      ]
-      },
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: { 
+          content: '',
+          embeds : [
+            {
+            "type": "rich",
+            "title": `Entornos`,
+            "description": `Estado de los ambientes`,
+            "color": 0x00FFFF,
+            "fields": getEnvironmentsInfo(userId),
+            "footer": {
+              "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+              }
+            }
+          ]
+        },
       });		
       /*
       return res.send({
