@@ -509,6 +509,8 @@ app.post('/interactions', async function (req, res) {
     // custom_id set in payload when sending message component
     const componentId = data.custom_id;
 
+    console.log('componentId', componentId);
+    
     if (componentId === 'options_environment_select') {
       //console.log(req.body);
 
@@ -615,9 +617,8 @@ app.post('/interactions', async function (req, res) {
       }
 
     }
-    
-    
-     if (componentId === 'tincho_options_environment_select') {
+        
+    if (componentId === 'tincho_options_environment_select') {
       //console.log(req.body);
 
       // Get selected option from payload
@@ -847,10 +848,13 @@ app.post('/interactions', async function (req, res) {
 
       }
   
-    if (componentId === 'inputuser') {
+    if (componentId === 'reserva_user') {
       const selectedOption = data.values[0];
       const userId = req.body.member.user.id;
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+      
+      console.log('selectedOption', selectedOption);
+      console.log('userId', userId);
       
       try {
         await res.send({
