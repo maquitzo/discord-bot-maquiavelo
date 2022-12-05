@@ -431,6 +431,20 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: { 
           content: '',
+          components: [
+            {
+              type: MessageComponentTypes.ACTION_ROW,
+              components: [
+                {
+                  type: MessageComponentTypes.BUTTON,
+                  // Value for your app to identify the button
+                  custom_id: 'my_button',
+                  label: 'Click',
+                  style: ButtonStyleTypes.PRIMARY,
+                },
+              ],
+            },
+          ],
           embeds : [
             {
             "type": "rich",
@@ -699,7 +713,7 @@ app.post('/interactions', async function (req, res) {
         
         fields.push({
             "name": `${envs[i]}  ${icon}`,
-            "value": `used by <@${e.id}> since ${getTimestampFormat(e.timestamp)}`
+            "value": `used by <@${e.id}> since ${getTimestampFormat(e.timestamp)}`,
         });
         
       }
@@ -712,7 +726,7 @@ app.post('/interactions', async function (req, res) {
         });
       }
 
-    };
+    };    
     
 
 //     if (content == "") 
