@@ -779,11 +779,6 @@ app.post('/interactions', async function (req, res) {
 
         try {
           // Send results
-          
-          
-         
-          
-            
            await res.send({
             /* 
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -855,6 +850,42 @@ app.post('/interactions', async function (req, res) {
     if (componentId === 'inputuser') {
       const selectedOption = data.values[0];
       const userId = req.body.member.user.id;
+      const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+      
+      try {
+        await res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { 
+              content: '',
+              embeds : [
+              {
+                "type": "rich",
+                "title": `Entornos`,
+                "description": `<@${selectedOption}> is the CHOSEN.`,
+                "color": 0x00FFFF,
+                "fields": [],
+                "footer": {
+                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                }
+              }
+            ]
+            },
+          });
+        
+         // Update ephemeral message
+          await DiscordRequest(endpoint, { method: 'DELETE' });
+          // await DiscordRequest(endpoint, {
+          //   method: 'PATCH',
+          //   body: {
+          //     content: '> Nice choice ' + getRandomEmoji(),
+          //     components: []
+          //   }
+          // });
+          
+        } catch (err) {
+          console.error('Error sending message:', err);
+        }
+        
       
     }
   }
