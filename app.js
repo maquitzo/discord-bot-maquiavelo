@@ -707,7 +707,8 @@ app.post('/interactions', async function (req, res) {
             delete environments[env]; 
           }
           else { 
-            showMessage('El ambiente NO se encuentra ocupado!');
+            //showMessage('El ambiente NO se encuentra ocupado!');
+            console.log('El ambiente NO se encuentra ocupado!');
           }
       }
       else {
@@ -721,7 +722,8 @@ app.post('/interactions', async function (req, res) {
               timestamp: getTimeStamp(),
               task: task
             };
-            showMessage(`El ambiente "${ env }" fue reservado por <@${userId}>.`);
+            //showMessage(`El ambiente "${ env }" fue reservado por <@${userId}>.`);
+            console.log(`El ambiente "${ env }" fue reservado por <@${userId}>.`);
           }
         }
         /* original maqui
