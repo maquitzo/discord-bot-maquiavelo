@@ -465,6 +465,9 @@ app.post('/interactions', async function (req, res) {
             }
           ]
         },
+        
+      },
+      {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: { 
           content: '',
@@ -484,7 +487,7 @@ app.post('/interactions', async function (req, res) {
                   // Value for your app to identify the button
                   custom_id: 'my_button_4',
                   label: 'Click 4',
-                  style: 1 + 1 !== 2 ? ButtonStyleTypes.SUCCESS : ButtonStyleTypes.DESTRUCTIVE,
+                  style: 1 + 1 !== 2 ? ButtonStyleTypes.SUCCESS : ButtonStyleTypes.DANGER,
                 },
               ],
             },
