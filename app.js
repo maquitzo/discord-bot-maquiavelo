@@ -863,10 +863,10 @@ app.post('/interactions', async function (req, res) {
               embeds : [
               {
                 "type": "rich",
-                "title": `Entornos`,
-                "description": `<@${selectedOption}> is the CHOSEN.`,
+                "title": ``,
+                "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
                 "color": 0x00FFFF,
-                "fields": [],
+                "fields": getEnvironmentsInfo(selectedOption),
                 "footer": {
                   "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
                 }
@@ -926,7 +926,8 @@ app.post('/interactions', async function (req, res) {
         
         fields.push({
             "name": `${envs[i]}  ${icon}`,
-            "value": `used by <@${e.id}> since ${getTimestampFormat(e.timestamp)}`,
+            //"value": `used by <@${e.id}> since ${getTimestampFormat(e.timestamp)}`,
+            "value": `reservado por <@${ UserId }> desde ${getTimestampFormat(e.timestamp)}`,
         });
         
       }
