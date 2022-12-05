@@ -781,32 +781,14 @@ app.post('/interactions', async function (req, res) {
           // Send results
           
           
-          return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            custom_id: 'inputuser',
-            title: 'inputconuser',
-            components: [
-              {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                    type: 5,
-                    custom_id: 'reserva_user',
-                    label: 'User',
-                  },
-                ],
-              }
-            ],
-          },
-        });
+         
           
-          
+            
            await res.send({
+            /* 
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: { 
               content: '',
-              components
               embeds : [
               {
                 "type": "rich",
@@ -820,6 +802,38 @@ app.post('/interactions', async function (req, res) {
               }
             ]
             },
+            */
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                custom_id: 'inputuser',
+                title: 'inputconuser',
+                components: [
+                  {
+                    type: MessageComponentTypes.ACTION_ROW,
+                    components: [
+                      {
+                        type: 5,
+                        custom_id: 'reserva_user',
+                        label: 'User',
+                      },
+                    ],
+                  }
+                ],
+                content: '',
+                embeds : [
+                  {
+                    "type": "rich",
+                    "title": ``,
+                    "description": `<@${userId}> seleccioná el usuario que hará las pruebas.`,
+                    "color": 0x00FFFF,
+                    "fields": [],
+                    "footer": {
+                      "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                    }
+                  }
+                ]
+              
+              },
           });
           
           // Update ephemeral message
@@ -838,7 +852,11 @@ app.post('/interactions', async function (req, res) {
 
       }
   
-    
+    if (componentId === 'inputuser') {
+      const selectedOption = data.values[0];
+      const userId = req.body.member.user.id;
+      
+    }
   }
   
   // END environments
