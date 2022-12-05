@@ -436,21 +436,29 @@ app.post('/interactions', async function (req, res) {
               type: MessageComponentTypes.ACTION_ROW,
               components: [
                 {
-                  type: MessageComponentTypes.BUTTON,
-                  // Value for your app to identify the button
-                  custom_id: 'my_button_3',
-                  label: 'Click 3',
-                  style: ButtonStyleTypes.PRIMARY,
-                },
-                {
-                  type: MessageComponentTypes.BUTTON,
-                  // Value for your app to identify the button
-                  custom_id: 'my_button_4',
-                  label: 'Click 4',
-                  style: 1 + 1 !== 2 ? ButtonStyleTypes.SUCCESS : ButtonStyleTypes.DANGER,
+                  type: MessageComponentTypes.STRING_SELECT,
+                  custom_id: 'options_environment_select',
+                  "placeholder": "Seleccionar opción",
+                  options: [
+                    {
+                      label: 'LISTAR',
+                      value: 'list',
+                      description: 'Disponibilidad de los ambientes',
+                    },
+                    {
+                      label: 'RESERVAR',
+                      value: 'set',
+                      description: 'Reserválo con pesos, si lo liberáss en un rato te devuelvo la guita',
+                    },
+                    {
+                      label: 'LIBERAR',
+                      value: 'release',
+                      description: 'FreeWilly pero con el ambiente',
+                    },
+                  ],
                 },
               ],
-            },
+            }
           ],
           embeds : [
             {
@@ -466,42 +474,7 @@ app.post('/interactions', async function (req, res) {
           ]
         },
       });		
-      /*
-      return res.send({
-        type: InteractionResponseType.APPLICATION_MODAL,
-        data: {
-          custom_id: 'my_modal',
-          title: 'Modal title',
-          components: [
-            {
-              // Text inputs must be inside of an action component
-              type: MessageComponentTypes.ACTION_ROW,
-              components: [
-                {
-                  // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-                  type: MessageComponentTypes.INPUT_TEXT,
-                  custom_id: 'my_text',
-                  style: 1,
-                  label: 'Type some text',
-                },
-              ],
-            },
-            {
-              type: MessageComponentTypes.ACTION_ROW,
-              components: [
-                {
-                  type: MessageComponentTypes.INPUT_TEXT,
-                  custom_id: 'my_longer_text',
-                  // Bigger text box for input
-                  style: 2,
-                  label: 'Type some (longer) text',
-                },
-              ],
-            },
-          ],
-        },
-      });
-      */
+      
     }
   }
 
