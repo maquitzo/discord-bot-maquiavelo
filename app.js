@@ -427,25 +427,57 @@ app.post('/interactions', async function (req, res) {
       
       const userId = req.body.member.user.id;
       
+      // Send results
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
+        data: { 
           content: '',
-          embeds: [
+                  components: [
             {
-              "type": "rich",
-              "title": `No es por ahí rey !! `,
-              "description": `Mi corazonzito tiene otros colores`,
-              "color": 0x0099ff,
-              "image": {
-                "url": getGiphy(),
-                "height": null,
-                "width": null
-              }
+              type: MessageComponentTypes.ACTION_ROW,
+              components: [
+                {
+                  type: MessageComponentTypes.STRING_SELECT,
+                  custom_id: 'options_environment_select',
+                  "placeholder": "Seleccionar opción",
+                  options: [
+                    /*
+                    {
+                      label: 'LISTAR',
+                      value: 'list',
+                      description: 'Disponibilidad de los ambientes',
+                    },
+                    */
+                    {
+                      label: 'RESERVAR',
+                      value: 'set',
+                      description: 'Reserválo con pesos, si lo liberáss en un rato te devuelvo la guita',
+                    },
+                    {
+                      label: 'LIBERAR',
+                      value: 'release',
+                      description: 'FreeWilly pero con el ambiente',
+                    },
+                  ],
+                },
+              ],
             }
-          ]
+          ],
+          embeds : [
+          {
+            "type": "rich",
+            "title": `Entornos`,
+            "description": `Acá se muestra el estado de cada ambiente`,
+            "color": 0x00FFFF,
+            "fields": getEnvironmentsInfo(userId),
+            "footer": {
+              "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+            }
+          }
+        ]
         },
-      });
+      });      
+      
       
     }
   }
