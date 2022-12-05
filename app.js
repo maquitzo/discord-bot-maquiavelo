@@ -438,16 +438,16 @@ app.post('/interactions', async function (req, res) {
                 {
                   type: MessageComponentTypes.BUTTON,
                   // Value for your app to identify the button
-                  custom_id: 'my_button_1',
-                  label: 'Click 1',
+                  custom_id: 'my_button_3',
+                  label: 'Click 3',
                   style: ButtonStyleTypes.PRIMARY,
                 },
                 {
                   type: MessageComponentTypes.BUTTON,
                   // Value for your app to identify the button
-                  custom_id: 'my_button_2',
-                  label: 'Click 2',
-                  style: ButtonStyleTypes.SUCCESS,
+                  custom_id: 'my_button_4',
+                  label: 'Click 4',
+                  style: 1 + 1 !== 2 ? ButtonStyleTypes.SUCCESS : ButtonStyleTypes.DANGER,
                 },
               ],
             },
@@ -456,7 +456,7 @@ app.post('/interactions', async function (req, res) {
             {
             "type": "rich",
             "title": `Entornos`,
-            "description": `Estado de los ambientes`,
+            "description": `Estado II de los ambientes`,
             "color": 0x00FFFF,
             "fields": getEnvironmentsInfo(userId),
             "footer": {
@@ -464,7 +464,7 @@ app.post('/interactions', async function (req, res) {
               }
             }
           ]
-        }
+        },
       });		
       /*
       return res.send({
