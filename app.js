@@ -772,9 +772,6 @@ app.post('/interactions', async function (req, res) {
         const userId = req.body.member.user.id;
         const options = selectedOption.split("-");
         
-        // Keep selection
-        //setEnvironment(userId, options[1], options[0]);
-
         const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
         
         ambienteSeleccionado = options[1];      
@@ -787,7 +784,8 @@ app.post('/interactions', async function (req, res) {
           
             if (environments[ambienteSeleccionado]) {
 
-              setEnvironmentTincho(userId, ambienteSeleccionado, accionSeleccionada);
+              //setEnvironmentTincho(userId, ambienteSeleccionado, accionSeleccionada);
+              setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
 
               await res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -929,7 +927,8 @@ app.post('/interactions', async function (req, res) {
           }
           else {
             
-            setEnvironmentTincho(usuarioReserva, ambienteSeleccionado, accionSeleccionada);
+            //setEnvironmentTincho(usuarioReserva, ambienteSeleccionado, accionSeleccionada);
+            setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
             
             await res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -1004,7 +1003,6 @@ app.post('/interactions', async function (req, res) {
         
         fields.push({
             "name": `${envs[i]}  ${icon}`,
-            //"value": `used by <@${e.id}> since ${getTimestampFormat(e.timestamp)}`,
             "value": `reservado para <@${ e.id }> desde ${getTimestampFormat(e.timestamp)}`,
         });
         
@@ -1043,8 +1041,7 @@ app.post('/interactions', async function (req, res) {
         if (environments[env]) {
             delete environments[env]; 
           }
-          else { 
-            //showMessage('El ambiente NO se encuentra ocupado!');
+          else {             
             console.log('El ambiente NO se encuentra ocupado!');
           }
       }
@@ -1058,8 +1055,7 @@ app.post('/interactions', async function (req, res) {
               id: userId,
               timestamp: getTimeStamp(),
               task: task
-            };
-            //showMessage(`El ambiente "${ env }" fue reservado por <@${userId}>.`);
+            };            
             console.log(`El ambiente "${ env }" fue reservado por <@${userId}>.`);
           }
         }
@@ -1086,23 +1082,9 @@ app.post('/interactions', async function (req, res) {
               timestamp: getTimeStamp(),
               task: task
             };          
-        }
-        /* original maqui
-        environments[env] = {
-            id: userId,
-            timestamp: getTimeStamp(),
-            task: task
-        };
-        */ 
+        }         
       } 
       
-  }
-  
-  function showMessage(message) {
-    return res.send({
-      type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-      data: { content: message },
-    });
   }
   
   function getGiphy() {
