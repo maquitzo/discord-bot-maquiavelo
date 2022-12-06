@@ -850,7 +850,32 @@ app.post('/interactions', async function (req, res) {
       try {
         
         // Validaciones
-        
+        if (accionSeleccionada == 'release') {
+          
+          if (environments[ambienteSeleccionado]) {
+            setEnvironmentTincho(usuarioReserva, ambienteSeleccionado, accionSeleccionada);
+          }
+          else {
+            await res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: { 
+                content: '',
+                embeds : [
+                {
+                  "type": "rich",
+                  "title": `<@${ userId }> el ambiente No se encuentra ocupado, lo podés reservar tranka!`,
+                  "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
+                  "color": 0x00FFFF,
+                  "fields": getEnvironmentsInfo(selectedOption),
+                  "footer": {
+                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                  }
+                }
+              ]
+              },
+            });
+          }
+        }
         
         await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -955,9 +980,7 @@ app.post('/interactions', async function (req, res) {
       return new Date(now.getTime() + offset);
   }
   
-  function setEnvironment(userId,env,task) {
-      console.log("Ambiente: ", environments[env]);
-      
+  function setEnvironmentTincho(userId,env,task) {
       if (task == 'release') {
         // delete environments[env]; original maqui
         if (environments[env]) {
@@ -994,7 +1017,7 @@ app.post('/interactions', async function (req, res) {
       //console.log("after setting", environments);
   }
   
-  function setEnvironmentTincho(userId, env, task) {
+  function setEnvironment(userId, env, task) {
       
       if (task == 'release') {
         delete environments[env];        
