@@ -439,7 +439,7 @@ app.post('/interactions', async function (req, res) {
                 {
                   type: MessageComponentTypes.STRING_SELECT,
                   custom_id: 'tincho_options_environment_select',
-                  "placeholder": "Seleccionar opción",
+                  "placeholder": "Haz una selección",
                   options: [
                     /*
                     {
@@ -776,27 +776,12 @@ app.post('/interactions', async function (req, res) {
 
         const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
+        console.log(`Userid: ${ userId } - options[1]: ${ options[0] } - options[0]: ${ options[0] }`);
+      
         try {
           // Send results
            await res.send({
-            /* 
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { 
-              content: '',
-              embeds : [
-              {
-                "type": "rich",
-                "title": `Entornos`,
-                "description": `Acá se muestra el estado de cada ambiente <@${userId}>.`,
-                "color": 0x00FFFF,
-                "fields": getEnvironmentsInfo(userId),
-                "footer": {
-                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                }
-              }
-            ]
-            },
-            */
+            
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: {
                 custom_id: 'inputuser',
