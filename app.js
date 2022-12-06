@@ -863,8 +863,8 @@ app.post('/interactions', async function (req, res) {
                 embeds : [
                 {
                   "type": "rich",
-                  "title": `El ambiente ${ ambienteSeleccionado } fue liberado! `,
-                  "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
+                  "title": 'Éxito!',
+                  "description": `El ambiente ${ ambienteSeleccionado } fue liberado.`,
                   "color": 0x00FFFF,
                   "fields": getEnvironmentsInfo(selectedOption),
                   "footer": {
@@ -884,8 +884,8 @@ app.post('/interactions', async function (req, res) {
                 embeds : [
                 {
                   "type": "rich",
-                  "title": `<@${ userId }> el ambiente No se encuentra ocupado!`,
-                  "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
+                  "title": 'Error!',
+                  "description": `<@${userId}> el ambiente No se encuentra ocupado.`,//`<@${selectedOption}> is the CHOSEN.`,
                   "color": 0x00FFFF,
                   "fields": getEnvironmentsInfo(selectedOption),
                   "footer": {
@@ -907,8 +907,8 @@ app.post('/interactions', async function (req, res) {
                 embeds : [
                 {
                   "type": "rich",
-                  "title": `El ambiente ${ ambienteSeleccionado } está ocupado!!`,
-                  "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
+                  "title": 'Error!',
+                  "description": `El ambiente ${ ambienteSeleccionado } está ocupado!!`,
                   "color": 0x00FFFF,
                   "fields": getEnvironmentsInfo(selectedOption),
                   "footer": {
@@ -930,8 +930,8 @@ app.post('/interactions', async function (req, res) {
                 embeds : [
                 {
                   "type": "rich",
-                  "title": `El ambiente ${ ambienteSeleccionado } fue liberado por <@${ usuarioReserva }>. `,
-                  "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
+                  "title": 'Éxito!',
+                  "description": `El ambiente ${ ambienteSeleccionado } fue reservado para <@${ usuarioReserva }>. `,
                   "color": 0x00FFFF,
                   "fields": getEnvironmentsInfo(selectedOption),
                   "footer": {
@@ -945,27 +945,8 @@ app.post('/interactions', async function (req, res) {
           }
         }
         
-        await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { 
-              content: '',
-              embeds : [
-              {
-                "type": "rich",
-                "title": ``,
-                "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
-                "color": 0x00FFFF,
-                "fields": getEnvironmentsInfo(selectedOption),
-                "footer": {
-                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                }
-              }
-            ]
-            },
-          });
-        
-         // Update ephemeral message
-          await DiscordRequest(endpoint, { method: 'DELETE' });
+        // Update ephemeral message
+        await DiscordRequest(endpoint, { method: 'DELETE' });
           // await DiscordRequest(endpoint, {
           //   method: 'PATCH',
           //   body: {
