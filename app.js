@@ -777,12 +777,8 @@ app.post('/interactions', async function (req, res) {
 
         const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
         
-        ambienteSeleccionado = selectedOption;
+        ambienteSeleccionado = options[1];      
       
-      
-        console.log('ambienteSeleccionado: ', ambienteSeleccionado);
-      
-        console.log(`Userid: ${ userId } - options[1]: ${ options[0] } - options[0]: ${ options[0] }`);
       
         try {
           // Send results
@@ -849,8 +845,13 @@ app.post('/interactions', async function (req, res) {
       console.log('usuarioReserva: ', usuarioReserva);
       console.log('userId Logueado: ', userId);
 
+      // setEnvironment(userId, options[1], options[0]);
       
       try {
+        
+        // Validaciones
+        
+        
         await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: { 
@@ -922,7 +923,7 @@ app.post('/interactions', async function (req, res) {
         fields.push({
             "name": `${envs[i]}  ${icon}`,
             //"value": `used by <@${e.id}> since ${getTimestampFormat(e.timestamp)}`,
-            "value": `reservado por <@${ UserId }> desde ${getTimestampFormat(e.timestamp)}`,
+            "value": `reservado para <@${ e.id }> desde ${getTimestampFormat(e.timestamp)}`,
         });
         
       }
@@ -991,6 +992,30 @@ app.post('/interactions', async function (req, res) {
         */ 
       } 
       //console.log("after setting", environments);
+  }
+  
+  function setEnvironmentTincho(userId, env, task) {
+      
+      if (task == 'release') {
+        delete environments[env];        
+      }
+      else {
+        if (task == 'set') {          
+            environments[env] = {
+              id: userId,
+              timestamp: getTimeStamp(),
+              task: task
+            };          
+        }
+        /* original maqui
+        environments[env] = {
+            id: userId,
+            timestamp: getTimeStamp(),
+            task: task
+        };
+        */ 
+      } 
+      
   }
   
   function showMessage(message) {
