@@ -853,9 +853,9 @@ app.post('/interactions', async function (req, res) {
         if (accionSeleccionada == 'release') {
           
           if (environments[ambienteSeleccionado]) {
+            
             setEnvironmentTincho(usuarioReserva, ambienteSeleccionado, accionSeleccionada);
-          }
-          else {
+            
             await res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: { 
@@ -863,7 +863,7 @@ app.post('/interactions', async function (req, res) {
                 embeds : [
                 {
                   "type": "rich",
-                  "title": `<@${ userId }> el ambiente No se encuentra ocupado, lo podés reservar tranka!`,
+                  "title": `El ambiente ${ ambienteSeleccionado } fue liberado! `,
                   "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
                   "color": 0x00FFFF,
                   "fields": getEnvironmentsInfo(selectedOption),
@@ -874,6 +874,74 @@ app.post('/interactions', async function (req, res) {
               ]
               },
             });
+            
+          }
+          else {
+            await res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: { 
+                content: '',
+                embeds : [
+                {
+                  "type": "rich",
+                  "title": `<@${ userId }> el ambiente No se encuentra ocupado!`,
+                  "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
+                  "color": 0x00FFFF,
+                  "fields": getEnvironmentsInfo(selectedOption),
+                  "footer": {
+                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                  }
+                }
+              ]
+              },
+            });
+          }
+        }
+        else {
+          if (environments[ambienteSeleccionado]) {
+            
+            await res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: { 
+                content: '',
+                embeds : [
+                {
+                  "type": "rich",
+                  "title": `El ambiente ${ ambienteSeleccionado } está ocupado!!`,
+                  "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
+                  "color": 0x00FFFF,
+                  "fields": getEnvironmentsInfo(selectedOption),
+                  "footer": {
+                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                  }
+                }
+              ]
+              },
+            });
+          }
+          else {
+            
+            setEnvironmentTincho(usuarioReserva, ambienteSeleccionado, accionSeleccionada);
+            
+            await res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: { 
+                content: '',
+                embeds : [
+                {
+                  "type": "rich",
+                  "title": `El ambiente ${ ambienteSeleccionado } fue liberado por <@${ usuarioReserva }>. `,
+                  "description": ``,//`<@${selectedOption}> is the CHOSEN.`,
+                  "color": 0x00FFFF,
+                  "fields": getEnvironmentsInfo(selectedOption),
+                  "footer": {
+                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                  }
+                }
+              ]
+              },
+            });
+            
           }
         }
         
