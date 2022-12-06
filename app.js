@@ -31,6 +31,11 @@ app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
 const activeGames = {};
 const environments = {};
 
+const accionSeleccionada = '';
+const ambienteSeleccionado = '';
+const usuarioReserva = 0;
+
+
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
@@ -441,13 +446,6 @@ app.post('/interactions', async function (req, res) {
                   custom_id: 'tincho_options_environment_select',
                   "placeholder": "Haz una selección",
                   options: [
-                    /*
-                    {
-                      label: 'LISTAR',
-                      value: 'list',
-                      description: 'Disponibilidad de los ambientes',
-                    },
-                    */
                     {
                       label: 'RESERVAR',
                       value: 'set',
@@ -624,9 +622,11 @@ app.post('/interactions', async function (req, res) {
       const userId = req.body.member.user.id;
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
-      console.log('tincho_options_environment_select');
-       
+      accionSeleccionada = selectedOption;
+      console.log('accionSeleccionada: ', accionSeleccionada);
+      
       switch(selectedOption) {
+        /*  
         case 'list':
 
           // Send results
@@ -649,7 +649,7 @@ app.post('/interactions', async function (req, res) {
             },
           });
           break;
-          
+        */  
         case 'set':
         case 'release':
           
