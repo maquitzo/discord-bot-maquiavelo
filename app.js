@@ -782,40 +782,95 @@ app.post('/interactions', async function (req, res) {
       
         try {
           // Send results
-           await res.send({
-            
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: {
-                custom_id: 'inputuser',
-                title: 'inputconuser',
-                components: [
-                  {
-                    type: MessageComponentTypes.ACTION_ROW,
-                    components: [
-                      {
-                        type: 5,
-                        custom_id: 'reserva_user',
-                        label: 'User',
-                      },
-                    ],
-                  }
-                ],
-                content: '',
-                embeds : [
+          
+          if (accionSeleccionada == 'release') {
+          
+            if (environments[ambienteSeleccionado]) {
+
+              setEnvironmentTincho(userId, ambienteSeleccionado, accionSeleccionada);
+
+              await res.send({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: { 
+                  content: '',
+                  embeds : [
                   {
                     "type": "rich",
-                    "title": ``,
-                    "description": `<@${userId}> seleccioná el usuario que hará las pruebas.`,
+                    "title": 'Éxito!',
+                    "description": `El ambiente ${ ambienteSeleccionado } fue liberado.`,
                     "color": 0x00FFFF,
-                    "fields": [],
+                    "fields": getEnvironmentsInfo(selectedOption),
                     "footer": {
                       "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
                     }
                   }
                 ]
-              
-              },
-          });
+                },
+              });
+
+            }
+            else {
+              await res.send({
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: { 
+                  content: '',
+                  embeds : [
+                  {
+                    "type": "rich",
+                    "title": 'Error!',
+                    "description": `<@${userId}> el ambiente No se encuentra ocupado.`,//`<@${selectedOption}> is the CHOSEN.`,
+                    "color": 0x00FFFF,
+                    "fields": getEnvironmentsInfo(selectedOption),
+                    "footer": {
+                      "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                    }
+                  }
+                ]
+                },
+              });
+            }
+          }
+          else {
+
+            await res.send({
+
+                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+                data: {
+                  custom_id: 'inputuser',
+                  title: 'inputconuser',
+                  components: [
+                    {
+                      type: MessageComponentTypes.ACTION_ROW,
+                      components: [
+                        {
+                          type: 5,
+                          custom_id: 'reserva_user',
+                          label: 'User',
+                        },
+                      ],
+                    }
+                  ],
+                  content: '',
+                  embeds : [
+                    {
+                      "type": "rich",
+                      "title": ``,
+                      "description": `<@${userId}> seleccioná el usuario que hará las pruebas.`,
+                      "color": 0x00FFFF,
+                      "fields": [],
+                      "footer": {
+                        "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                      }
+                    }
+                  ]
+
+                },
+              });
+
+            
+          }
+          
+          
           
           // Update ephemeral message
           await DiscordRequest(endpoint, { method: 'DELETE' });
@@ -849,55 +904,8 @@ app.post('/interactions', async function (req, res) {
       
       try {
         
-        // Validaciones
-        if (accionSeleccionada == 'release') {
-          
-          if (environments[ambienteSeleccionado]) {
-            
-            setEnvironmentTincho(usuarioReserva, ambienteSeleccionado, accionSeleccionada);
-            
-            await res.send({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: { 
-                content: '',
-                embeds : [
-                {
-                  "type": "rich",
-                  "title": 'Éxito!',
-                  "description": `El ambiente ${ ambienteSeleccionado } fue liberado.`,
-                  "color": 0x00FFFF,
-                  "fields": getEnvironmentsInfo(selectedOption),
-                  "footer": {
-                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                  }
-                }
-              ]
-              },
-            });
-            
-          }
-          else {
-            await res.send({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: { 
-                content: '',
-                embeds : [
-                {
-                  "type": "rich",
-                  "title": 'Error!',
-                  "description": `<@${userId}> el ambiente No se encuentra ocupado.`,//`<@${selectedOption}> is the CHOSEN.`,
-                  "color": 0x00FFFF,
-                  "fields": getEnvironmentsInfo(selectedOption),
-                  "footer": {
-                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                  }
-                }
-              ]
-              },
-            });
-          }
-        }
-        else {
+        // Validaciones        
+        if (accionSeleccionada == 'set') {
           if (environments[ambienteSeleccionado]) {
             
             await res.send({
