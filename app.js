@@ -31,9 +31,9 @@ app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
 const activeGames = {};
 const environments = {};
 
-const accionSeleccionada = '';
-const ambienteSeleccionado = '';
-const usuarioReserva = 0;
+var accionSeleccionada = '';
+var ambienteSeleccionado = '';
+var usuarioReserva = 0;
 
 
 /**
@@ -771,11 +771,17 @@ app.post('/interactions', async function (req, res) {
         const selectedOption = data.values[0];
         const userId = req.body.member.user.id;
         const options = selectedOption.split("-");
+        
         // Keep selection
-        setEnvironment(userId, options[1], options[0]);
+        //setEnvironment(userId, options[1], options[0]);
 
         const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
-
+        
+        ambienteSeleccionado = selectedOption;
+      
+      
+        console.log('ambienteSeleccionado: ', ambienteSeleccionado);
+      
         console.log(`Userid: ${ userId } - options[1]: ${ options[0] } - options[0]: ${ options[0] }`);
       
         try {
@@ -836,9 +842,13 @@ app.post('/interactions', async function (req, res) {
       const userId = req.body.member.user.id;
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
-      console.log('selectedOption', selectedOption);
-      console.log('userId', userId);
-      console.log('environments', environments);
+      usuarioReserva = selectedOption;
+      
+      console.log('accionSeleccionada: ', accionSeleccionada);
+      console.log('ambienteSeleccionado: ', ambienteSeleccionado);
+      console.log('usuarioReserva: ', usuarioReserva);
+      console.log('userId Logueado: ', userId);
+
       
       try {
         await res.send({
