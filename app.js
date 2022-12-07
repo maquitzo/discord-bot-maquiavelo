@@ -591,8 +591,7 @@ app.post('/interactions', async function (req, res) {
     }
         
     if (componentId === 'tincho_options_environment_select') {
-      //console.log(req.body);
-
+      
       // Get selected option from payload
       const selectedOption = data.values[0];
       const userId = req.body.member.user.id;
@@ -643,9 +642,8 @@ app.post('/interactions', async function (req, res) {
                   "title": `Selección de ambiente`,
                   "description": `Go <@${userId}>!`,
                   "color": 0x1eff00,
-                  //"timestamp": getTimeStamp(),
                   "footer": {
-                    "text": `Recordá usar "/environments" para ver disponibilidad.`
+                  "text": `Recordá usar "/environments" para ver disponibilidad.`
                   }
                 }
               ]
@@ -656,16 +654,9 @@ app.post('/interactions', async function (req, res) {
       }
       
       try {
-        await DiscordRequest(endpoint, { method: 'DELETE' });
-        // await DiscordRequest(endpoint, {
-        //   method: 'PATCH',
-        //   body: {
-        //     content: '> Selected something ! ' + getRandomEmoji(),
-        //     components: []
-        //   }
-        // });
-        
-      } catch (err) {
+        await DiscordRequest(endpoint, { method: 'DELETE' });        
+      } 
+      catch (err) {
         console.error('Error sending message:', err);
       }
 
@@ -704,13 +695,7 @@ app.post('/interactions', async function (req, res) {
           
           // Update ephemeral message
           await DiscordRequest(endpoint, { method: 'DELETE' });
-          // await DiscordRequest(endpoint, {
-          //   method: 'PATCH',
-          //   body: {
-          //     content: '> Nice choice ' + getRandomEmoji(),
-          //     components: []
-          //   }
-          // });
+          
           
         } catch (err) {
           console.error('Error sending message:', err);
@@ -727,11 +712,9 @@ app.post('/interactions', async function (req, res) {
         const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
         
         ambienteSeleccionado = options[1];      
-      
-      
+            
         try {
-          // Send results
-          
+                    
           if (accionSeleccionada == 'release') {
           
             if (environments[ambienteSeleccionado]) {            
@@ -814,37 +797,26 @@ app.post('/interactions', async function (req, res) {
                   ]
 
                 },
-              });
-
-            
+              });            
           }
-          
-          
-          
           // Update ephemeral message
           await DiscordRequest(endpoint, { method: 'DELETE' });
-
           
-        } catch (err) {
-          console.error('Error sending message:', err);
-        }
-
+      } 
+      catch (err) {
+        console.error('Error sending message:', err);
       }
+
+    }
   
     if (componentId === 'reserva_user') {
+      
       const selectedOption = data.values[0];
       const userId = req.body.member.user.id;
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
       usuarioReserva = selectedOption;
-      
-      //console.log('accionSeleccionada: ', accionSeleccionada);
-      //console.log('ambienteSeleccionado: ', ambienteSeleccionado);
-      //console.log('usuarioReserva: ', usuarioReserva);
-      //console.log('userId Logueado: ', userId);
-
-      // setEnvironment(userId, options[1], options[0]);
-      
+            
       try {
         
         // Validaciones        
@@ -897,38 +869,16 @@ app.post('/interactions', async function (req, res) {
               },
             });
 
-            
-            //setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
-            /*
-            await res.send({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: { 
-                content: '',
-                embeds : [
-                {
-                  "type": "rich",
-                  "title": 'Éxito!',
-                  "description": `El ambiente ${ ambienteSeleccionado } fue reservado para <@${ usuarioReserva }>. `,
-                  "color": 0x00FFFF,
-                  "fields": getEnvironmentsInfo(selectedOption),
-                  "footer": {
-                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                  }
-                }
-              ]
-              },
-            });
-            */
           }
         }
         
         // Update ephemeral message
         await DiscordRequest(endpoint, { method: 'DELETE' });
           
-        } catch (err) {
-          console.error('Error sending message:', err);
-        }
-        
+      } 
+      catch (err) {
+        console.error('Error sending message:', err);
+      }        
       
     }
   }
@@ -950,13 +900,6 @@ app.post('/interactions', async function (req, res) {
         }
 
         cardSeleccionada = modalValues;
-        /*
-        return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: `<@${userId}> typed the following (in a modal):\n\n${modalValues}`,
-          },
-        });*/
 
         setEnvironment(usuarioReserva, ambienteSeleccionado, accionSeleccionada, cardSeleccionada);
 
@@ -1000,7 +943,7 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsInfo(UserId) {
     
-    const envs = ['development', 'testing', 'staging'];
+    const envs = ['development', 'staging', 'testing'];
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
@@ -1021,7 +964,7 @@ app.post('/interactions', async function (req, res) {
         
         fields.push({
             "name": ` => ${envs[i]}  ${icon}`,
-            "value": `Reservado para: <@${ e.id }> \n Desde: ${getTimestampFormat(e.timestamp)} \n Para probar la card: #${e.card}.`,
+            "value": `Reservado para: <@${ e.id }> \n Desde: ${getTimestampFormat(e.timestamp)} \n Para probar la card: #${e.card} \n`,
         });
         
       }
@@ -1031,7 +974,7 @@ app.post('/interactions', async function (req, res) {
         fields.push({
             "name": ` => ${envs[i]}  ${ICON_NOENV}`,
             //"value": "\u200B"
-            "value": 'Libre'
+            "value": 'Libre \n'
         });
       }
 
