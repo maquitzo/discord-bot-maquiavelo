@@ -463,12 +463,12 @@ app.post('/interactions', async function (req, res) {
           embeds : [
           {
             "type": "rich",
-            "title": `Entornos`,
+            "title": `Disponibilidad de entornos`,
             "description": `Acá se muestra el estado de cada ambiente`,
             "color": 0x00FFFF,
             "fields": getEnvironmentsInfo(userId),
             "footer": {
-              "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+              "text": `Recordá usar "/environments" para ver disponibilidad.`
             }
           }
         ]
@@ -602,30 +602,6 @@ app.post('/interactions', async function (req, res) {
       console.log('accionSeleccionada: ', accionSeleccionada);
       
       switch(selectedOption) {
-        /*  
-        case 'list':
-
-          // Send results
-          await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { 
-              content: '',
-              embeds : [
-              {
-                "type": "rich",
-                "title": `Entornos`,
-                "description": `Acá se muestra el estado de cada ambiente`,
-                "color": 0x00FFFF,
-                "fields": getEnvironmentsInfo(userId),
-                "footer": {
-                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                }
-              }
-            ]
-            },
-          });
-          break;
-        */  
         case 'set':
         case 'release':
           
@@ -1045,7 +1021,7 @@ app.post('/interactions', async function (req, res) {
         
         fields.push({
             "name": `${envs[i]}  ${icon}`,
-            "value": `Reservado para: <@${ e.id }> \n\n desde: ${getTimestampFormat(e.timestamp)} \n\n para probar la card: #${e.card}.`,
+            "value": `Reservado para: <@${ e.id }> \n Desde: ${getTimestampFormat(e.timestamp)} \n Para probar la card: #${e.card}.`,
         });
         
       }
