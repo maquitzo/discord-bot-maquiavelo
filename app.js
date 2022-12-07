@@ -758,36 +758,10 @@ app.post('/interactions', async function (req, res) {
           
           if (accionSeleccionada == 'release') {
           
-            if (environments[ambienteSeleccionado]) {
+            if (environments[ambienteSeleccionado]) {            
 
-              // Acá debo lanzar el modal para meter la card en cuestión.
-        
-              return res.send({
-                type: InteractionResponseType.APPLICATION_MODAL,
-                data: {
-                  custom_id: 'modal_card',
-                  title: 'Selección de card',
-                  components: [
-                    {
-                      // Text inputs must be inside of an action component
-                      type: MessageComponentTypes.ACTION_ROW,
-                      components: [
-                        {
-                          // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-                          type: MessageComponentTypes.INPUT_TEXT,
-                          custom_id: 'my_text',
-                          style: 1,
-                          label: 'Ingresá el número de la card a probar.',                    
-                          placeholder: '#42',
-                        },
-                      ],
-                    }
-                  ],
-                },
-              });
-
-              //setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
-              /*
+              setEnvironment(userId, ambienteSeleccionado, accionSeleccionada, '');
+              
               await res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: { 
@@ -806,7 +780,7 @@ app.post('/interactions', async function (req, res) {
                 ]
                 },
               });
-              */
+              
             }
             else {
               await res.send({
@@ -939,7 +913,7 @@ app.post('/interactions', async function (req, res) {
                         custom_id: 'my_text',
                         style: 1,
                         label: 'Ingresá el número de la card a probar.',                    
-                        placeholder: '#42',
+                        placeholder: '42',
                       },
                     ],
                   }
@@ -1008,24 +982,24 @@ app.post('/interactions', async function (req, res) {
           },
         });*/
 
-        setEnvironment(userId, ambienteSeleccionado, accionSeleccionada, cardSeleccionada);
+        setEnvironment(usuarioReserva, ambienteSeleccionado, accionSeleccionada, cardSeleccionada);
 
         await res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: { 
-            content: '',
-            embeds : [
-            {
-              "type": "rich",
-              "title": 'Éxito!',
-              "description": `El ambiente ${ ambienteSeleccionado } fue liberado.`,
-              "color": 0x00FFFF,
-              "fields": getEnvironmentsInfo(ambienteSeleccionado),
-              "footer": {
-                "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-              }
-            }
-          ]
+              data: { 
+                content: '',
+                embeds : [
+                {
+                  "type": "rich",
+                  "title": 'Éxito!',
+                  "description": `El ambiente ${ ambienteSeleccionado } fue reservado para <@${ usuarioReserva }>. `,
+                  "color": 0x00FFFF,
+                  "fields": getEnvironmentsInfo(ambienteSeleccionado),
+                  "footer": {
+                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                  }
+                }
+              ]
           },
         });
       }
@@ -1071,7 +1045,7 @@ app.post('/interactions', async function (req, res) {
         
         fields.push({
             "name": `${envs[i]}  ${icon}`,
-            "value": `Reservado para <@${ e.id }> \n\n desde ${getTimestampFormat(e.timestamp)}`,
+            "value": `Reservado para: <@${ e.id }> \n\n desde: ${getTimestampFormat(e.timestamp)} \n\n para probar la card: #${e.card}.`,
         });
         
       }
@@ -1113,8 +1087,8 @@ app.post('/interactions', async function (req, res) {
             environments[env] = {
               id: userId,
               timestamp: getTimeStamp(),
-              task: task, 
-              card: card
+              task, 
+              card
             };          
         }         
       } 
