@@ -34,7 +34,7 @@ const environments = {};
 var accionSeleccionada = '';
 var ambienteSeleccionado = '';
 var usuarioReserva = 0;
-
+var cardSeleccionada = '';
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
@@ -955,13 +955,6 @@ app.post('/interactions', async function (req, res) {
         
         // Update ephemeral message
         await DiscordRequest(endpoint, { method: 'DELETE' });
-          // await DiscordRequest(endpoint, {
-          //   method: 'PATCH',
-          //   body: {
-          //     content: '> Nice choice ' + getRandomEmoji(),
-          //     components: []
-          //   }
-          // });
           
         } catch (err) {
           console.error('Error sending message:', err);
@@ -982,9 +975,11 @@ app.post('/interactions', async function (req, res) {
       // Get value of text inputs
       for (let action of data.components) {
         let inputComponent = action.components[0];
-        modalValues += `${inputComponent.custom_id}: ${inputComponent.value}\n`;
+        modalValues += `${inputComponent.value}\n`;
       }
 
+      cardSeleccionada = 
+      
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
