@@ -545,11 +545,6 @@ app.post('/interactions', async function (req, res) {
                           value: `${selectedOption}-testing`,
                           description: 'Sprint Release',
                         },
-                        /*{
-                          label: 'PRODUCTION',
-                          value: `${selectedOption}-production`,
-                          description: 'Release ended, master branch',
-                        },*/
                         
                       ],
                     },
@@ -575,21 +570,54 @@ app.post('/interactions', async function (req, res) {
       }
       
       try {
-        await DiscordRequest(endpoint, { method: 'DELETE' });
-        // await DiscordRequest(endpoint, {
-        //   method: 'PATCH',
-        //   body: {
-        //     content: '> Selected something ! ' + getRandomEmoji(),
-        //     components: []
-        //   }
-        // });
-        
+        await DiscordRequest(endpoint, { method: 'DELETE' });        
       } catch (err) {
         console.error('Error sending message:', err);
       }
 
-    }
-        
+    }    
+  
+    if (componentId === 'environment_select') {
+
+        const selectedOption = data.values[0];
+        const userId = req.body.member.user.id;
+        const options = selectedOption.split("-");
+        // Keep selection
+        setEnvironment(userId, options[1], options[0], '');
+
+        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+
+        try {
+          // Send results
+          await res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { 
+              content: '',
+              embeds : [
+              {
+                "type": "rich",
+                "title": `Entornos`,
+                "description": `Acá se muestra el estado de cada ambiente <@${userId}>.`,
+                "color": 0x00FFFF,
+                "fields": getEnvironmentsInfo(userId),
+                "footer": {
+                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                }
+              }
+            ]
+            },
+          });
+          
+          // Update ephemeral message
+          await DiscordRequest(endpoint, { method: 'DELETE' });
+          
+          
+        } catch (err) {
+          console.error('Error sending message:', err);
+        }
+
+      }
+    
     if (componentId === 'tincho_options_environment_select') {
       
       // Get selected option from payload
@@ -661,47 +689,6 @@ app.post('/interactions', async function (req, res) {
       }
 
     }
-  
-    if (componentId === 'environment_select') {
-
-        const selectedOption = data.values[0];
-        const userId = req.body.member.user.id;
-        const options = selectedOption.split("-");
-        // Keep selection
-        setEnvironment(userId, options[1], options[0], '');
-
-        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
-
-        try {
-          // Send results
-          await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { 
-              content: '',
-              embeds : [
-              {
-                "type": "rich",
-                "title": `Entornos`,
-                "description": `Acá se muestra el estado de cada ambiente <@${userId}>.`,
-                "color": 0x00FFFF,
-                "fields": getEnvironmentsInfo(userId),
-                "footer": {
-                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                }
-              }
-            ]
-            },
-          });
-          
-          // Update ephemeral message
-          await DiscordRequest(endpoint, { method: 'DELETE' });
-          
-          
-        } catch (err) {
-          console.error('Error sending message:', err);
-        }
-
-      }
     
     if (componentId === 'tincho_environment_select') {
 
@@ -711,97 +698,96 @@ app.post('/interactions', async function (req, res) {
         
         const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
         
-        ambienteSeleccionado = options[1];      
-            
-        try {
+        ambienteSeleccionado = options[1];              
                     
-          if (accionSeleccionada == 'release') {
-          
-            if (environments[ambienteSeleccionado]) {            
+        if (accionSeleccionada == 'release') {
 
-              setEnvironment(userId, ambienteSeleccionado, accionSeleccionada, '');
-              
-              await res.send({
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: { 
-                  content: '',
-                  embeds : [
-                  {
-                    "type": "rich",
-                    "title": 'Éxito!',
-                    "description": `El ambiente ${ ambienteSeleccionado } fue liberado.`,
-                    "color": 0x00FFFF,
-                    "fields": getEnvironmentsInfo(selectedOption),
-                    "footer": {
-                      "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                    }
-                  }
-                ]
-                },
-              });
-              
-            }
-            else {
-              await res.send({
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: { 
-                  content: '',
-                  embeds : [
-                  {
-                    "type": "rich",
-                    "title": 'Error!',
-                    "description": `<@${userId}> el ambiente No se encuentra ocupado.`,//`<@${selectedOption}> is the CHOSEN.`,
-                    "color": 0x00FFFF,
-                    "fields": getEnvironmentsInfo(selectedOption),
-                    "footer": {
-                      "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                    }
-                  }
-                ]
-                },
-              });
-            }
-          }
-          else {
+          if (environments[ambienteSeleccionado]) {            
+
+            setEnvironment(userId, ambienteSeleccionado, accionSeleccionada, '');
 
             await res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: { 
+                content: '',
+                embeds : [
+                {
+                  "type": "rich",
+                  "title": 'Éxito!',
+                  "description": `El ambiente ${ ambienteSeleccionado } fue liberado.`,
+                  "color": 0x00FFFF,
+                  "fields": getEnvironmentsInfo(selectedOption),
+                  "footer": {
+                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                  }
+                }
+              ]
+              },
+            });
 
-                type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-                data: {
-                  custom_id: 'inputuser',
-                  title: 'inputconuser',
-                  components: [
-                    {
-                      type: MessageComponentTypes.ACTION_ROW,
-                      components: [
-                        {
-                          type: 5,
-                          custom_id: 'reserva_user',
-                          label: 'User',
-                        },
-                      ],
-                    }
-                  ],
-                  content: '',
-                  embeds : [
-                    {
-                      "type": "rich",
-                      "title": 'Selección de usuario',
-                      "description": `<@${userId}> seleccioná el usuario que hará las pruebas.`,
-                      "color": 0x00FFFF,
-                      "fields": [],
-                      "footer": {
-                        "text": `Recordá usar "/environments" para ver disponibilidad.`
-                      }
-                    }
-                  ]
-
-                },
-              });            
           }
-          // Update ephemeral message
-          await DiscordRequest(endpoint, { method: 'DELETE' });
-          
+          else {
+            await res.send({
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: { 
+                content: '',
+                embeds : [
+                {
+                  "type": "rich",
+                  "title": 'Error!',
+                  "description": `<@${userId}> el ambiente No se encuentra ocupado.`,//`<@${selectedOption}> is the CHOSEN.`,
+                  "color": 0x00FFFF,
+                  "fields": getEnvironmentsInfo(selectedOption),
+                  "footer": {
+                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                  }
+                }
+              ]
+              },
+            });
+          }
+        }
+        else {
+
+          await res.send({
+
+              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+              data: {
+                custom_id: 'inputuser',
+                title: 'inputconuser',
+                components: [
+                  {
+                    type: MessageComponentTypes.ACTION_ROW,
+                    components: [
+                      {
+                        type: 5,
+                        custom_id: 'reserva_user',
+                        label: 'User',
+                      },
+                    ],
+                  }
+                ],
+                content: '',
+                embeds : [
+                  {
+                    "type": "rich",
+                    "title": 'Selección de usuario',
+                    "description": `<@${userId}> seleccioná el usuario que hará las pruebas.`,
+                    "color": 0x00FFFF,
+                    "fields": [],
+                    "footer": {
+                      "text": `Recordá usar "/environments" para ver disponibilidad.`
+                    }
+                  }
+                ]
+
+              },
+            });            
+        }
+      
+      try {
+        // Update ephemeral message
+        await DiscordRequest(endpoint, { method: 'DELETE' });          
       } 
       catch (err) {
         console.error('Error sending message:', err);
@@ -815,66 +801,64 @@ app.post('/interactions', async function (req, res) {
       const userId = req.body.member.user.id;
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
-      usuarioReserva = selectedOption;
-            
-      try {
+      usuarioReserva = selectedOption;      
         
-        // Validaciones        
-        if (accionSeleccionada == 'set') {
-          if (environments[ambienteSeleccionado]) {
-            
-            await res.send({
-              type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: { 
-                content: '',
-                embeds : [
-                {
-                  "type": "rich",
-                  "title": 'Error!',
-                  "description": `El ambiente ${ ambienteSeleccionado } está ocupado!!`,
-                  "color": 0x00FFFF,
-                  "fields": getEnvironmentsInfo(selectedOption),
-                  "footer": {
-                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                  }
-                }
-              ]
-              },
-            });
-          }
-          else {
-                        
-            // Acá debo lanzar el modal para meter la card en cuestión.        
-            return res.send({
-              type: InteractionResponseType.APPLICATION_MODAL,
-              data: {
-                custom_id: 'modal_card',
-                title: 'Selección de card',
-                components: [
-                  {
-                    // Text inputs must be inside of an action component
-                    type: MessageComponentTypes.ACTION_ROW,
-                    components: [
-                      {
-                        // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-                        type: MessageComponentTypes.INPUT_TEXT,
-                        custom_id: 'my_text',
-                        style: 1,
-                        label: 'Ingresá el número de la card a probar.',                    
-                        placeholder: '42',
-                      },
-                    ],
-                  }
-                ],
-              },
-            });
+      // Validaciones        
+      if (accionSeleccionada == 'set') {
+        if (environments[ambienteSeleccionado]) {
 
-          }
+          await res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { 
+              content: '',
+              embeds : [
+              {
+                "type": "rich",
+                "title": 'Error!',
+                "description": `El ambiente ${ ambienteSeleccionado } está ocupado!!`,
+                "color": 0x00FFFF,
+                "fields": getEnvironmentsInfo(selectedOption),
+                "footer": {
+                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                }
+              }
+            ]
+            },
+          });
         }
-        
+        else {
+
+          // Acá debo lanzar el modal para meter la card en cuestión.        
+          return res.send({
+            type: InteractionResponseType.APPLICATION_MODAL,
+            data: {
+              custom_id: 'modal_card',
+              title: 'Selección de card',
+              components: [
+                {
+                  // Text inputs must be inside of an action component
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                    {
+                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                      type: MessageComponentTypes.INPUT_TEXT,
+                      custom_id: 'my_text',
+                      style: 1,
+                      label: 'Ingresá el número de la card a probar.',                    
+                      placeholder: '42',
+                    },
+                  ],
+                }
+              ],
+            },
+          });
+
+        }
+      }
+       
+      try {
         // Update ephemeral message
-        await DiscordRequest(endpoint, { method: 'DELETE' });
-          
+        await DiscordRequest(endpoint, { method: 'DELETE' });          
       } 
       catch (err) {
         console.error('Error sending message:', err);
@@ -888,46 +872,48 @@ app.post('/interactions', async function (req, res) {
     const modalId = data.custom_id;
     // user ID of member who filled out modal
     const userId = req.body.member.user.id;
+    const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
-    try {
-    
-      if (modalId === 'modal_card') {
-        let modalValues = '';
-        // Get value of text inputs
-        for (let action of data.components) {
-          let inputComponent = action.components[0];
-          modalValues += `${inputComponent.value}\n`;
-        }
-
-        cardSeleccionada = modalValues;
-
-        setEnvironment(usuarioReserva, ambienteSeleccionado, accionSeleccionada, cardSeleccionada);
-
-        await res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: { 
-                content: '',
-                embeds : [
-                {
-                  "type": "rich",
-                  "title": 'Éxito!',
-                  "description": `El ambiente ${ ambienteSeleccionado } fue reservado para <@${ usuarioReserva }>. `,
-                  "color": 0x00FFFF,
-                  "fields": getEnvironmentsInfo(ambienteSeleccionado),
-                  "footer": {
-                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                  }
-                }
-              ]
-          },
-        });
+    if (modalId === 'modal_card') {
+      let modalValues = '';
+      // Get value of text inputs
+      for (let action of data.components) {
+        let inputComponent = action.components[0];
+        modalValues += `${inputComponent.value}\n`;
       }
+
+      cardSeleccionada = modalValues;
+
+      setEnvironment(usuarioReserva, ambienteSeleccionado, accionSeleccionada, cardSeleccionada);
+
+      await res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { 
+              content: '',
+              embeds : [
+              {
+                "type": "rich",
+                "title": 'Éxito!',
+                "description": `El ambiente ${ ambienteSeleccionado } fue reservado para <@${ usuarioReserva }>. `,
+                "color": 0x00FFFF,
+                "fields": getEnvironmentsInfo(ambienteSeleccionado),
+                "footer": {
+                  "text": `Recordá usar "/environments" para ver disponibilidad.`
+                }
+              }
+            ]
+        },
+      });
+    }
+    
+    try {
+      // Update ephemeral message
+      await DiscordRequest(endpoint, { method: 'DELETE' });    
     }
     catch (err) 
     {
       console.error('Error sending message:', err);
-    }
-    
+    }    
     
   }  
   
