@@ -640,12 +640,12 @@ app.post('/interactions', async function (req, res) {
               "embeds": [
                 {
                   "type": "rich",
-                  "title": `Entornos`,
-                  "description": `Seleccioná un ambiente <@${userId}>`,
+                  "title": `Selección de ambiente`,
+                  "description": `Go <@${userId}>!`,
                   "color": 0x1eff00,
-                  "timestamp": getTimeStamp(),
+                  //"timestamp": getTimeStamp(),
                   "footer": {
-                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                    "text": `Recordá usar "/environments" para ver disponibilidad.`
                   }
                 }
               ]
@@ -803,12 +803,12 @@ app.post('/interactions', async function (req, res) {
                   embeds : [
                     {
                       "type": "rich",
-                      "title": ``,
+                      "title": 'Selección de usuario',
                       "description": `<@${userId}> seleccioná el usuario que hará las pruebas.`,
                       "color": 0x00FFFF,
                       "fields": [],
                       "footer": {
-                        "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                        "text": `Recordá usar "/environments" para ver disponibilidad.`
                       }
                     }
                   ]
@@ -1020,7 +1020,7 @@ app.post('/interactions', async function (req, res) {
         //content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
         
         fields.push({
-            "name": `${envs[i]}  ${icon}`,
+            "name": ` => ${envs[i]}  ${icon}`,
             "value": `Reservado para: <@${ e.id }> \n Desde: ${getTimestampFormat(e.timestamp)} \n Para probar la card: #${e.card}.`,
         });
         
@@ -1029,8 +1029,9 @@ app.post('/interactions', async function (req, res) {
         //content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
         
         fields.push({
-            "name": `${envs[i]}  ${ICON_NOENV}`,
-            "value": "\u200B"
+            "name": ` => ${envs[i]}  ${ICON_NOENV}`,
+            //"value": "\u200B"
+            "value": 'Libre'
         });
       }
 
