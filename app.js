@@ -426,8 +426,7 @@ app.post('/interactions', async function (req, res) {
         },
       });
     }
-    
-    // Tincho
+        
     if (data.name === 'tincho') {
       
       const userId = req.body.member.user.id;      
@@ -784,7 +783,6 @@ app.post('/interactions', async function (req, res) {
           
             if (environments[ambienteSeleccionado]) {
 
-              //setEnvironmentTincho(userId, ambienteSeleccionado, accionSeleccionada);
               setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
 
               await res.send({
@@ -902,6 +900,46 @@ app.post('/interactions', async function (req, res) {
       
       try {
         
+        // Acá debo lanzar el modal para meter la card en cuestión.
+        
+         return res.send({
+          type: InteractionResponseType.APPLICATION_MODAL,
+          data: {
+            custom_id: 'my_modal',
+            title: 'Modal title',
+            components: [
+              {
+                // Text inputs must be inside of an action component
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                    // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                    type: MessageComponentTypes.INPUT_TEXT,
+                    custom_id: 'my_text',
+                    style: 1,
+                    label: 'Ingresá el número de la card a probar.',
+                    title: 'Selección de card',
+                    placeholder: '',
+                  },
+                ],
+              },
+              {
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                    type: MessageComponentTypes.INPUT_TEXT,
+                    custom_id: 'my_longer_text',
+                    // Bigger text box for input
+                    style: 2,
+                    label: 'Type some (longer) text',
+                  },
+                ],
+              },
+            ],
+          },
+        });
+        
+        
         // Validaciones        
         if (accionSeleccionada == 'set') {
           if (environments[ambienteSeleccionado]) {
@@ -927,7 +965,6 @@ app.post('/interactions', async function (req, res) {
           }
           else {
             
-            //setEnvironmentTincho(usuarioReserva, ambienteSeleccionado, accionSeleccionada);
             setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
             
             await res.send({
@@ -1033,41 +1070,6 @@ app.post('/interactions', async function (req, res) {
       //let d = new Date(new Date().toLocaleString("en-US", {timeZone: "timezone id"}));
 
       return new Date(now.getTime() + offset);
-  }
-  
-  function setEnvironmentTincho(userId,env,task) {
-      if (task == 'release') {
-        // delete environments[env]; original maqui
-        if (environments[env]) {
-            delete environments[env]; 
-          }
-          else {             
-            console.log('El ambiente NO se encuentra ocupado!');
-          }
-      }
-      else {
-        if (task == 'set') {
-          if (environments[env]) {
-            console.log("ESTA OCUPADO!");
-          }
-          else {            
-            environments[env] = {
-              id: userId,
-              timestamp: getTimeStamp(),
-              task: task
-            };            
-            console.log(`El ambiente "${ env }" fue reservado por <@${userId}>.`);
-          }
-        }
-        /* original maqui
-        environments[env] = {
-            id: userId,
-            timestamp: getTimeStamp(),
-            task: task
-        };
-        */ 
-      } 
-      //console.log("after setting", environments);
   }
   
   function setEnvironment(userId, env, task) {
