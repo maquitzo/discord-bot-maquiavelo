@@ -478,29 +478,6 @@ app.post('/interactions', async function (req, res) {
       
     }
   }
-
-  if (type === InteractionType.APPLICATION_MODAL_SUBMIT) {
-    // custom_id of modal
-    const modalId = data.custom_id;
-    // user ID of member who filled out modal
-    const userId = req.body.member.user.id;
-
-    if (modalId === 'my_modal') {
-      let modalValues = '';
-      // Get value of text inputs
-      for (let action of data.components) {
-        let inputComponent = action.components[0];
-        modalValues += `${inputComponent.custom_id}: ${inputComponent.value}\n`;
-      }
-
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: `<@${userId}> typed the following (in a modal):\n\n${modalValues}`,
-        },
-      });
-    }
-  }
   
   if (type === InteractionType.MESSAGE_COMPONENT) {
     // custom_id set in payload when sending message component
@@ -905,8 +882,8 @@ app.post('/interactions', async function (req, res) {
          return res.send({
           type: InteractionResponseType.APPLICATION_MODAL,
           data: {
-            custom_id: 'my_modal',
-            title: 'Modal title',
+            custom_id: 'modal_card',
+            title: 'Selección de card',
             components: [
               {
                 // Text inputs must be inside of an action component
@@ -917,24 +894,11 @@ app.post('/interactions', async function (req, res) {
                     type: MessageComponentTypes.INPUT_TEXT,
                     custom_id: 'my_text',
                     style: 1,
-                    label: 'Ingresá el número de la card a probar.',
-                    title: 'Selección de card',
-                    placeholder: '',
+                    label: 'Ingresá el número de la card a probar.',                    
+                    placeholder: '#42',
                   },
                 ],
-              },
-              {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                    type: MessageComponentTypes.INPUT_TEXT,
-                    custom_id: 'my_longer_text',
-                    // Bigger text box for input
-                    style: 2,
-                    label: 'Type some (longer) text',
-                  },
-                ],
-              },
+              }
             ],
           },
         });
@@ -1006,6 +970,29 @@ app.post('/interactions', async function (req, res) {
       
     }
   }
+
+  if (type === InteractionType.APPLICATION_MODAL_SUBMIT) {
+    // custom_id of modal
+    const modalId = data.custom_id;
+    // user ID of member who filled out modal
+    const userId = req.body.member.user.id;
+
+    if (modalId === 'modal_card') {
+      let modalValues = '';
+      // Get value of text inputs
+      for (let action of data.components) {
+        let inputComponent = action.components[0];
+        modalValues += `${inputComponent.custom_id}: ${inputComponent.value}\n`;
+      }
+
+      return res.send({
+        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        data: {
+          content: `<@${userId}> typed the following (in a modal):\n\n${modalValues}`,
+        },
+      });
+    }
+  }  
   
   // END environments
   
