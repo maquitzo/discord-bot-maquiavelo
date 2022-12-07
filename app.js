@@ -243,13 +243,13 @@ app.post('/interactions', async function (req, res) {
             
           case 'set':
             env = req.body.data.options[1].value;
-            setEnvironment(userId, env, task);
+            setEnvironment(userId, env, task, '');
             action = "Reservando";
             break;
             
           case 'release':
             env = req.body.data.options[1].value;
-            setEnvironment(userId, env, task);
+            setEnvironment(userId, env, task, '');
             action = "Liberando";
             break;
         }
@@ -701,7 +701,7 @@ app.post('/interactions', async function (req, res) {
         const userId = req.body.member.user.id;
         const options = selectedOption.split("-");
         // Keep selection
-        setEnvironment(userId, options[1], options[0]);
+        setEnvironment(userId, options[1], options[0], '');
 
         const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
@@ -760,8 +760,34 @@ app.post('/interactions', async function (req, res) {
           
             if (environments[ambienteSeleccionado]) {
 
-              setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
+              // Acá debo lanzar el modal para meter la card en cuestión.
+        
+              return res.send({
+                type: InteractionResponseType.APPLICATION_MODAL,
+                data: {
+                  custom_id: 'modal_card',
+                  title: 'Selección de card',
+                  components: [
+                    {
+                      // Text inputs must be inside of an action component
+                      type: MessageComponentTypes.ACTION_ROW,
+                      components: [
+                        {
+                          // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                          type: MessageComponentTypes.INPUT_TEXT,
+                          custom_id: 'my_text',
+                          style: 1,
+                          label: 'Ingresá el número de la card a probar.',                    
+                          placeholder: '#42',
+                        },
+                      ],
+                    }
+                  ],
+                },
+              });
 
+              //setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
+              /*
               await res.send({
                 type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
                 data: { 
@@ -780,7 +806,7 @@ app.post('/interactions', async function (req, res) {
                 ]
                 },
               });
-
+              */
             }
             else {
               await res.send({
@@ -847,13 +873,7 @@ app.post('/interactions', async function (req, res) {
           
           // Update ephemeral message
           await DiscordRequest(endpoint, { method: 'DELETE' });
-          // await DiscordRequest(endpoint, {
-          //   method: 'PATCH',
-          //   body: {
-          //     content: '> Nice choice ' + getRandomEmoji(),
-          //     components: []
-          //   }
-          // });
+
           
         } catch (err) {
           console.error('Error sending message:', err);
@@ -868,41 +888,14 @@ app.post('/interactions', async function (req, res) {
       
       usuarioReserva = selectedOption;
       
-      console.log('accionSeleccionada: ', accionSeleccionada);
-      console.log('ambienteSeleccionado: ', ambienteSeleccionado);
-      console.log('usuarioReserva: ', usuarioReserva);
-      console.log('userId Logueado: ', userId);
+      //console.log('accionSeleccionada: ', accionSeleccionada);
+      //console.log('ambienteSeleccionado: ', ambienteSeleccionado);
+      //console.log('usuarioReserva: ', usuarioReserva);
+      //console.log('userId Logueado: ', userId);
 
       // setEnvironment(userId, options[1], options[0]);
       
       try {
-        
-        // Acá debo lanzar el modal para meter la card en cuestión.
-        
-         return res.send({
-          type: InteractionResponseType.APPLICATION_MODAL,
-          data: {
-            custom_id: 'modal_card',
-            title: 'Selección de card',
-            components: [
-              {
-                // Text inputs must be inside of an action component
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                    // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-                    type: MessageComponentTypes.INPUT_TEXT,
-                    custom_id: 'my_text',
-                    style: 1,
-                    label: 'Ingresá el número de la card a probar.',                    
-                    placeholder: '#42',
-                  },
-                ],
-              }
-            ],
-          },
-        });
-        
         
         // Validaciones        
         if (accionSeleccionada == 'set') {
@@ -928,9 +921,35 @@ app.post('/interactions', async function (req, res) {
             });
           }
           else {
+                        
+            // Acá debo lanzar el modal para meter la card en cuestión.        
+            return res.send({
+              type: InteractionResponseType.APPLICATION_MODAL,
+              data: {
+                custom_id: 'modal_card',
+                title: 'Selección de card',
+                components: [
+                  {
+                    // Text inputs must be inside of an action component
+                    type: MessageComponentTypes.ACTION_ROW,
+                    components: [
+                      {
+                        // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                        type: MessageComponentTypes.INPUT_TEXT,
+                        custom_id: 'my_text',
+                        style: 1,
+                        label: 'Ingresá el número de la card a probar.',                    
+                        placeholder: '#42',
+                      },
+                    ],
+                  }
+                ],
+              },
+            });
+
             
-            setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
-            
+            //setEnvironment(userId, ambienteSeleccionado, accionSeleccionada);
+            /*
             await res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
               data: { 
@@ -949,7 +968,7 @@ app.post('/interactions', async function (req, res) {
               ]
               },
             });
-            
+            */
           }
         }
         
@@ -970,23 +989,53 @@ app.post('/interactions', async function (req, res) {
     // user ID of member who filled out modal
     const userId = req.body.member.user.id;
 
-    if (modalId === 'modal_card') {
-      let modalValues = '';
-      // Get value of text inputs
-      for (let action of data.components) {
-        let inputComponent = action.components[0];
-        modalValues += `${inputComponent.value}\n`;
-      }
+    try {
+    
+      if (modalId === 'modal_card') {
+        let modalValues = '';
+        // Get value of text inputs
+        for (let action of data.components) {
+          let inputComponent = action.components[0];
+          modalValues += `${inputComponent.value}\n`;
+        }
 
-      cardSeleccionada = 
-      
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: `<@${userId}> typed the following (in a modal):\n\n${modalValues}`,
-        },
-      });
+        cardSeleccionada = modalValues;
+        /*
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: `<@${userId}> typed the following (in a modal):\n\n${modalValues}`,
+          },
+        });*/
+
+        setEnvironment(userId, ambienteSeleccionado, accionSeleccionada, cardSeleccionada);
+
+        await res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: { 
+            content: '',
+            embeds : [
+            {
+              "type": "rich",
+              "title": 'Éxito!',
+              "description": `El ambiente ${ ambienteSeleccionado } fue liberado.`,
+              "color": 0x00FFFF,
+              "fields": getEnvironmentsInfo(ambienteSeleccionado),
+              "footer": {
+                "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+              }
+            }
+          ]
+          },
+        });
+      }
     }
+    catch (err) 
+    {
+      console.error('Error sending message:', err);
+    }
+    
+    
   }  
   
   // END environments
@@ -1022,7 +1071,7 @@ app.post('/interactions', async function (req, res) {
         
         fields.push({
             "name": `${envs[i]}  ${icon}`,
-            "value": `reservado para <@${ e.id }> desde ${getTimestampFormat(e.timestamp)}`,
+            "value": `Reservado para <@${ e.id }> \n\n desde ${getTimestampFormat(e.timestamp)}`,
         });
         
       }
@@ -1054,7 +1103,7 @@ app.post('/interactions', async function (req, res) {
       return new Date(now.getTime() + offset);
   }
   
-  function setEnvironment(userId, env, task) {
+  function setEnvironment(userId, env, task, card) {
       
       if (task == 'release') {
         delete environments[env];        
@@ -1064,7 +1113,8 @@ app.post('/interactions', async function (req, res) {
             environments[env] = {
               id: userId,
               timestamp: getTimeStamp(),
-              task: task
+              task: task, 
+              card: card
             };          
         }         
       } 
