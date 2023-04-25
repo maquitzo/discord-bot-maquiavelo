@@ -178,7 +178,7 @@ export const TINCHO_COMMAND = {
 
 export const ENV_COMMAND = {
   name: 'environments',
-  description: 'Listar, reservar o liberar ambientes',
+  description: 'Manipulacao dos entornos',
   type: 1,
 };
 

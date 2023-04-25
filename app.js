@@ -382,18 +382,19 @@ app.post('/interactions', async function (req, res) {
               ],
             }
           ],
-          "embeds": [
-            {
-              "type": "rich",
-              "title": `Entornos`,
-              "description": `¿Qué harás ahora <@${userId}> ?`,
-              "color": 0xff2200,
-              "timestamp": getTimeStamp(),
-              "footer": {
-                "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-              }
-            }
-          ]
+          // "embeds": [
+          //   {
+          //     "type": "rich",
+          //     "title": `Entornos`,
+          //     "description": `¿Qué harás ahora <@${userId}> ?`,
+          //     "color": 0xff2200,
+          //     "timestamp": getTimeStamp(),
+          //     "footer": {
+          //       "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+          //     }
+          //   }
+          // ]
+          "embeds" : getEnvironmentsList(userId),
         },
       });
     }
@@ -409,7 +410,7 @@ app.post('/interactions', async function (req, res) {
           embeds: [
             {
               "type": "rich",
-              "title": `No es por ahí rey !! `,
+              "title": `No es por ahí rey !!! `,
               "description": `Mi corazonzito tiene otros colores`,
               "color": 0x0099ff,
               "image": {
@@ -463,9 +464,9 @@ app.post('/interactions', async function (req, res) {
             "description": `El estado de disponibilidad de cada uno`,
             "color": 0x00FFFF,
             "fields": getEnvironmentsInfo(userId),
-            // "footer": {
-            //   "text": `Recordá usar "/environments" para ver disponibilidad.`
-            // }
+            "footer": {
+              "text": `Recordá usar "/environments" para ver disponibilidad.`
+            }
           }
         ]
         },
@@ -495,19 +496,8 @@ app.post('/interactions', async function (req, res) {
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: { 
               content: '',
-              embeds : [
-              {
-                "type": "rich",
-                "title": `Entornos`,
-                "description": `Acá se muestra el estado de cada ambiente`,
-                "color": 0x00FFFF,
-                "fields": getEnvironmentsInfo(userId),
-                "footer": {
-                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                }
-              }
-            ]
-            },
+              embeds : getEnvironmentsList(userId),
+            }
           });
           break;
           
@@ -915,8 +905,30 @@ app.post('/interactions', async function (req, res) {
   
   // END environments
   
+  // commands
+  
+  function getEnvironmentsList(userId) {
+    
+    return [
+              {
+                "type": "rich",
+                "title": `Entornos`,
+                "description": `La disponibildad de cada ambiente`,
+                "color": 0x00FFFF,
+                "fields": getEnvironmentsInfo(userId),
+                // "footer": {
+                //   "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+                // }
+                "footer" : { "text" : ` ` }
+              }
+          ];
+  }
+  
+  // END commands
   
   // TODO poner todo esto en utils
+  
+
   function getTimestampFormat (timestamp) {
     
     return new Date(timestamp).toUTCString().replace( / GMT$/, "" );
