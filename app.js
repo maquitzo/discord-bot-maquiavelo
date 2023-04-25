@@ -231,14 +231,10 @@ app.post('/interactions', async function (req, res) {
             //   development: { id: '808483336548253706', env: 'development', task: 'set' },
             //   testing: { id: '808483336548253706', env: 'testing', task: 'set' }
             // }
-                        
-            const content = getEnvironmentsInfo();
-            
             return res.send({
               type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-              data: { content: content },
+              data: { content: getEnvironmentsInfo() },
             });
-            
             break;
             
           case 'set':
