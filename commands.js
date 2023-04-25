@@ -15,6 +15,8 @@ async function HasGuildCommand(appId, guildId, command) {
   try {
     const res = await DiscordRequest(endpoint, { method: 'GET' });
     const data = await res.json();
+    
+    console.log('data',data);
 
     if (data) {
       const installedNames = data.map((c) => c['name']);

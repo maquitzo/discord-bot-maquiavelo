@@ -361,12 +361,12 @@ app.post('/interactions', async function (req, res) {
                   type: MessageComponentTypes.STRING_SELECT,
                   custom_id: 'options_environment_select',
                   "placeholder": "Seleccionar opción",
-                  options: [
-                    {
-                      label: 'LISTAR',
-                      value: 'list',
-                      description: 'Disponibilidad de los ambientes',
-                    },
+                  "options": [
+                    // {
+                    //   label: 'LISTAR',
+                    //   value: 'list',
+                    //   description: 'Disponibilidad de los ambientes',
+                    // },
                     {
                       label: 'RESERVAR',
                       value: 'set',
@@ -410,7 +410,7 @@ app.post('/interactions', async function (req, res) {
           embeds: [
             {
               "type": "rich",
-              "title": `No es por ahí rey !!! `,
+              "title": `No es por ahí rey !!! !!! `,
               "description": `Mi corazonzito tiene otros colores`,
               "color": 0x0099ff,
               "image": {
