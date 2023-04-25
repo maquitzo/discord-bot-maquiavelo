@@ -2,6 +2,8 @@ import { getRPSChoices, getRPSEnvironments, getRPSOptions } from './game.js';
 import { capitalize, DiscordRequest } from './utils.js';
 
 export async function HasGuildCommands(appId, guildId, commands) {
+  
+  console.log(appId, " ", guildId);
   if (guildId === '' || appId === '') return;
 
   commands.forEach((c) => HasGuildCommand(appId, guildId, c));
@@ -16,7 +18,7 @@ async function HasGuildCommand(appId, guildId, command) {
     const res = await DiscordRequest(endpoint, { method: 'GET' });
     const data = await res.json();
     
-    console.log('data',data);
+    //console.log('data',data);
 
     if (data) {
       const installedNames = data.map((c) => c['name']);
@@ -26,7 +28,7 @@ async function HasGuildCommand(appId, guildId, command) {
         InstallGuildCommand(appId, guildId, command);
       } else {
         console.log(`"${command['name']}" command already installed`);
-        if (command['name'] == "experta") {
+        if (command['name'] == "environments") {
           console.log(`"${command['name']}" command already installed .. updating`);
           InstallGuildCommand(appId, guildId, command);
         }
