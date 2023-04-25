@@ -432,7 +432,7 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: { 
           content: '',
-                  components: [
+            components: [
             {
               type: MessageComponentTypes.ACTION_ROW,
               components: [
@@ -460,12 +460,12 @@ app.post('/interactions', async function (req, res) {
           {
             "type": "rich",
             "title": `Disponibilidad de entornos`,
-            "description": `Acá se muestra el estado de cada ambiente`,
+            "description": `El estado de disponibilidad de cada uno`,
             "color": 0x00FFFF,
             "fields": getEnvironmentsInfo(userId),
-            "footer": {
-              "text": `Recordá usar "/environments" para ver disponibilidad.`
-            }
+            // "footer": {
+            //   "text": `Recordá usar "/environments" para ver disponibilidad.`
+            // }
           }
         ]
         },
