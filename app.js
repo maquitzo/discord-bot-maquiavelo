@@ -347,6 +347,8 @@ app.post('/interactions', async function (req, res) {
     
     if (data.name === 'environments') {
       
+      console.log("environments call !!");
+      
       const userId = req.body.member.user.id;
       
       return res.send({

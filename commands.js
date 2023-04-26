@@ -28,7 +28,7 @@ async function HasGuildCommand(appId, guildId, command) {
         InstallGuildCommand(appId, guildId, command);
       } else {
         console.log(`"${command['name']}" command already installed`);
-        if (command['name'] == "environments") {
+        if (command['name'] == "environments" || command['name'] == "tincho")  {
           console.log(`"${command['name']}" command already installed .. updating`);
           InstallGuildCommand(appId, guildId, command);
         }
