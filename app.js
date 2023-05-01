@@ -953,43 +953,54 @@ app.post('/interactions', async function (req, res) {
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
     
-    // let content = `> \n`;
-    // content += `> We got this environments registered <@${UserId}> :\n`;
-    
     let icon = ICON_NOENV;
     let fields = [];
 
-    envs.forEach((env)=> {
+    envs.forEach((element) => {
       
-      if (environments[env]) {
-        console.log('exist ' + env);
-      } else
-        console.log('not exist ' + env);
+      let add_environment = {
+          "name": ` => ${element}  ${ICON_NOENV}`,
+          "value": 'Libre \n'
+      }
+      
+      let env = environments[element];
+      
+      if (env)
+        add_environment = {
+          "name": ` => ${element}  ${env.task == 'set'? ICON_ENV : ICON_NOENV}`,
+          "value": `Reservado para: <@${ env.id }> \n Desde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
+        };
+                                        
+      fields.push(add_environment);
       
     });
     
-    for(let i = 0; i < envs.length; i++) {
+//     for(let i = 0; i < envs.length; i++) {
       
-      const e = environments[envs[i]];
+//       const e = environments[envs[i]];
       
-      if (e) {
-        icon = (e.task == 'set'? ICON_ENV : ICON_NOENV);
-        //content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
+//       if (e) {
+//         icon = (e.task == 'set'? ICON_ENV : ICON_NOENV);
+//         //content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
         
-        fields.push();
+//         fields.push({
+//           "name": ` => ${envs[i]}  ${icon}`,
+//           "value": `Reservado para: <@${ e.id }> \n Desde: ${getTimestampFormat(e.timestamp)} \n Para probar la card: #${e.card} \n`,
+//         });
+      
         
-      }
-      else {
-        //content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
+//       }
+//       else {
+//         //content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
         
-        fields.push({
-            "name": ` => ${envs[i]}  ${ICON_NOENV}`,
-            //"value": "\u200B"
-            "value": 'Libre \n'
-        });
-      }
+//         fields.push({
+//             "name": ` => ${envs[i]}  ${ICON_NOENV}`,
+//             //"value": "\u200B"
+//             "value": 'Libre \n'
+//         });
+//       }
 
-    };    
+//     };    
     
 
 //     if (content == "") 
