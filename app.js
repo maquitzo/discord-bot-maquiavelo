@@ -937,6 +937,15 @@ app.post('/interactions', async function (req, res) {
     
   }
   
+  function getEnvironment(name, icon, user, user_time, card) {
+    
+      return {
+          "name": ` => ${name}  ${icon}`,
+          "value": `Reservado para: <@${ user }> \n Desde: ${getTimestampFormat(user_time)} \n Para probar la card: #${card} \n`,
+      }
+    
+  }
+  
   function getEnvironmentsInfo(UserId) {
     
     const envs = ['development', 'staging', 'testing'];
@@ -950,6 +959,15 @@ app.post('/interactions', async function (req, res) {
     let icon = ICON_NOENV;
     let fields = [];
 
+    envs.forEach((env)=> {
+      
+      if (environments[env]) {
+        console.log('exist ' + env);
+      } else
+        console.log('not exist ' + env);
+      
+    });
+    
     for(let i = 0; i < envs.length; i++) {
       
       const e = environments[envs[i]];
@@ -958,10 +976,7 @@ app.post('/interactions', async function (req, res) {
         icon = (e.task == 'set'? ICON_ENV : ICON_NOENV);
         //content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
         
-        fields.push({
-            "name": ` => ${envs[i]}  ${icon}`,
-            "value": `Reservado para: <@${ e.id }> \n Desde: ${getTimestampFormat(e.timestamp)} \n Para probar la card: #${e.card} \n`,
-        });
+        fields.push();
         
       }
       else {
@@ -998,17 +1013,16 @@ app.post('/interactions', async function (req, res) {
       if (task == 'release') {
         delete environments[env];        
       }
-      else {
-        if (task == 'set') {          
-            environments[env] = {
-              id: userId,
-              timestamp: getTimeStamp(),
-              task, 
-              card
-            };          
-        }         
-      } 
-      
+
+      if (task == 'set') {          
+          environments[env] = {
+            id: userId,
+            timestamp: getTimeStamp(),
+            task, 
+            card
+          };          
+      }         
+
   }
   
   function getGiphy() {
