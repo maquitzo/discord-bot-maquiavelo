@@ -347,7 +347,7 @@ app.post('/interactions', async function (req, res) {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             // Fetches a random emoji to send from a helper function
-            content: 'What is your object of choice?',
+            content: 'Cual ambiente ?',
             // Indicates it'll be an ephemeral message
             flags: InteractionResponseFlags.EPHEMERAL,
             components: [
@@ -357,7 +357,7 @@ app.post('/interactions', async function (req, res) {
                   {
                     type: MessageComponentTypes.STRING_SELECT,
                     // Append game ID
-                    custom_id: `select_choice_${gameId}`,
+                    custom_id: `env_choice_${setId}`,
                     options: getShuffledOptions(),
                   },
                 ],
@@ -369,6 +369,44 @@ app.post('/interactions', async function (req, res) {
         await DiscordRequest(endpoint, { method: 'DELETE' });
       } catch (err) {
         console.error('Error sending message:', err);
+      }
+      
+    } else if (componentId.startsWith('env_choice_')) {
+      // get the associated set ID
+      const setId = componentId.replace('env_choice_', '');
+
+      if (activeGames[setId]) {
+        // Get user ID and object choice for responding user
+        const userId = req.body.member.user.id;
+        const objectName = data.values[0];
+        // Calculate result from helper function
+        const resultStr = getResult(activeGames[setId], {
+          id: userId,
+          objectName,
+        });
+
+        // Remove set from storage
+        delete activeGames[setId];
+        // Update message with token in request body
+        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+
+        try {
+          // Send results
+          await res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { content: resultStr },
+          });
+          // Update ephemeral message
+          await DiscordRequest(endpoint, {
+            method: 'PATCH',
+            body: {
+              content: 'Nice choice ' + getRandomEmoji(),
+              components: []
+            }
+          });
+        } catch (err) {
+          console.error('Error sending message:', err);
+        }
       }
     }
   }
