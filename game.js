@@ -106,38 +106,38 @@ let RPSEnvironments = {
   development: {
     label:'Desarrollo',
     description: 'desarrollo',
-    id:0,
+    id:'',
     branch:'',
     card:'',
     state: 0,
-    timestamp:0
+    timestamp:''
   },
   test: {
     label:'Testing   ',
     description: 'Release v1X.XX.XX',
-    id:0,
+    id:'808483336548253706',
     branch:'',
     card:'',
     state: 1,
-    timestamp:0
+    timestamp:'2023-05-02T09:42:40.301Z'
   },
   staging: {
     label:'Stage     ',
     description: 'Staging',
-    id:0,
+    id:'',
     branch:'',
     card:'',
     state: 0,
-    timestamp:0
+    timestamp:''
   },
   demo: {
     label:'Demo.     ',
     description: 'Ambiente para una Demo en particular',
-    id:0,
+    id:'',
     branch:'',
     card:'',
     state: 0,
-    timestamp:0
+    timestamp:''
   },
 }
 
@@ -188,7 +188,7 @@ export function getRPSEnvironmentsAvailables() {
 export function setRPSEnvironments(env,data) {
   
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  console.log(RPSEnvironments);
+  //console.log(RPSEnvironments);
 }
 
 const RPSOptions = {

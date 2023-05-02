@@ -1176,7 +1176,11 @@ app.post('/interactions', async function (req, res) {
           card
         };  
         
-        let update = {
+        let environment = getRPSEnvironments().map(e => console.log(e));
+        
+        console.log('aaad', environment);
+          
+        let update = { ...environment, 
           id:userId,
           card:card,
           state: 1,
