@@ -1083,32 +1083,22 @@ app.post('/interactions', async function (req, res) {
       if (env.state != 0)
         return {
           "type": "rich",
-          "title": `${ICON_ENV}   ${env.label} `,
-          "color": 0x00FFFF,
-          inline: true,
+          "title": `${env.label}                                                            ${ICON_ENV} `,
+          "color": 0xc0392b,
           //"description": 'aaaa',
           "fields": [
             {
-              "name": `Probando: `,
-              "value": `${env.tester}`,
-            },
-            {
-              "name": `Desde: `,
-              "value": `${getTimestampFormat(env.timestamp)}`,
-            },
-                    {
-              "name": `Card: `,
-              "value": `#${env.card} \n`,
-            },
+              "name": ``,
+              "value": `Probando: ${env.tester} \nDesde: ${getTimestampFormat(env.timestamp)} \nCard: #${env.card} \n`,
+            }
           ],
           
         }
     
         return {
           "type": "rich",
-          "title": `${ICON_NOENV}   ${env.label} `,
+          "title": `${env.label}                                                            ${ICON_NOENV} `,
           "color": 0x00FFFF,
-          inline: true,
           //"description": 'aaaa',
           "fields": [{"name": `Disponible`, "value": ''}],
         }
@@ -1202,33 +1192,7 @@ app.post('/interactions', async function (req, res) {
     };
  
   }
-  
-  function getEnvironmentX(env) {
-    
-    const ICON_NOENV = ':blue_heart:';
-    const ICON_ENV = ':heart:';
 
-    if (env.state != 0)
-      return [
-        {
-          "name": `Probando: `,
-          "value": `${env.tester}`,
-        },
-        {
-          "name": `Desde: `,
-          "value": `${getTimestampFormat(env.timestamp)}`,
-        },
-                {
-          "name": `Card: `,
-          "value": `#${env.card} \n`,
-        },
-      ]
-
-    return [{
-      "name": `Disponible`, "value": '',
-    }];
-      
-  }
   
   
   function getEnvironmentsInfo(UserId) {
