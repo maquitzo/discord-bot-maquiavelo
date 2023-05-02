@@ -845,8 +845,23 @@ app.post('/interactions', async function (req, res) {
             type: InteractionResponseType.APPLICATION_MODAL,
             data: {
               custom_id: 'modal_set',
-              title: 'Reservando ' + environment,
+              title: 'Reservando ' + environment.toUpperCase(),
               components: [
+                {
+                  // Text inputs must be inside of an action component
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                    {
+                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                      type: MessageComponentTypes.INPUT_TEXT,
+                      custom_id: 'environment',
+                      style: 1,
+                      label: 'Entorno', 
+                      value: environment,
+                      placeholder: 'environment',
+                    },
+                  ],
+                },
                 {
                   // Text inputs must be inside of an action component
                   type: MessageComponentTypes.ACTION_ROW,
@@ -856,7 +871,7 @@ app.post('/interactions', async function (req, res) {
                       type: MessageComponentTypes.INPUT_TEXT,
                       custom_id: 'card',
                       style: 1,
-                      label: 'Ingresá el número de la card a probar.',                    
+                      label: 'Numero de Card',                    
                       placeholder: '42',
                     },
                   ],
@@ -871,7 +886,7 @@ app.post('/interactions', async function (req, res) {
                       custom_id: 'tester',
                       style: 1,
                       label: 'Quien la va a estar probando ?.',                    
-                      placeholder: 'Grace, Mati, Roque, Maqui ...',
+                      placeholder: 'Grace, Mati, Roque, Maqui, Gus, Pablo White ...',
                     },
                   ],
                 }
@@ -965,16 +980,67 @@ app.post('/interactions', async function (req, res) {
             ]
         },
       });
+      
+      try {
+        // Update ephemeral message
+        await DiscordRequest(endpoint, { method: 'DELETE' });    
+      }
+      catch (err) 
+      {
+        console.error('Error sending message:', err);
+      } 
+      
+      
     }
     
-    try {
-      // Update ephemeral message
-      await DiscordRequest(endpoint, { method: 'DELETE' });    
+     if (modalId === 'modal_set') {
+       
+        let modalValues = '';
+       
+        // Get value of text inputs
+        for (let action of data.components) {
+          let inputComponent = action.components[0];
+          modalValues += `${inputComponent.value}|`;
+        }
+       
+        const environment = modalValues[0];
+         const card = modalValues[1];
+       
+        console.log(data.components);
+
+        //cardSeleccionada = modalValues;
+
+        //setEnvironment(usuarioReserva, ambienteSeleccionado, accionSeleccionada, cardSeleccionada);
+
+        // await res.send({
+        //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        //       data: { 
+        //         content: '',
+        //         embeds : [
+        //         {
+        //           "type": "rich",
+        //           "title": 'Éxito!',
+        //           "description": `El ambiente ${ ambienteSeleccionado } fue reservado para <@${ usuarioReserva }>. `,
+        //           "color": 0x00FFFF,
+        //           "fields": getEnvironmentsInfo(ambienteSeleccionado),
+        //           "footer": {
+        //             "text": `Recordá usar "/environments" para ver disponibilidad.`
+        //           }
+        //         }
+        //       ]
+        //   },
+        // });
+
+        // try {
+        //   // Update ephemeral message
+        //   await DiscordRequest(endpoint, { method: 'DELETE' });    
+        // }
+        // catch (err) 
+        // {
+        //   console.error('Error sending message:', err);
+        // } 
+      
     }
-    catch (err) 
-    {
-      console.error('Error sending message:', err);
-    }    
     
   }  
   
@@ -1011,7 +1077,7 @@ app.post('/interactions', async function (req, res) {
       
       return {
           type: MessageComponentTypes.BUTTON,
-          custom_id: `environment_action|${isRelease(e.state)}|${e.label}|${req.body.id}`,
+          custom_id: `environment_action|${isRelease(e.state)}|${e.value}|${req.body.id}`,
           label: `${e.label}`,
           style: style(e.state),
       }
