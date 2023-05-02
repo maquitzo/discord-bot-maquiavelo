@@ -1079,10 +1079,17 @@ app.post('/interactions', async function (req, res) {
     
       return {
         "type": "rich",
-        "title": env.label,
-        //"description": env.description,
-        "fields": getEnvironment(env),
+        "thumbnail": { url : "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png" },
+        "title": `Entornos`,
+        "description": `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
         "color": 0x00FFFF,
+        "timestamp": getTimeStamp()
+        
+        // "type": "rich",
+        // "title": 'aa',
+        // "description": 'aaaa',
+        // "fields": getEnvironment(env),
+        // "color": 0x00FFFF,
       }
   }
   
@@ -1105,21 +1112,23 @@ app.post('/interactions', async function (req, res) {
     //legacy
     //return [getEmbedEnvironments(userId)];
     
-      let list = [getEmbedEnvironmentsHeader(userId)];
-      console.log(list);
+      //let list = [getEmbedEnvironmentsHeader(userId)];
+      //console.log(list);
     
       let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
-      //console.log(items);
-     let combined = list.concat(items)
+      console.log(items.pop());
+     //let combined = list.concat(items)
     
 //console.log(combined);
     
 //     return combined;
     
-    return 
-      // getEmbedEnvironmentsHeader(userId),
+    return [
+       //getEmbedEnvironmentsHeader(userId),
+
       // getEmbedEnvironments(userId)
-      list;
+      items.pop()
+      ];
   }
   
   function getEnvironmentsReserved(environment, userId) {
