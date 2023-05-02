@@ -832,10 +832,6 @@ app.post('/interactions', async function (req, res) {
     
     if (componentId.startsWith('environment_action')) {
       
-      //console.log(req.body);
-
-      // Get selected option from payload
-      //const selectedOption = data.values[0];
       const userId = req.body.member.user.id;
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
