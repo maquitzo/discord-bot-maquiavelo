@@ -462,129 +462,129 @@ app.post('/interactions', async function (req, res) {
     // custom_id set in payload when sending message component
     const componentId = data.custom_id;
 
-    if (componentId === 'options_environment_select') {
-      //console.log(req.body);
+//     if (componentId === 'options_environment_select') {
+//       //console.log(req.body);
 
-      // Get selected option from payload
-      const selectedOption = data.values[0];
-      const userId = req.body.member.user.id;
-      const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+//       // Get selected option from payload
+//       const selectedOption = data.values[0];
+//       const userId = req.body.member.user.id;
+//       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
-      switch(selectedOption) {
-        case 'list':
+//       switch(selectedOption) {
+//         case 'list':
 
-          // Send results
-          await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { 
-              content: '',
-              embeds : getEnvironmentsList(userId),
-            }
-          });
-          break;
+//           // Send results
+//           await res.send({
+//             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+//             data: { 
+//               content: '',
+//               embeds : getEnvironmentsList(userId),
+//             }
+//           });
+//           break;
           
-        case 'set':
-        case 'release':
+//         case 'set':
+//         case 'release':
           
-          await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: '',
-              components: [
-                {
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: [
-                    {
-                      type: MessageComponentTypes.STRING_SELECT,
-                      custom_id: 'environment_select',
-                      options: [
-                        {
-                          label: 'DEVELOPMENT',
-                          value: `${selectedOption}-development`,
-                          description: 'Features branches',
-                        },
-                        {
-                          label: 'STAGING',
-                          value: `${selectedOption}-staging`,
-                          description: 'Features branches',
-                        },
-                        {
-                          label: 'TESTING',
-                          value: `${selectedOption}-testing`,
-                          description: 'Sprint Release',
-                        },
+//           await res.send({
+//             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+//             data: {
+//               content: '',
+//               components: [
+//                 {
+//                   type: MessageComponentTypes.ACTION_ROW,
+//                   components: [
+//                     {
+//                       type: MessageComponentTypes.STRING_SELECT,
+//                       custom_id: 'environment_select',
+//                       options: [
+//                         {
+//                           label: 'DEVELOPMENT',
+//                           value: `${selectedOption}-development`,
+//                           description: 'Features branches',
+//                         },
+//                         {
+//                           label: 'STAGING',
+//                           value: `${selectedOption}-staging`,
+//                           description: 'Features branches',
+//                         },
+//                         {
+//                           label: 'TESTING',
+//                           value: `${selectedOption}-testing`,
+//                           description: 'Sprint Release',
+//                         },
                         
-                      ],
-                    },
-                  ],
-                },
-              ],
-              "embeds": [
-                {
-                  "type": "rich",
-                  "title": `Entornos`,
-                  "description": `Seleccioná un ambiente <@${userId}>`,
-                  "color": 0x1eff00,
-                  "timestamp": getTimeStamp(),
-                  "footer": {
-                    "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                  }
-                }
-              ]
-            },
-          });
-          break;
+//                       ],
+//                     },
+//                   ],
+//                 },
+//               ],
+//               "embeds": [
+//                 {
+//                   "type": "rich",
+//                   "title": `Entornos`,
+//                   "description": `Seleccioná un ambiente <@${userId}>`,
+//                   "color": 0x1eff00,
+//                   "timestamp": getTimeStamp(),
+//                   "footer": {
+//                     "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+//                   }
+//                 }
+//               ]
+//             },
+//           });
+//           break;
           
-      }
+//       }
       
-      try {
-        await DiscordRequest(endpoint, { method: 'DELETE' });        
-      } catch (err) {
-        console.error('Error sending message:', err);
-      }
+//       try {
+//         await DiscordRequest(endpoint, { method: 'DELETE' });        
+//       } catch (err) {
+//         console.error('Error sending message:', err);
+//       }
 
-    }    
+//     }    
   
-    if (componentId === 'environment_select') {
+//     if (componentId === 'environment_select') {
 
-        const selectedOption = data.values[0];
-        const userId = req.body.member.user.id;
-        const options = selectedOption.split("-");
-        // Keep selection
-        setEnvironment(userId, options[1], options[0], '');
+//         const selectedOption = data.values[0];
+//         const userId = req.body.member.user.id;
+//         const options = selectedOption.split("-");
+//         // Keep selection
+//         setEnvironment(userId, options[1], options[0], '');
 
-        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+//         const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
 
-        try {
-          // Send results
-          await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { 
-              content: '',
-              embeds : [
-              {
-                "type": "rich",
-                "title": `Entornos`,
-                "description": `Acá se muestra el estado de cada ambiente <@${userId}>.`,
-                "color": 0x00FFFF,
-                "fields": getEnvironmentsInfo(userId),
-                "footer": {
-                  "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                }
-              }
-            ]
-            },
-          });
+//         try {
+//           // Send results
+//           await res.send({
+//             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+//             data: { 
+//               content: '',
+//               embeds : [
+//               {
+//                 "type": "rich",
+//                 "title": `Entornos`,
+//                 "description": `Acá se muestra el estado de cada ambiente <@${userId}>.`,
+//                 "color": 0x00FFFF,
+//                 "fields": getEnvironmentsInfo(userId),
+//                 "footer": {
+//                   "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+//                 }
+//               }
+//             ]
+//             },
+//           });
           
-          // Update ephemeral message
-          await DiscordRequest(endpoint, { method: 'DELETE' });
+//           // Update ephemeral message
+//           await DiscordRequest(endpoint, { method: 'DELETE' });
           
           
-        } catch (err) {
-          console.error('Error sending message:', err);
-        }
+//         } catch (err) {
+//           console.error('Error sending message:', err);
+//         }
 
-      }
+//       }
     
     if (componentId === 'tincho_options_environment_select') {
       
@@ -846,9 +846,6 @@ app.post('/interactions', async function (req, res) {
       const environment = options[2];
       const reqbody = options[3];
       
-      //console.log('options ', options);
-      //console.log('endpoint ', endpoint);
-
       try {
         
         if (action == 'set') {
@@ -860,43 +857,9 @@ app.post('/interactions', async function (req, res) {
               custom_id: 'popup_|' + action + '|' + environment,
               title: 'Reservando ' + environment.toUpperCase(),
               components: [
-                {
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: [
-                    {
-                      type: MessageComponentTypes.INPUT_TEXT,
-                      custom_id: 'card',
-                      style: 1,
-                      label: 'Numero de Card',                    
-                      placeholder: '42',
-                    },
-                  ],
-                },
-                {
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: [
-                    {
-                      type: MessageComponentTypes.INPUT_TEXT,
-                      custom_id: 'tester',
-                      style: 1,
-                      label: 'Quien la va a estar probando ?.',                    
-                      placeholder: 'Grace, Mati, Roque, Maqui, Gus, Pablo White ...',
-                    },
-                  ],
-                },
-                {
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: [
-                    {
-                      type: MessageComponentTypes.INPUT_TEXT,
-                      custom_id: 'branch',
-                      style: 1,
-                      label: 'Cual es la rama usada',                    
-                      placeholder: 'feature/345-algoasdfs',
-                      required: 0
-                    },
-                  ],
-                }
+                buildInputRow('card','Numero de Card','42'),
+                buildInputRow('tester','Quien la va a estar probando ?.','Grace, Mati, Roque, Maqui, Gus, Pablo White ...'),
+                buildInputRow('branch','Cual es la rama / funcionalidad','feature/345-algoasdfs'),
               ],
             },
           });
@@ -923,48 +886,8 @@ app.post('/interactions', async function (req, res) {
         console.error('Error sending message:', err);
       }
       
-
-      
     } 
-    
-    if (componentId.startsWith('env_choice_')) {
-      // get the associated set ID
-      const setId = componentId.replace('env_choice_', '');
 
-      if (activeGames[setId]) {
-        // Get user ID and object choice for responding user
-        const userId = req.body.member.user.id;
-        const objectName = data.values[0];
-        // Calculate result from helper function
-        const resultStr = getResult(activeGames[setId], {
-          id: userId,
-          objectName,
-        });
-
-        // Remove set from storage
-        delete activeGames[setId];
-        // Update message with token in request body
-        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
-
-        try {
-          // Send results
-          await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: resultStr },
-          });
-          // Update ephemeral message
-          await DiscordRequest(endpoint, {
-            method: 'PATCH',
-            body: {
-              content: 'Nice choice ' + getRandomEmoji(),
-              components: []
-            }
-          });
-        } catch (err) {
-          console.error('Error sending message:', err);
-        }
-      }
-    }
   }
 
   if (type === InteractionType.APPLICATION_MODAL_SUBMIT) {
@@ -1206,7 +1129,22 @@ app.post('/interactions', async function (req, res) {
  
   }
 
-  
+  function buildInputRow(custom_id, label, placeholder) {
+    {
+        return {
+            type: MessageComponentTypes.ACTION_ROW,
+            components: [
+              {
+                type: MessageComponentTypes.INPUT_TEXT,
+                custom_id: custom_id,
+                style: 1,
+                label: label,                    
+                placeholder: placeholder,
+              },
+            ],
+          }
+        }
+  }
   
   function getEnvironmentsInfo(UserId) {
 

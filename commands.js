@@ -1,4 +1,4 @@
-import { getRPSChoices, getRPSEnvironments, getRPSOptions } from './game.js';
+import { getRPSChoices, getRPSEnvironments } from './game.js';
 import { capitalize, DiscordRequest } from './utils.js';
 
 export async function HasGuildCommands(appId, guildId, commands) {
@@ -84,19 +84,19 @@ function createCommandEnvironments() {
   return commandChoices;
 }
 
-function createCommandOptions() {
-  const choices = getRPSOptions();
-  const commandChoices = [];
+// function createCommandOptions() {
+//   const choices = getRPSOptions();
+//   const commandChoices = [];
 
-  for (let choice of choices) {
-    commandChoices.push({
-      name: capitalize(choice),
-      value: choice.toLowerCase(),
-    });
-  }
+//   for (let choice of choices) {
+//     commandChoices.push({
+//       name: capitalize(choice),
+//       value: choice.toLowerCase(),
+//     });
+//   }
 
-  return commandChoices;
-}
+//   return commandChoices;
+// }
 
 // Simple test command
 export const TEST_COMMAND = {
@@ -182,7 +182,7 @@ export const CHALLENGE_COMMAND = {
 
 export const ENV_COMMAND = {
   name: 'environments',
-  description: 'Manipulacao dos entornos',
+  description: 'Que seriamos sin ellos...',
   type: 1,
 };
 
@@ -194,6 +194,6 @@ export const IND_COMMAND = {
 
 export const EXPERTA_COMMAND = {
   name: 'experta',
-  description: 'sin palabras',
+  description: 'We are experta',
   type: 1,
 };
