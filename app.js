@@ -937,43 +937,34 @@ app.post('/interactions', async function (req, res) {
     
   }
   
-  function getEnvironment(name, icon, user, user_time, card) {
-    
-      return {
-          "name": ` => ${name}  ${icon}`,
-          "value": `Reservado para: <@${ user }> \n Desde: ${getTimestampFormat(user_time)} \n Para probar la card: #${card} \n`,
-      }
-    
-  }
-  
-  function getEnvironmentsInfo(UserId) {
-    
-    const envs = ['development', 'staging', 'testing'];
+  function getEnvironment(element) {
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
     
-    let icon = ICON_NOENV;
-    let fields = [];
+    let env = environments[element];
+    let add_environment = {};
 
-    envs.forEach((element) => {
+    if (env)
+      add_environment = {
+        "name": ` => ${element}  ${env.task == 'set'? ICON_ENV : ICON_NOENV}`,
+        "value": `Reservado para: <@${ env.id }> \n Desde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
+      };
+    
+    else
+      add_environment = {
+        "name": ` => ${element}  ${ICON_NOENV}`,
+        "value": 'Libre \n'
+      };
       
-      let add_environment = {
-          "name": ` => ${element}  ${ICON_NOENV}`,
-          "value": 'Libre \n'
-      }
-      
-      let env = environments[element];
-      
-      if (env)
-        add_environment = {
-          "name": ` => ${element}  ${env.task == 'set'? ICON_ENV : ICON_NOENV}`,
-          "value": `Reservado para: <@${ env.id }> \n Desde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
-        };
-                                        
-      fields.push(add_environment);
-      
-    });
+    return add_environment;
+    
+  }
+  
+  function getEnvironmentsInfo(UserId) {
+
+    return ['development', 'staging', 'testing'].map((element) => getEnvironment(element));
+    
     
 //     for(let i = 0; i < envs.length; i++) {
       
@@ -1006,7 +997,7 @@ app.post('/interactions', async function (req, res) {
 //     if (content == "") 
 //       content = ":man_facepalming: I Haven't any environment registered";
     
-    return fields;
+ //   return fields;
     
   }
   
