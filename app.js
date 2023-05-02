@@ -1045,14 +1045,34 @@ app.post('/interactions', async function (req, res) {
                   {
                       type: MessageComponentTypes.BUTTON,
                       custom_id: `accept_button_${req.body.id}`,
-                      label: 'Accept',
-                      style: ButtonStyleTypes.PRIMARY,
+                      label: reserva,
+                      style: 5,
                   },
                 ],
               }
             ],
             "embeds" : getEnvironmentsList(userId),
           },
+          
+          data: {
+            content: 'A message with a button',
+            // Buttons are inside of action rows
+            components: [
+              {
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                    type: MessageComponentTypes.BUTTON,
+                    // Value for your app to identify the button
+                    custom_id: 'my_button',
+                    label: 'Click',
+                    style: ButtonStyleTypes.PRIMARY,
+                  },
+                ],
+              },
+            ],
+          },
+          
         });
       
       }
