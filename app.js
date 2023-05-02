@@ -1005,7 +1005,7 @@ app.post('/interactions', async function (req, res) {
 
         //cardSeleccionada = modalValues;
 
-        //setEnvironment(usuarioReserva, ambienteSeleccionado, accionSeleccionada, cardSeleccionada);
+        setEnvironment(userId, environment, 'set', card);
 
         // await res.send({
         //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -1177,17 +1177,13 @@ app.post('/interactions', async function (req, res) {
         };  
         
         let update = {
-          
-          demo: {
-            id:userId,
-            card:card,
-            state: 1,
-            timestamp:getTimeStamp()
-          },
-          
-        }
+          id:userId,
+          card:card,
+          state: 1,
+          timestamp:getTimeStamp()
+        };
         
-        setRPSEnvironments(update);
+        setRPSEnvironments(env, update);
       }         
 
   }
