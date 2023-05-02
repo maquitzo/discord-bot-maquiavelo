@@ -131,7 +131,7 @@ let RPSEnvironments = {
     timestamp:''
   },
   demo: {
-    label:'Demo.     ',
+    label:'Demo     ',
     description: 'Ambiente para una Demo en particular',
     id:'',
     branch:'',
