@@ -1025,6 +1025,8 @@ app.post('/interactions', async function (req, res) {
           let inputComponent = action.components[0];
           modalValues += `${inputComponent.value}|`;
         }
+      
+      console.log(modalValues);
 
         const card = modalValues[0];
         const tester = modalValues[1];
@@ -1033,7 +1035,7 @@ app.post('/interactions', async function (req, res) {
         const action = modalId.split('|')[1];
         const environment = modalId.split('|')[2];
 
-        setEnvironment(userId, environment, action, card);
+        setEnvironment(userId, environment, action, card, tester);
 
         await res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -1137,7 +1139,7 @@ app.post('/interactions', async function (req, res) {
     if (env.state != 0)
       return {
         "name": `${ICON_ENV}   ${env.label} `,
-        "value": `Para: ${env.tester} \nDesde: ${env.timestamp} \nCard: #${env.card} \n`,
+        "value": `Probando: ${env.tester} \nDesde: ${getTimestampFormat(env.timestamp)} \nCard: #${env.card} \n`,
       };
 
     return {
@@ -1197,6 +1199,8 @@ app.post('/interactions', async function (req, res) {
   }
   
   function setEnvironment(userId, env, task, card, tester) {
+    
+    console.log('teser',tester);
       
     let environment = getRPSEnvironments().filter(e => e.value == env);
     let update = { ...environment[0], 

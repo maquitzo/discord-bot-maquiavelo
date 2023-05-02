@@ -107,7 +107,7 @@ let RPSEnvironments = {
     label:'Desarrollo',
     description: 'desarrollo',
     id:'',
-    branch:'',
+    tester:'',
     card:'',
     state: 0,
     timestamp:''
@@ -116,16 +116,16 @@ let RPSEnvironments = {
     label:'Testing   ',
     description: 'Release v1X.XX.XX',
     id: 808483336548253706,
-    branch:'',
+    tester:'brokers',
     card:'',
     state: 1,
-    timestamp:'2023-05-02T09:42:40.301Z'
+    timestamp:'2020-04-03T13:49:01.767Z'
   },
   staging: {
     label:'Stage     ',
     description: 'Staging',
     id:'',
-    branch:'',
+    tester:'',
     card:'',
     state: 0,
     timestamp:''
@@ -134,7 +134,7 @@ let RPSEnvironments = {
     label:'Demo     ',
     description: 'Ambiente para una Demo en particular',
     id:'',
-    branch:'',
+    tester:'',
     card:'',
     state: 0,
     timestamp:''
@@ -155,10 +155,11 @@ export function getRPSEnvironments() {
       options.push({
         label: RPSEnvironments[c]['label'],
         value: c,
-        description: RPSEnvironments[c]['description'],
-        branch: RPSEnvironments[c]['branch'],
-        card: RPSEnvironments[c]['card'],
-        state: RPSEnvironments[c]['state']
+        // description: RPSEnvironments[c]['description'],
+        // branch: RPSEnvironments[c]['branch'],
+        // card: RPSEnvironments[c]['card'],
+        // state: RPSEnvironments[c]['state']
+        ...RPSEnvironments[c]
       });
   }
 
