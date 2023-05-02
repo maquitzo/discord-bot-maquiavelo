@@ -188,7 +188,7 @@ export function getRPSEnvironmentsAvailables() {
 export function setRPSEnvironments(env,data) {
   
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  //console.log(RPSEnvironments);
+  console.log(RPSEnvironments);
 }
 
 const RPSOptions = {

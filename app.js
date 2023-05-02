@@ -1102,7 +1102,7 @@ app.post('/interactions', async function (req, res) {
     if (env.state != 0)
       return {
         "name": `${ICON_ENV}   ${env.label}`,
-        "value": `Reservado para: <@${ env.id }> \n Desde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
+        "value": `Reservado para: <@${env.id}> \n Desde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
       };
 
     return {
@@ -1163,6 +1163,8 @@ app.post('/interactions', async function (req, res) {
   
   function setEnvironment(userId, env, task, card) {
       
+    let environment = getRPSEnvironments().filter(e => e.value == env);
+    
       if (task == 'release') {
         delete environments[env];        
       }
@@ -1176,19 +1178,17 @@ app.post('/interactions', async function (req, res) {
           card
         };  
         
-        let environment = getRPSEnvironments().map(e => console.log(e));
-        
-        console.log('aaad', environment);
-          
-        let update = { ...environment, 
+        let update = { ...environment[0], 
           id:userId,
           card:card,
           state: 1,
           timestamp:getTimeStamp()
         };
         
-        setRPSEnvironments(env, update);
-      }         
+        
+      }   
+    
+    setRPSEnvironments(env, update);
 
   }
   
