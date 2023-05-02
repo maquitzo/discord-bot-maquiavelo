@@ -1028,6 +1028,7 @@ app.post('/interactions', async function (req, res) {
 
         const card = modalValues[0];
         const tester = modalValues[1];
+        const branch = modalValues[2];
 
         const action = modalId.split('|')[1];
         const environment = modalId.split('|')[2];
@@ -1136,7 +1137,7 @@ app.post('/interactions', async function (req, res) {
     if (env.state != 0)
       return {
         "name": `${ICON_ENV}   ${env.label} `,
-        "value": `Reservado para: <@${env.id}> \nDesde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
+        "value": `Para: ${env.tester} \nDesde: ${env.timestamp} \nCard: #${env.card} \n`,
       };
 
     return {
@@ -1195,14 +1196,15 @@ app.post('/interactions', async function (req, res) {
       return new Date(now.getTime() + offset);
   }
   
-  function setEnvironment(userId, env, task, card) {
+  function setEnvironment(userId, env, task, card, tester) {
       
     let environment = getRPSEnvironments().filter(e => e.value == env);
     let update = { ...environment[0], 
       id:0,
       card:'',
       state: 0,
-      timestamp:''
+      timestamp:'',
+      tester: '',
     };
     
     if (task == 'release') {
@@ -1222,6 +1224,7 @@ app.post('/interactions', async function (req, res) {
         id:userId,
         card:card,
         state: 1,
+        tester: tester,
         timestamp:getTimeStamp()
       };
 
