@@ -7,7 +7,16 @@ import {
   ButtonStyleTypes,
 } from 'discord-interactions';
 import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
-import { getShuffledOptions, getResult, getRPSEnvironments, getRPSEnvironmentsKeys, getRPSEnvironmentsAvailables } from './game.js';
+
+import { 
+  getShuffledOptions, 
+  getResult, 
+  getRPSEnvironments, 
+  getRPSEnvironmentsKeys, 
+  getRPSEnvironmentsAvailables,
+  setRPSEnvironments
+} from './game.js';
+
 import {
   CHALLENGE_COMMAND,
   TEST_COMMAND,
@@ -844,24 +853,9 @@ app.post('/interactions', async function (req, res) {
           return res.send({
             type: InteractionResponseType.APPLICATION_MODAL,
             data: {
-              custom_id: 'modal_set',
+              custom_id: 'modal_set|' + environment,
               title: 'Reservando ' + environment.toUpperCase(),
               components: [
-                {
-                  // Text inputs must be inside of an action component
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: [
-                    {
-                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-                      type: MessageComponentTypes.INPUT_TEXT,
-                      custom_id: 'environment',
-                      style: 1,
-                      label: 'Entorno', 
-                      value: environment,
-                      placeholder: 'environment',
-                    },
-                  ],
-                },
                 {
                   // Text inputs must be inside of an action component
                   type: MessageComponentTypes.ACTION_ROW,
@@ -993,20 +987,21 @@ app.post('/interactions', async function (req, res) {
       
     }
     
-     if (modalId === 'modal_set') {
+     if (modalId.startsWith('modal_set')) {
        
         let modalValues = '';
-       
+
         // Get value of text inputs
         for (let action of data.components) {
           let inputComponent = action.components[0];
           modalValues += `${inputComponent.value}|`;
         }
+
+        const card = modalValues[0];
+        const tester = modalValues[1];
+        const environment = modalId.split('|')[1];
        
-        const environment = modalValues[0];
-         const card = modalValues[1];
-       
-        console.log(data.components);
+        console.log(data);
 
         //cardSeleccionada = modalValues;
 
@@ -1172,13 +1167,27 @@ app.post('/interactions', async function (req, res) {
         delete environments[env];        
       }
 
-      if (task == 'set') {          
-          environments[env] = {
-            id: userId,
-            timestamp: getTimeStamp(),
-            task, 
-            card
-          };          
+      if (task == 'set') {    
+        
+        environments[env] = {
+          id: userId,
+          timestamp: getTimeStamp(),
+          task, 
+          card
+        };  
+        
+        let update = {
+          
+          demo: {
+            id:userId,
+            card:card,
+            state: 1,
+            timestamp:getTimeStamp()
+          },
+          
+        }
+        
+        setRPSEnvironments(update);
       }         
 
   }
