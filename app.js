@@ -846,52 +846,20 @@ app.post('/interactions', async function (req, res) {
       // get the associated game ID
       const setId = componentId.replace('environment_set_button_', '');
       console.log('set ', setId);
-      // Delete message with token in request body
-      //const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
-      
+
       try {
         
         await res.send({
-            type: InteractionResponseType.APPLICATION_MODAL,
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
               custom_id: 'reserva_modal',
               title: 'Seleccione las opciones',
               flags: InteractionResponseFlags.EPHEMERAL,
               components: [
                 {
-                  // Text inputs must be inside of an action component
                   type: MessageComponentTypes.ACTION_ROW,
-                  components: [
-                    {
-                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-                      type: MessageComponentTypes.INPUT_TEXT,
-                      custom_id: 'my_text',
-                      style: 1,
-                      label: 'Ingresá el número de la card a probar.',                    
-                      placeholder: '211',
-                    },
-                    {
-                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-                      type: MessageComponentTypes.INPUT_TEXT,
-                      custom_id: 'my_text',
-                      style: 1,
-                      label: 'Ingresá el número de la card a probar.',                    
-                      placeholder: '211',
-                    },
-                  ],
+                  components: getEnvironmentsAvailables(),
                 },
-                {
-                  // Text inputs must be inside of an action component
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: [
-                    {
-                      type: MessageComponentTypes.STRING_SELECT,
-                      // Append game ID
-                      custom_id: `env_choice_${setId}`,
-                      options: getRPSEnvironmentsAvailables(),
-                    },
-                  ],
-                }
               ],
             },
         });
@@ -1014,6 +982,29 @@ app.post('/interactions', async function (req, res) {
         "footer" : { "text" : ` \n` }
       }
     ];
+  }
+  
+  function getEnvironmentsAvailables() {
+    
+    const env = getRPSEnvironmentsAvailables();
+    
+    const buttons = env.map((element) => {
+      
+          console.log(buttons);
+      
+          return {
+              type: MessageComponentTypes.BUTTON,
+              custom_id: `environment_set_button_${environments[element]}_${req.body.id}`,
+              label: `${environments[element]}`,
+              style: ButtonStyleTypes.PRIMARY,
+          }
+      
+    });
+    
+    
+    
+    return buttons;
+    
   }
   
   // END commands
