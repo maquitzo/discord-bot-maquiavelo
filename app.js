@@ -1028,7 +1028,7 @@ app.post('/interactions', async function (req, res) {
 
     return {
       "name": `${ICON_NOENV}  ${env.label}`,
-      "value": 'Disponible \n'
+      "value": 'Disponible'
     };
       
   }
