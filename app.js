@@ -359,22 +359,9 @@ app.post('/interactions', async function (req, res) {
           flags: InteractionResponseFlags.EPHEMERAL,
           components: [
             {
-              type: MessageComponentTypes.ACTION_ROW,
-              components: [
-                {
-                    type: MessageComponentTypes.BUTTON,
-                    custom_id: `environment_set_button_${req.body.id}`,
-                    label: 'Quiero reservar uno libre',
-                    style: ButtonStyleTypes.PRIMARY,
-                },
-                {
-                    type: MessageComponentTypes.BUTTON,
-                    custom_id: `environment_release_button_${req.body.id}`,
-                    label: 'Liberar',
-                    style: ButtonStyleTypes.SECONDARY,
-                },
-              ],
-            }
+                type: MessageComponentTypes.ACTION_ROW,
+                components: getEnvironmentsState(0),
+            },
           ],
           "embeds" : getEnvironmentsList(userId),
         },
@@ -998,10 +985,9 @@ app.post('/interactions', async function (req, res) {
     
     // por cada ambiente disponible
     // damos la posibilidad de reservar
-    
     const isRelease = (state) => (state == 0) ? 'set' : 'release';
-    
-    const isRelease = (state) => (state == 0) ? 'set' : 'release';
+    // identificamos con el style si puede o no
+    const style = (state) => (state == 0) ? ButtonStyleTypes.PRIMARY : ButtonStyleTypes.DANGER;
     
     const buttons = (element) => {
       
@@ -1009,18 +995,12 @@ app.post('/interactions', async function (req, res) {
           type: MessageComponentTypes.BUTTON,
           custom_id: `environment_${isRelease(element['state'])}_button_${element['label']}_${req.body.id}`,
           label: `${element['label']}`,
-          style: ButtonStyleTypes.PRIMARY,
+          style: style(element['state']),
       }
       
     }
     
-    const p = getRPSEnvironments()
-                .filter(e => e.state == state)
-                .map(buttons);
-    
-    console.log(p);
-    
-    return p;
+    return getRPSEnvironments().map(buttons);
     
   }
   
@@ -1040,18 +1020,18 @@ app.post('/interactions', async function (req, res) {
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
     
-    let env = environments[element];
+    let env = element; //environments[element];
     let add_environment = {};
 
-    if (env)
+    if (env.state == 1)
       add_environment = {
-        "name": `${env.task == 'set'? ICON_ENV : ICON_NOENV}   ${element}`,
+        "name": `${env.task == 'set'? ICON_ENV : ICON_NOENV}   ${element.label}`,
         "value": `Reservado para: <@${ env.id }> \n Desde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
       };
     
     else
       add_environment = {
-        "name": `${ICON_NOENV}  ${element}`,
+        "name": `${ICON_NOENV}  ${element.label}`,
         "value": 'Libre \n'
       };
       
@@ -1061,7 +1041,7 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsInfo(UserId) {
 
-    return getRPSEnvironmentsKeys().map((element) => getEnvironment(element));
+    return getRPSEnvironments().map((element) => getEnvironment(element));
     
     
 //     for(let i = 0; i < envs.length; i++) {
