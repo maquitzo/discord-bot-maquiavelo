@@ -836,7 +836,7 @@ app.post('/interactions', async function (req, res) {
     
     if (componentId.startsWith('environment_set')) {
       
-      console.log(req.body);
+      //console.log(req.body);
 
       // Get selected option from payload
       //const selectedOption = data.values[0];
@@ -850,74 +850,51 @@ app.post('/interactions', async function (req, res) {
       //const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
       try {
-          await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { 
-              content: '',
-              embeds : getEnvironmentsList(userId),
-            }
-          });
-      } catch (err) {
-        console.error('Error sending message:', err);
-      }
-      
-      
-      try {
         
-        
-        // await res.send({
-        //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        //   data: {
-        //     // Fetches a random emoji to send from a helper function
-        //     content: 'Cual ambiente ?',
-        //     // Indicates it'll be an ephemeral message
-        //     flags: InteractionResponseFlags.EPHEMERAL,
-        //     components: [
-        //       {
-        //         type: MessageComponentTypes.ACTION_ROW,
-        //         components: [
-        //           {
-        //             type: MessageComponentTypes.STRING_SELECT,
-        //             // Append game ID
-        //             custom_id: `env_choice_${setId}`,
-        //             options: getShuffledOptions(),
-        //           },
-        //         ],
-        //       },
-        //     ],
-        //   },
-        // });
-        
-        // await res.send({
-        //     type: InteractionResponseType.APPLICATION_MODAL,
-        //     data: {
-        //       custom_id: 'reserva_modal',
-        //       title: 'Seleccione las opciones',
-        //       flags: InteractionResponseFlags.EPHEMERAL,
-        //       components: [
-        //         {
-        //           // Text inputs must be inside of an action component
-        //           type: MessageComponentTypes.ACTION_ROW,
-        //           components: [
-        //             {
-        //               // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-        //               type: MessageComponentTypes.INPUT_TEXT,
-        //               custom_id: 'my_text',
-        //               style: 1,
-        //               label: 'Ingresá el número de la card a probar.',                    
-        //               placeholder: '211',
-        //             },
-        //             {
-        //               type: MessageComponentTypes.STRING_SELECT,
-        //               // Append game ID
-        //               custom_id: `env_choice_${setId}`,
-        //               options: getRPSEnvironmentsAvailables(),
-        //             },
-        //           ],
-        //         }
-        //       ],
-        //     },
-        // });
+        await res.send({
+            type: InteractionResponseType.APPLICATION_MODAL,
+            data: {
+              custom_id: 'reserva_modal',
+              title: 'Seleccione las opciones',
+              flags: InteractionResponseFlags.EPHEMERAL,
+              components: [
+                {
+                  // Text inputs must be inside of an action component
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                    {
+                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                      type: MessageComponentTypes.INPUT_TEXT,
+                      custom_id: 'my_text',
+                      style: 1,
+                      label: 'Ingresá el número de la card a probar.',                    
+                      placeholder: '211',
+                    },
+                    {
+                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                      type: MessageComponentTypes.INPUT_TEXT,
+                      custom_id: 'my_text',
+                      style: 1,
+                      label: 'Ingresá el número de la card a probar.',                    
+                      placeholder: '211',
+                    },
+                  ],
+                },
+                {
+                  // Text inputs must be inside of an action component
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                    {
+                      type: MessageComponentTypes.STRING_SELECT,
+                      // Append game ID
+                      custom_id: `env_choice_${setId}`,
+                      options: getRPSEnvironmentsAvailables(),
+                    },
+                  ],
+                }
+              ],
+            },
+        });
         
         
         // Delete previous message

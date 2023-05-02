@@ -148,6 +148,7 @@ export function getRPSEnvironmentsAvailables() {
       });
   }
 
+  console.log(options);
   return options;
 }
 
