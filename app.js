@@ -360,11 +360,14 @@ app.post('/interactions', async function (req, res) {
     if (data.name === 'environments') {
       
       const userId = req.body.member.user.id;
+      
+      let content = 'Bienvenido a reserva tu ambiente \n\n La disponiblidad de ambiente y la posibilidad de reservarlo';
+      content += 'con la seleccion de botones esta a continuación\n\n`,'
 
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
-          content: '',
+          content: content,
           flags: InteractionResponseFlags.EPHEMERAL,
           components: [
             {
@@ -1052,8 +1055,9 @@ app.post('/interactions', async function (req, res) {
     
       return {
         "type": "rich",
-        "title": `Ambientes`,
-        "description": `La disponiblidad de cada uno se muestra a continuación`,
+        "thumbnail": { url : "https://www.experta.com.ar/wp-content/uploads/2018/03/image-41.jpg" },
+        // "title": `Ambientes`,
+        // "description": `La disponiblidad de cada uno se muestra a continuación`,
         "color": 0x00FFFF,
         "fields": getEnvironmentsInfo(userId),
         "footer" : { "text" : `` }
@@ -1063,7 +1067,6 @@ app.post('/interactions', async function (req, res) {
   function getEmbedReserve(environment, userId) {
     
       return {
-        "thumbnail": { url : "https://message.style/logo128.png" },
         "type": "rich",
         "title": `Enhorabuena`,
         "description": `El ambiente ${environment} fue reservado por <@${userId}>.`,
@@ -1133,7 +1136,7 @@ app.post('/interactions', async function (req, res) {
 
     return {
       "name": `${ICON_NOENV}  ${env.label}`,
-      "value": 'Disponible'
+      "value": 'Disponible',
     };
       
   }
