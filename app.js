@@ -360,7 +360,7 @@ app.post('/interactions', async function (req, res) {
     if (data.name === 'environments') {
       
       const userId = req.body.member.user.id;
-      
+
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -375,6 +375,7 @@ app.post('/interactions', async function (req, res) {
           "embeds" : getEnvironmentsList(userId),
         },
       });
+      
     }
     
     if (data.name === 'independiente') {
@@ -849,7 +850,7 @@ app.post('/interactions', async function (req, res) {
         
         if (action == 'set')
           
-          return res.send({
+          await res.send({
             type: InteractionResponseType.APPLICATION_MODAL,
             data: {
               custom_id: 'popup_|' + action + '|' + environment,
@@ -950,9 +951,12 @@ app.post('/interactions', async function (req, res) {
     const modalId = data.custom_id;
     // user ID of member who filled out modal
     const userId = req.body.member.user.id;
-    const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+    
 
     if (modalId === 'modal_card') {
+      
+      const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+      
       let modalValues = '';
       // Get value of text inputs
       for (let action of data.components) {
@@ -995,7 +999,7 @@ app.post('/interactions', async function (req, res) {
       
     }
     
-     if (modalId.startsWith('popup_')) {
+  if (modalId.startsWith('popup_')) {
        
         let modalValues = '';
 
@@ -1035,6 +1039,21 @@ app.post('/interactions', async function (req, res) {
         //       ]
         //   },
         // });
+    
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '',
+            flags: InteractionResponseFlags.EPHEMERAL,
+            components: [
+              {
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: getEnvironmentsActions(),
+              },
+            ],
+            "embeds" : getEnvironmentsList(userId),
+          },
+        });
 
         // try {
         //   // Update ephemeral message
