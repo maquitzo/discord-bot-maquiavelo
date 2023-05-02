@@ -1060,7 +1060,8 @@ app.post('/interactions', async function (req, res) {
         "description": `La disponiblidad de los ambientes es la siguiente`,
         "color": 0x00FFFF,
         "fields": getEnvironmentsInfo(userId),
-        "footer" : { "text" : ``, timestamp: '2020-11-23 12:00' }
+        "footer" : { "text" : `` },
+        "timestamp": getTimeStamp()
       }
   }
   
@@ -1130,8 +1131,8 @@ app.post('/interactions', async function (req, res) {
 
     if (env.state != 0)
       return {
-        "name": `${ICON_ENV}   ${env.label}`,
-        "value": `Reservado para: <@${env.id}> \n Desde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
+        "name": `${ICON_ENV}   ${env.label} `,
+        "value": `Reservado para: <@${env.id}> \n[Backend](http://cluster-test.art.com:20442/) [Frontend] \nDesde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
       };
 
     return {
