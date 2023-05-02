@@ -883,6 +883,20 @@ app.post('/interactions', async function (req, res) {
                       placeholder: 'Grace, Mati, Roque, Maqui, Gus, Pablo White ...',
                     },
                   ],
+                },
+                {
+                  // Text inputs must be inside of an action component
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                    {
+                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                      type: MessageComponentTypes.INPUT_TEXT,
+                      custom_id: 'branch',
+                      style: 1,
+                      label: 'Cual es la rama usada',                    
+                      placeholder: 'feature/345-algoasdfs',
+                    },
+                  ],
                 }
               ],
             },
@@ -999,72 +1013,34 @@ app.post('/interactions', async function (req, res) {
       
     }
     
-  if (modalId.startsWith('popup_')) {
-       
-        let modalValues = '';
+    if (modalId.startsWith('popup_')) {
 
-        // Get value of text inputs
-        for (let action of data.components) {
-          let inputComponent = action.components[0];
-          modalValues += `${inputComponent.value}|`;
-        }
+          let modalValues = '';
 
-        const card = modalValues[0];
-        const tester = modalValues[1];
-       
-        const action = modalId.split('|')[1];
-        const environment = modalId.split('|')[2];
-       
-        console.log(data);
+          // Get value of text inputs
+          for (let action of data.components) {
+            let inputComponent = action.components[0];
+            modalValues += `${inputComponent.value}|`;
+          }
 
-        //cardSeleccionada = modalValues;
+          const card = modalValues[0];
+          const tester = modalValues[1];
 
-        setEnvironment(userId, environment, action, card);
+          const action = modalId.split('|')[1];
+          const environment = modalId.split('|')[2];
 
-        // await res.send({
-        //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        //       data: { 
-        //         content: '',
-        //         embeds : [
-        //         {
-        //           "type": "rich",
-        //           "title": 'Éxito!',
-        //           "description": `El ambiente ${ ambienteSeleccionado } fue reservado para <@${ usuarioReserva }>. `,
-        //           "color": 0x00FFFF,
-        //           "fields": getEnvironmentsInfo(ambienteSeleccionado),
-        //           "footer": {
-        //             "text": `Recordá usar "/environments" para ver disponibilidad.`
-        //           }
-        //         }
-        //       ]
-        //   },
-        // });
-    
-        return res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: '',
-            flags: InteractionResponseFlags.EPHEMERAL,
-            components: [
-              {
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: getEnvironmentsActions(),
-              },
-            ],
-            "embeds" : getEnvironmentsList(userId),
-          },
-        });
+          setEnvironment(userId, environment, action, card);
 
-        // try {
-        //   // Update ephemeral message
-        //   await DiscordRequest(endpoint, { method: 'DELETE' });    
-        // }
-        // catch (err) 
-        // {
-        //   console.error('Error sending message:', err);
-        // } 
-      
-    }
+          return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              content: `El ambiente **${environment}** fue reservado por <@${userId}>.\n`,
+              flags: InteractionResponseFlags.EPHEMERAL,
+              "embeds" : getEnvironmentsList(userId),
+            },
+          });
+
+      }
     
   }  
   
