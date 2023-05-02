@@ -357,6 +357,7 @@ app.post('/interactions', async function (req, res) {
           content: '',
           components: [
             {
+              content: 'acciones',
               type: MessageComponentTypes.ACTION_ROW,
               components: [
                 {
@@ -914,8 +915,8 @@ app.post('/interactions', async function (req, res) {
     return [
               {
                 "type": "rich",
-                "title": `Entornos`,
-                "description": `La disponibildad de cada ambiente`,
+                "title": `Ambientes`,
+                "description": `La disponiblidad de cada uno se muestra a continuación`,
                 "color": 0x00FFFF,
                 "fields": getEnvironmentsInfo(userId),
                 // "footer": {
@@ -947,13 +948,13 @@ app.post('/interactions', async function (req, res) {
 
     if (env)
       add_environment = {
-        "name": ` => ${element}  ${env.task == 'set'? ICON_ENV : ICON_NOENV}`,
+        "name": `${env.task == 'set'? ICON_ENV : ICON_NOENV}   ${element}`,
         "value": `Reservado para: <@${ env.id }> \n Desde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
       };
     
     else
       add_environment = {
-        "name": ` => ${element}  ${ICON_NOENV}`,
+        "name": `${ICON_NOENV}  ${element}`,
         "value": 'Libre \n'
       };
       
