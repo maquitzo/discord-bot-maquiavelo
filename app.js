@@ -360,7 +360,7 @@ app.post('/interactions', async function (req, res) {
           components: [
             {
                 type: MessageComponentTypes.ACTION_ROW,
-                components: getEnvironmentsState(0),
+                components: getEnvironmentsActions(),
             },
           ],
           "embeds" : getEnvironmentsList(userId),
@@ -821,7 +821,7 @@ app.post('/interactions', async function (req, res) {
       
     }
     
-    if (componentId.startsWith('environment_set')) {
+    if (componentId.startsWith('environment_')) {
       
       //console.log(req.body);
 
@@ -832,7 +832,7 @@ app.post('/interactions', async function (req, res) {
       
       // get the associated game ID
       const setId = componentId.replace('environment_set_button_', '');
-      console.log('set ', setId);
+      console.log('set ', componentId);
 
       try {
         
@@ -981,7 +981,7 @@ app.post('/interactions', async function (req, res) {
     ];
   }
   
-  function getEnvironmentsState(state) {
+  function getEnvironmentsActions() {
     
     // por cada ambiente disponible
     // damos la posibilidad de reservar
@@ -989,13 +989,13 @@ app.post('/interactions', async function (req, res) {
     // identificamos con el style si puede o no
     const style = (state) => (state == 0) ? ButtonStyleTypes.PRIMARY : ButtonStyleTypes.DANGER;
     
-    const buttons = (element) => {
+    const buttons = (e) => {
       
       return {
           type: MessageComponentTypes.BUTTON,
-          custom_id: `environment_${isRelease(element['state'])}_button_${element['label']}_${req.body.id}`,
-          label: `${element['label']}`,
-          style: style(element['state']),
+          custom_id: `environment_${isRelease(e.state)}_button_${e.label}_req_${req.body.id}`,
+          label: `${e.label}`,
+          style: style(e.state),
       }
       
     }
@@ -1015,28 +1015,22 @@ app.post('/interactions', async function (req, res) {
     
   }
   
-  function getEnvironment(element) {
+  function getEnvironment(env) {
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
-    
-    let env = element; //environments[element];
-    let add_environment = {};
 
-    if (env.state == 1)
-      add_environment = {
-        "name": `${env.task == 'set'? ICON_ENV : ICON_NOENV}   ${element.label}`,
+    if (env.state != 0)
+      return {
+        "name": `${ICON_ENV}   ${env.label}`,
         "value": `Reservado para: <@${ env.id }> \n Desde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
       };
-    
-    else
-      add_environment = {
-        "name": `${ICON_NOENV}  ${element.label}`,
-        "value": 'Libre \n'
-      };
+
+    return {
+      "name": `${ICON_NOENV}  ${env.label}`,
+      "value": 'Disponible \n'
+    };
       
-    return add_environment;
-    
   }
   
   function getEnvironmentsInfo(UserId) {
