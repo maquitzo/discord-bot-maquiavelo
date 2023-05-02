@@ -906,7 +906,7 @@ app.post('/interactions', async function (req, res) {
           
             setEnvironment(userId, environment, '', '');
           
-            await res.send(await res.send(getFinal()));
+            await res.send(getFinal(environment, userId));
           
         }
         
@@ -1039,7 +1039,7 @@ app.post('/interactions', async function (req, res) {
 
         setEnvironment(userId, environment, action, card, tester);
 
-        await res.send(getFinal());
+        await res.send(getFinal(environment, userId));
 
       }
     
