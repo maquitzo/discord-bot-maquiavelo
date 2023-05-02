@@ -115,7 +115,7 @@ let RPSEnvironments = {
   test: {
     label:'Testing   ',
     description: 'Release v1X.XX.XX',
-    id:'808483336548253706',
+    id: 808483336548253706,
     branch:'',
     card:'',
     state: 1,
@@ -188,7 +188,7 @@ export function getRPSEnvironmentsAvailables() {
 export function setRPSEnvironments(env,data) {
   
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  console.log(RPSEnvironments);
+  //console.log(RPSEnvironments);
 }
 
 const RPSOptions = {

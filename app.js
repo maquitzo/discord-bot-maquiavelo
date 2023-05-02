@@ -847,6 +847,7 @@ app.post('/interactions', async function (req, res) {
       const reqbody = options[3];
       
       console.log('options ', options);
+      console.log('endpoint ', endpoint);
 
       try {
         
