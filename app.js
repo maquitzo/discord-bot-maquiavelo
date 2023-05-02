@@ -1034,10 +1034,24 @@ app.post('/interactions', async function (req, res) {
           return res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              content: `El ambiente **${environment}** fue reservado por <@${userId}>.\n`,
+              content: ``,
               flags: InteractionResponseFlags.EPHEMERAL,
               "embeds" : getEnvironmentsList(userId),
             },
+          });
+      
+          return res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: {
+              flags: InteractionResponseFlags.EPHEMERAL,
+              embeds : [
+              {
+                "type": "rich",
+                "title": 'Error!',
+                "description": `El ambiente **${environment}** fue reservado por <@${userId}>.\n`,
+                "color": 0x00FFFF,
+              }]
+            }
           });
 
       }
