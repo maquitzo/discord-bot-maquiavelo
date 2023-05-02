@@ -113,7 +113,7 @@ let RPSEnvironments = {
     timestamp:''
   },
   test: {
-    label:'Testing   ',
+    label:'Testing',
     description: 'Release v1X.XX.XX',
     id: 808483336548253706,
     tester:'brokers',
@@ -122,7 +122,7 @@ let RPSEnvironments = {
     timestamp:'2020-04-03T13:49:01.767Z'
   },
   staging: {
-    label:'Stage     ',
+    label:'Staging',
     description: 'Staging',
     id:'',
     tester:'',
@@ -131,8 +131,8 @@ let RPSEnvironments = {
     timestamp:''
   },
   demo: {
-    label:'Demo     ',
-    description: 'Ambiente para una Demo en particular',
+    label:'Demo',
+    description: 'Ambiente para una Demo en particular ',
     id:'',
     tester:'',
     card:'',
