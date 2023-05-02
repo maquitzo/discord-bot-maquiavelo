@@ -851,8 +851,9 @@ app.post('/interactions', async function (req, res) {
 
       try {
         
-        if (action == 'set')
+        if (action == 'set') {
           
+        
           await res.send({
             type: InteractionResponseType.APPLICATION_MODAL,
             data: {
@@ -899,22 +900,30 @@ app.post('/interactions', async function (req, res) {
               ],
             },
           });
+           
+          
+        } else {
+          
+            setEnvironment(userId, environment, '', '');
+          
+            await res.send(await res.send(getFinal()));
+          
+        }
         
-        else 
-          setEnvironment(userId, environment, '', '')
+        try {
+          // Update ephemeral message
+          await DiscordRequest(endpoint, { method: 'DELETE' });          
+        } 
+        catch (err) {
+          console.error('Error sending message:', err);
+        }   
+          
         
-
       } catch (err) {
         console.error('Error sending message:', err);
       }
       
-      try {
-        // Update ephemeral message
-        await DiscordRequest(endpoint, { method: 'DELETE' });          
-      } 
-      catch (err) {
-        console.error('Error sending message:', err);
-      }    
+
       
     } 
     
@@ -1020,8 +1029,6 @@ app.post('/interactions', async function (req, res) {
           let inputComponent = action.components[0];
           modalValues += `${inputComponent.value}|`;
         }
-      
-        //console.log(modalValues);
 
         const card = modalValues.split('|')[0];
         const tester = modalValues.split('|')[1];
@@ -1032,15 +1039,8 @@ app.post('/interactions', async function (req, res) {
 
         setEnvironment(userId, environment, action, card, tester);
 
-        await res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            content: '',
-            //flags: InteractionResponseFlags.EPHEMERAL,
-            "embeds" : getEnvironmentsReserved(environment, userId),
-          },
-        });
-      
+        await res.send(getFinal());
+
       }
     
   }  
@@ -1048,6 +1048,19 @@ app.post('/interactions', async function (req, res) {
   // END environments
   
   // commands
+  
+  function getFinal(environment, userId) {
+    
+      return {
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: '',
+            flags: InteractionResponseFlags.EPHEMERAL,
+            "embeds" : getEnvironmentsReserved(environment, userId),
+          },
+      };
+    
+  }
   
   function getEmbedEnvironments(userId) {
     
@@ -1122,13 +1135,13 @@ app.post('/interactions', async function (req, res) {
   function getEnvironmentsList(userId) {
     
     //legacy
-    //return [getEmbedEnvironments(userId)];
+    return [getEmbedEnvironments(userId)];
     
-    let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
-    return [
-       getEmbedEnvironmentsHeader(userId),
-      ...items
-    ];
+    // let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
+    // return [
+    //    getEmbedEnvironmentsHeader(userId),
+    //   ...items
+    // ];
     
   }
   
