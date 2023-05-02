@@ -337,6 +337,39 @@ app.post('/interactions', async function (req, res) {
           console.error('Error sending message:', err);
         }
       }
+    } else if (componentId.startsWith('environment_set')) {
+      // get the associated game ID
+      const setId = componentId.replace('environment_set_button_', '');
+      // Delete message with token in request body
+      const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+      try {
+        await res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            // Fetches a random emoji to send from a helper function
+            content: 'What is your object of choice?',
+            // Indicates it'll be an ephemeral message
+            flags: InteractionResponseFlags.EPHEMERAL,
+            components: [
+              {
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                    type: MessageComponentTypes.STRING_SELECT,
+                    // Append game ID
+                    custom_id: `select_choice_${gameId}`,
+                    options: getShuffledOptions(),
+                  },
+                ],
+              },
+            ],
+          },
+        });
+        // Delete previous message
+        await DiscordRequest(endpoint, { method: 'DELETE' });
+      } catch (err) {
+        console.error('Error sending message:', err);
+      }
     }
   }
   
@@ -382,13 +415,13 @@ app.post('/interactions', async function (req, res) {
                 //},
                 {
                     type: MessageComponentTypes.BUTTON,
-                    custom_id: `set_button_environment_${req.body.id}`,
+                    custom_id: `environment_set_button_${req.body.id}`,
                     label: 'Quiero reservar uno libre',
                     style: ButtonStyleTypes.PRIMARY,
                 },
                 {
                     type: MessageComponentTypes.BUTTON,
-                    custom_id: `release_button_environment_${req.body.id}`,
+                    custom_id: `environment_release_button_${req.body.id}`,
                     label: 'Liberar',
                     style: ButtonStyleTypes.SECONDARY,
                 },
