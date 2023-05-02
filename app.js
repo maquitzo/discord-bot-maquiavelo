@@ -1102,14 +1102,17 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsList(userId) {
     
-    let list = [getEmbedEnvironmentsHeader(userId)];
-    let list2 = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
+    return getEnvironmentsInfo(userId);
     
-    list.concat(list2);
+//     let list = [getEmbedEnvironmentsHeader(userId)];
+//     let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
+//     let combined = list.concat(items.pop())
     
-    console.log(list2);
+//     console.log(combined);
     
-    return list;
+//     return combined;
+    
+    
     
   }
   
