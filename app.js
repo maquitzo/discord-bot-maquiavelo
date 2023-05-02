@@ -1055,9 +1055,9 @@ app.post('/interactions', async function (req, res) {
     
       return {
         "type": "rich",
-        "thumbnail": { url : "https://www.experta.com.ar/wp-content/uploads/2018/03/image-41.jpg" },
-        "title": `Ambientes`,
-        "description": `La disponiblidad de los ambientes es la siguiente`,
+        "thumbnail": { url : "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png" },
+        "title": `Entornos`,
+        "description": `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
         "color": 0x00FFFF,
         "fields": getEnvironmentsInfo(userId),
         "footer" : { "text" : `` },
@@ -1069,9 +1069,13 @@ app.post('/interactions', async function (req, res) {
     
       return {
         "type": "rich",
-        "title": `Enhorabuena`,
-        "description": `El ambiente ${environment} fue reservado por <@${userId}>.`,
+        "title": `Reserva`,
+        "description": `El ambiente **${environment}** fue reservado por <@${userId}>.`,
         "color": 0x0099ff,
+        // "author": {
+        //     "name": `maquiavelus`,
+        //     "icon_url": "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png"
+        // },
       }
   }
   
@@ -1132,7 +1136,7 @@ app.post('/interactions', async function (req, res) {
     if (env.state != 0)
       return {
         "name": `${ICON_ENV}   ${env.label} `,
-        "value": `Reservado para: <@${env.id}> \n[Backend](http://cluster-test.art.com:20442/) [Frontend] \nDesde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
+        "value": `Reservado para: <@${env.id}> \nDesde: ${getTimestampFormat(env.timestamp)} \n Para probar la card: #${env.card} \n`,
       };
 
     return {
