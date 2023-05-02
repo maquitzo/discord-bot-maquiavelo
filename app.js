@@ -1075,13 +1075,13 @@ app.post('/interactions', async function (req, res) {
       }
   }
   
-  function getEmbedEnvironmentsItem(title, descripcion) {
+  function getEmbedEnvironmentsItem(env) {
     
       return {
         "type": "rich",
-        "title": title,
-        "description": descripcion,
-        "fields": getEnvironmentsInfo(userId),
+        "title": env.label,
+        //"description": env.description,
+        "fields": getEnvironment(env),
         "color": 0x00FFFF,
       }
   }
@@ -1102,10 +1102,14 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsList(userId) {
     
-    return [ 
-      getEmbedEnvironmentsHeader(userId),
-      getRPSEnvironments().map((element) => getEnvironmentsItem(element))
-    ];
+    let list = [getEmbedEnvironmentsHeader(userId)];
+    let list2 = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
+    
+    list.concat(list2);
+    
+    console.log(list2);
+    
+    return list;
     
   }
   
