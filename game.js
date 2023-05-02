@@ -104,24 +104,28 @@ export function getShuffledOptions() {
 
 const RPSEnvironments = {
   development : {
-    // label: 'Development',
-    // value: '0',
-    description: 'desarrollo'
+    description: 'desarrollo',
+    branch:'',
+    card:'',
+    state: 0
   },
-  testing : {
-    // label: 'Testing',
-    // value: '1',
-    description: 'Entorno del release'
+  test : {
+    description: 'Release v1X.XX.XX',
+    branch:'',
+    card:'',
+    state: 0
   },
   staging : {
-    // label: 'Staging',
-    // value: '2',
-    description: 'Staging'
+    description: 'Staging',
+    branch:'',
+    card:'',
+    state: 0
   },
-  production : {
-    // label: 'Production',
-    // value: '3',
-    description: 'Entorno Productivo generalmente no tocar'
+  demo : {
+    description: 'Ambiente para una Demo en particular',
+    branch:'',
+    card:'',
+    state: 0
   },
 }
 
@@ -150,3 +154,4 @@ const RPSOptions = {
 export function getRPSOptions() {
   return Object.keys(RPSOptions);
 }
+

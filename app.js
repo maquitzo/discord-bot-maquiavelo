@@ -7,7 +7,7 @@ import {
   ButtonStyleTypes,
 } from 'discord-interactions';
 import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
-import { getShuffledOptions, getResult } from './game.js';
+import { getShuffledOptions, getResult, getRPSEnvironments } from './game.js';
 import {
   CHALLENGE_COMMAND,
   TEST_COMMAND,
@@ -505,7 +505,8 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: { 
           content: '',
-            components: [
+          flags: InteractionResponseFlags.EPHEMERAL,
+          components: [
             {
               type: MessageComponentTypes.ACTION_ROW,
               components: [
@@ -1033,7 +1034,7 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsInfo(UserId) {
 
-    return ['development', 'staging', 'testing'].map((element) => getEnvironment(element));
+    return getRPSEnvironments().map((element) => getEnvironment(element));
     
     
 //     for(let i = 0; i < envs.length; i++) {
