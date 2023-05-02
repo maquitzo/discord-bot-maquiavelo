@@ -337,9 +337,11 @@ app.post('/interactions', async function (req, res) {
           console.error('Error sending message:', err);
         }
       }
+      
     } else if (componentId.startsWith('environment_set')) {
       // get the associated game ID
       const setId = componentId.replace('environment_set_button_', '');
+      console.log('set ', setId);
       // Delete message with token in request body
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       try {
@@ -400,7 +402,7 @@ app.post('/interactions', async function (req, res) {
         
         
         // Delete previous message
-        await DiscordRequest(endpoint, { method: 'DELETE' });
+        //await DiscordRequest(endpoint, { method: 'DELETE' });
       } catch (err) {
         console.error('Error sending message:', err);
       }
