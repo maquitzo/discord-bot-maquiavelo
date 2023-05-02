@@ -155,15 +155,9 @@ export function getRPSEnvironments() {
       options.push({
         label: RPSEnvironments[c]['label'],
         value: c,
-        // description: RPSEnvironments[c]['description'],
-        // branch: RPSEnvironments[c]['branch'],
-        // card: RPSEnvironments[c]['card'],
-        // state: RPSEnvironments[c]['state']
         ...RPSEnvironments[c]
       });
   }
-
-  console.log(options);
   return options;
 }
 
