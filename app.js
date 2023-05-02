@@ -1038,10 +1038,20 @@ app.post('/interactions', async function (req, res) {
           data: {
             content: reserva,
             flags: InteractionResponseFlags.EPHEMERAL,
+            components: [
+              {
+                title:'aaa',
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [{
+                      type: MessageComponentTypes.BUTTON,
+                      custom_id: `environment`,
+                      label: `reserva`,
+                      style: 2,
+                  }],
+              },
+            ],
             "embeds" : getEnvironmentsList(userId),
           },
-        
-          
         });
       
       }
