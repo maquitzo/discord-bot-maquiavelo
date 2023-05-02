@@ -7,7 +7,7 @@ import {
   ButtonStyleTypes,
 } from 'discord-interactions';
 import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
-import { getShuffledOptions, getResult, getRPSEnvironments } from './game.js';
+import { getShuffledOptions, getResult, getRPSEnvironments, getRPSEnvironmentsAvailables } from './game.js';
 import {
   CHALLENGE_COMMAND,
   TEST_COMMAND,
@@ -343,28 +343,61 @@ app.post('/interactions', async function (req, res) {
       // Delete message with token in request body
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       try {
+        
+        // await res.send({
+        //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        //   data: {
+        //     // Fetches a random emoji to send from a helper function
+        //     content: 'Cual ambiente ?',
+        //     // Indicates it'll be an ephemeral message
+        //     flags: InteractionResponseFlags.EPHEMERAL,
+        //     components: [
+        //       {
+        //         type: MessageComponentTypes.ACTION_ROW,
+        //         components: [
+        //           {
+        //             type: MessageComponentTypes.STRING_SELECT,
+        //             // Append game ID
+        //             custom_id: `env_choice_${setId}`,
+        //             options: getShuffledOptions(),
+        //           },
+        //         ],
+        //       },
+        //     ],
+        //   },
+        // });
+        
         await res.send({
-          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-          data: {
-            // Fetches a random emoji to send from a helper function
-            content: 'Cual ambiente ?',
-            // Indicates it'll be an ephemeral message
-            flags: InteractionResponseFlags.EPHEMERAL,
-            components: [
-              {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                    type: MessageComponentTypes.STRING_SELECT,
-                    // Append game ID
-                    custom_id: `env_choice_${setId}`,
-                    options: getShuffledOptions(),
-                  },
-                ],
-              },
-            ],
-          },
+            type: InteractionResponseType.APPLICATION_MODAL,
+            data: {
+              custom_id: 'reserva_modal',
+              title: 'Seleccione las opciones',
+              components: [
+                {
+                  // Text inputs must be inside of an action component
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                    {
+                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                      type: MessageComponentTypes.INPUT_TEXT,
+                      custom_id: 'my_text',
+                      style: 1,
+                      label: 'Ingresá el número de la card a probar.',                    
+                      placeholder: '211',
+                    },
+                    {
+                      type: MessageComponentTypes.STRING_SELECT,
+                      // Append game ID
+                      custom_id: `env_choice_${setId}`,
+                      options: getRPSEnvironmentsAvailables(),
+                    },
+                  ],
+                }
+              ],
+            },
         });
+        
+        
         // Delete previous message
         await DiscordRequest(endpoint, { method: 'DELETE' });
       } catch (err) {
@@ -418,39 +451,17 @@ app.post('/interactions', async function (req, res) {
     
     if (data.name === 'environments') {
       
-      console.log("environments call !!");
-      
       const userId = req.body.member.user.id;
       
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           content: '',
+          flags: InteractionResponseFlags.EPHEMERAL,
           components: [
             {
               type: MessageComponentTypes.ACTION_ROW,
               components: [
-                //{
-                  // type: MessageComponentTypes.STRING_SELECT,
-                  // custom_id: 'options_environment_select',
-                  // "placeholder": "Seleccionar opción",
-                  // "options": [
-                  //   {
-                  //     label: 'Reservar',
-                  //     value: 'set',
-                  //     description: 'Tomar un ambiente hasta terminar la prueba',
-                  //     "emoji": {
-                  //       "name": "heart",
-                  //       "id": "625891304081063986"
-                  //     }
-                  //   },
-                  //   {
-                  //     label: 'Liberar',
-                  //     value: 'release',
-                  //     description: 'Dejar libre el ambiente usado',
-                  //   },
-                  // ],
-                //},
                 {
                     type: MessageComponentTypes.BUTTON,
                     custom_id: `environment_set_button_${req.body.id}`,
@@ -505,7 +516,6 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: { 
           content: '',
-          flags: InteractionResponseFlags.EPHEMERAL,
           components: [
             {
               type: MessageComponentTypes.ACTION_ROW,
@@ -531,17 +541,17 @@ app.post('/interactions', async function (req, res) {
             }
           ],
           embeds : [
-          {
-            "type": "rich",
-            "title": `Disponibilidad de entornos`,
-            "description": `El estado de disponibilidad de cada uno`,
-            "color": 0x00FFFF,
-            "fields": getEnvironmentsInfo(userId),
-            "footer": {
-              "text": `Recordá usar "/environments" para ver disponibilidad.`
+            {
+              "type": "rich",
+              "title": `Disponibilidad de entornos`,
+              "description": `El estado de disponibilidad de cada uno`,
+              "color": 0x00FFFF,
+              "fields": getEnvironmentsInfo(userId),
+              "footer": {
+                "text": `Recordá usar "/environments" para ver disponibilidad.`
+              }
             }
-          }
-        ]
+          ]
         },
       });      
       
@@ -983,18 +993,18 @@ app.post('/interactions', async function (req, res) {
   function getEnvironmentsList(userId) {
     
     return [
-              {
-                "type": "rich",
-                "title": `Ambientes`,
-                "description": `La disponiblidad de cada uno se muestra a continuación`,
-                "color": 0x00FFFF,
-                "fields": getEnvironmentsInfo(userId),
-                // "footer": {
-                //   "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-                // }
-                "footer" : { "text" : ` ` }
-              }
-          ];
+      {
+        "type": "rich",
+        "title": `Ambientes`,
+        "description": `La disponiblidad de cada uno se muestra a continuación`,
+        "color": 0x00FFFF,
+        "fields": getEnvironmentsInfo(userId),
+        // "footer": {
+        //   "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
+        // }
+        "footer" : { "text" : ` \n` }
+      }
+    ];
   }
   
   // END commands

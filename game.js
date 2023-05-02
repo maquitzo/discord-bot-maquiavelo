@@ -133,6 +133,11 @@ export function getRPSEnvironments() {
   return Object.keys(RPSEnvironments);
 }
 
+export function getRPSEnvironmentsAvailables() {
+  return Object.keys(RPSEnvironments).filter(e => e.state = 0);
+}
+
+
 const RPSOptions = {
   list : {
     label: 'list',
