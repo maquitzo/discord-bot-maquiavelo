@@ -1079,17 +1079,10 @@ app.post('/interactions', async function (req, res) {
     
       return {
         "type": "rich",
-        "thumbnail": { url : "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png" },
-        "title": `Entornos`,
-        "description": `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
+        "title": env.value,
+        //"description": 'aaaa',
+        "fields": [getEnvironment(env)],
         "color": 0x00FFFF,
-        "timestamp": getTimeStamp()
-        
-        // "type": "rich",
-        // "title": 'aa',
-        // "description": 'aaaa',
-        // "fields": getEnvironment(env),
-        // "color": 0x00FFFF,
       }
   }
   
@@ -1112,23 +1105,12 @@ app.post('/interactions', async function (req, res) {
     //legacy
     //return [getEmbedEnvironments(userId)];
     
-      //let list = [getEmbedEnvironmentsHeader(userId)];
-      //console.log(list);
-    
-      let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
-      console.log(items.pop());
-     //let combined = list.concat(items)
-    
-//console.log(combined);
-    
-//     return combined;
-    
+    let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
     return [
-       //getEmbedEnvironmentsHeader(userId),
-
-      // getEmbedEnvironments(userId)
-      items.pop()
-      ];
+       getEmbedEnvironmentsHeader(userId),
+      ...items
+    ];
+    
   }
   
   function getEnvironmentsReserved(environment, userId) {
@@ -1180,10 +1162,24 @@ app.post('/interactions', async function (req, res) {
     const ICON_ENV = ':heart:';
 
     if (env.state != 0)
-      return {
-        "name": `${ICON_ENV}   ${env.label} `,
-        "value": `Probando: ${env.tester} \nDesde: ${getTimestampFormat(env.timestamp)} \nCard: #${env.card} \n`,
-      };
+      return [
+        {
+          "name": `${ICON_ENV}   ${env.label} `,
+          "value": `Probando: ${env.tester} \nDesde: ${getTimestampFormat(env.timestamp)} \nCard: #${env.card} \n`,
+        },
+        {
+          "name": `Probando:`,
+          "value": ` ${env.tester} \n`,
+        },
+        {
+          "name": `Desde: `,
+          "value": `${getTimestampFormat(env.timestamp)} \nCard: #${env.card}`,
+        },
+        {
+          "name": `Card`,
+          "value": `#${env.card}`,
+        }
+      ];
 
     return {
       "name": `${ICON_NOENV}  ${env.label}`,
