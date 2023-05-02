@@ -1015,45 +1015,33 @@ app.post('/interactions', async function (req, res) {
     
     if (modalId.startsWith('popup_')) {
 
-          let modalValues = '';
+        let modalValues = '';
 
-          // Get value of text inputs
-          for (let action of data.components) {
-            let inputComponent = action.components[0];
-            modalValues += `${inputComponent.value}|`;
-          }
+        // Get value of text inputs
+        for (let action of data.components) {
+          let inputComponent = action.components[0];
+          modalValues += `${inputComponent.value}|`;
+        }
 
-          const card = modalValues[0];
-          const tester = modalValues[1];
+        const card = modalValues[0];
+        const tester = modalValues[1];
 
-          const action = modalId.split('|')[1];
-          const environment = modalId.split('|')[2];
+        const action = modalId.split('|')[1];
+        const environment = modalId.split('|')[2];
 
-          setEnvironment(userId, environment, action, card);
+        setEnvironment(userId, environment, action, card);
 
-          return res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              content: ``,
-              flags: InteractionResponseFlags.EPHEMERAL,
-              "embeds" : getEnvironmentsList(userId),
-            },
-          });
+        const reserva = `El ambiente **${environment}** fue reservado por <@${userId}>.\n`;
+
+        await res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: ``,
+            flags: InteractionResponseFlags.EPHEMERAL,
+            "embeds" : getEnvironmentsList(userId),
+          },
+        });
       
-          return res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: {
-              flags: InteractionResponseFlags.EPHEMERAL,
-              embeds : [
-              {
-                "type": "rich",
-                "title": 'Error!',
-                "description": `El ambiente **${environment}** fue reservado por <@${userId}>.\n`,
-                "color": 0x00FFFF,
-              }]
-            }
-          });
-
       }
     
   }  
@@ -1074,7 +1062,7 @@ app.post('/interactions', async function (req, res) {
         // "footer": {
         //   "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
         // }
-        "footer" : { "text" : ` \n` }
+        "footer" : { "text" : `` }
       }
     ];
   }
