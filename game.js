@@ -115,7 +115,7 @@ let RPSEnvironments = {
     description: 'Release v1X.XX.XX',
     branch:'',
     card:'',
-    state: 0
+    state: 1
   },
   staging: {
     label:'Stage     ',
@@ -138,11 +138,28 @@ export function getRPSEnvironmentsKeys() {
 }
 
 export function getRPSEnvironments() {
-  return RPSEnvironments;
+  const allChoices = getRPSEnvironmentsKeys();
+  const options = [];
+
+  for (let c of allChoices) {
+    // Formatted for select menus
+    // https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
+      options.push({
+        label: RPSEnvironments[c]['label'],
+        value: c,
+        description: RPSEnvironments[c]['description'],
+        branch: RPSEnvironments[c]['branch'],
+        card: RPSEnvironments[c]['card'],
+        state: RPSEnvironments[c]['state']
+      });
+  }
+
+  //console.log(options);
+  return options;
 }
 
 export function getRPSEnvironmentsAvailables() {
-  const allChoices = getRPSEnvironments();
+  const allChoices = getRPSEnvironmentsKeys();
   const options = [];
 
   for (let c of allChoices) {

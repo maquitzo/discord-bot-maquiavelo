@@ -999,11 +999,15 @@ app.post('/interactions', async function (req, res) {
     // por cada ambiente disponible
     // damos la posibilidad de reservar
     
+    const isRelease = (state) => (state == 0) ? 'set' : 'release';
+    
+    const isRelease = (state) => (state == 0) ? 'set' : 'release';
+    
     const buttons = (element) => {
       
       return {
           type: MessageComponentTypes.BUTTON,
-          custom_id: `environment_set_button_${element['label']}_${req.body.id}`,
+          custom_id: `environment_${isRelease(element['state'])}_button_${element['label']}_${req.body.id}`,
           label: `${element['label']}`,
           style: ButtonStyleTypes.PRIMARY,
       }
@@ -1011,7 +1015,7 @@ app.post('/interactions', async function (req, res) {
     }
     
     const p = getRPSEnvironments()
-                .filter(e => e.state == 0)
+                .filter(e => e.state == state)
                 .map(buttons);
     
     console.log(p);
