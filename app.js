@@ -1102,18 +1102,24 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsList(userId) {
     
-    return getEnvironmentsInfo(userId);
+    //legacy
+    //return [getEmbedEnvironments(userId)];
     
-//     let list = [getEmbedEnvironmentsHeader(userId)];
-//     let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
-//     let combined = list.concat(items.pop())
+      let list = [getEmbedEnvironmentsHeader(userId)];
+      console.log(list);
     
-//     console.log(combined);
+      let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
+      //console.log(items);
+     let combined = list.concat(items)
+    
+//console.log(combined);
     
 //     return combined;
     
-    
-    
+    return 
+      // getEmbedEnvironmentsHeader(userId),
+      // getEmbedEnvironments(userId)
+      list;
   }
   
   function getEnvironmentsReserved(environment, userId) {
