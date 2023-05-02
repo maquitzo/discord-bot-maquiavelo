@@ -891,13 +891,20 @@ app.post('/interactions', async function (req, res) {
           });
         
         else 
+          setEnvironment(userId, environment, '', '')
         
-        
-        // Delete previous message
-        await DiscordRequest(endpoint, { method: 'DELETE' });
+
       } catch (err) {
         console.error('Error sending message:', err);
       }
+      
+      try {
+        // Update ephemeral message
+        await DiscordRequest(endpoint, { method: 'DELETE' });          
+      } 
+      catch (err) {
+        console.error('Error sending message:', err);
+      }    
       
     } 
     
