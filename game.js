@@ -106,30 +106,38 @@ let RPSEnvironments = {
   development: {
     label:'Desarrollo',
     description: 'desarrollo',
+    id:0,
     branch:'',
     card:'',
-    state: 0
+    state: 0,
+    timestamp:0
   },
   test: {
     label:'Testing   ',
     description: 'Release v1X.XX.XX',
+    id:0,
     branch:'',
     card:'',
-    state: 1
+    state: 1,
+    timestamp:0
   },
   staging: {
     label:'Stage     ',
     description: 'Staging',
+    id:0,
     branch:'',
     card:'',
-    state: 0
+    state: 0,
+    timestamp:0
   },
   demo: {
     label:'Demo.     ',
     description: 'Ambiente para una Demo en particular',
+    id:0,
     branch:'',
     card:'',
-    state: 0
+    state: 0,
+    timestamp:0
   },
 }
 

@@ -821,7 +821,7 @@ app.post('/interactions', async function (req, res) {
       
     }
     
-    if (componentId.startsWith('environment_')) {
+    if (componentId.startsWith('environment_action')) {
       
       //console.log(req.body);
 
@@ -831,35 +831,53 @@ app.post('/interactions', async function (req, res) {
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
       
       // get the associated game ID
-      const setId = componentId.replace('environment_set_button_', '');
-      console.log('set ', componentId);
+      const options = componentId.replace('environment_action', '').split('|');
+      
+      const action = options[1];
+      const environment = options[2];
+      const reqbody = options[3];
+      
+      console.log('options ', options);
 
       try {
         
-        await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          return res.send({
+            type: InteractionResponseType.APPLICATION_MODAL,
             data: {
-              flags: InteractionResponseFlags.EPHEMERAL,
+              custom_id: 'modal_set',
+              title: 'Reservando ' + environment,
               components: [
                 {
+                  // Text inputs must be inside of an action component
                   type: MessageComponentTypes.ACTION_ROW,
-                  components: getEnvironmentsState(0),
+                  components: [
+                    {
+                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                      type: MessageComponentTypes.INPUT_TEXT,
+                      custom_id: 'card',
+                      style: 1,
+                      label: 'Ingresá el número de la card a probar.',                    
+                      placeholder: '42',
+                    },
+                  ],
                 },
-              ],
-              embeds : [
                 {
-                  "type": "rich",
-                  "title": `Disponibilidad de entornos `,
-                  "description": `El estado de disponibilidad de cada uno`,
-                  "color": 0x00FFFF,
-                  //"fields": getEnvironmentsInfo(userId),
-                  // "footer": {
-                  //   "text": `Recordá usar "/environments" para ver disponibilidad.`
-                  // }
+                  // Text inputs must be inside of an action component
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: [
+                    {
+                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+                      type: MessageComponentTypes.INPUT_TEXT,
+                      custom_id: 'tester',
+                      style: 1,
+                      label: 'Quien la va a estar probando ?.',                    
+                      placeholder: 'Grace, Mati, Roque, Maqui ...',
+                    },
+                  ],
                 }
-              ]
+              ],
             },
-        });
+          });
         
         
         // Delete previous message
@@ -993,7 +1011,7 @@ app.post('/interactions', async function (req, res) {
       
       return {
           type: MessageComponentTypes.BUTTON,
-          custom_id: `environment_${isRelease(e.state)}_button_${e.label}_req_${req.body.id}`,
+          custom_id: `environment_action|${isRelease(e.state)}|${e.label}|${req.body.id}`,
           label: `${e.label}`,
           style: style(e.state),
       }
