@@ -359,86 +359,30 @@ app.post('/interactions', async function (req, res) {
             {
               type: MessageComponentTypes.ACTION_ROW,
               components: [
-                // {
-                //   type: MessageComponentTypes.STRING_SELECT,
-                //   custom_id: 'options_environment_select',
-                //   "placeholder": "Seleccionar opción",
-                //   "options": [
-                //     // {
-                //     //   label: 'LISTAR',
-                //     //   value: 'list',
-                //     //   description: 'Disponibilidad de los ambientes',
-                //     // },
-                //     {
-                //       label: 'RESERVAR',
-                //       value: 'set',
-                //       description: 'Tomar un ambiente hasta terminar la prueba',
-                //     },
-                //     {
-                //       label: 'LIBERAR',
-                //       value: 'release',
-                //       description: 'Dejar libre el ambiente usado',
-                //     },
-                //   ],
-                // },
-                  {
-
-                    "type": 1,
-                    "components": [
-                        {
-                            "type": 3,
-                            "custom_id": "class_select_1",
-                            "options":[
-                                {
-                                    "label": "Rogue",
-                                    "value": "rogue",
-                                    "description": "Sneak n stab",
-                                    "emoji": {
-                                        "name": "rogue",
-                                        "id": "625891304148303894"
-                                    }
-                                },
-                                {
-                                    "label": "Mage",
-                                    "value": "mage",
-                                    "description": "Turn 'em into a sheep",
-                                    "emoji": {
-                                        "name": "mage",
-                                        "id": "625891304081063986"
-                                    }
-                                },
-                                {
-                                    "label": "Priest",
-                                    "value": "priest",
-                                    "description": "You get heals when I'm done doing damage",
-                                    "emoji": {
-                                        "name": "priest",
-                                        "id": "625891303795982337"
-                                    }
-                                }
-                            ],
-                            "placeholder": "Choose a class",
-                            "min_values": 1,
-                            "max_values": 3
-                        }
-                    ]
-
-                }
+                {
+                  type: MessageComponentTypes.STRING_SELECT,
+                  custom_id: 'options_environment_select',
+                  "placeholder": "Seleccionar opción",
+                  "options": [
+                    {
+                      label: 'Reservar',
+                      value: 'set',
+                      description: 'Tomar un ambiente hasta terminar la prueba',
+                      "emoji": {
+                        "name": "heart",
+                        "id": "625891304081063986"
+                      }
+                    },
+                    {
+                      label: 'Liberar',
+                      value: 'release',
+                      description: 'Dejar libre el ambiente usado',
+                    },
+                  ],
+                },
               ],
             }
           ],
-          // "embeds": [
-          //   {
-          //     "type": "rich",
-          //     "title": `Entornos`,
-          //     "description": `¿Qué harás ahora <@${userId}> ?`,
-          //     "color": 0xff2200,
-          //     "timestamp": getTimeStamp(),
-          //     "footer": {
-          //       "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-          //     }
-          //   }
-          // ]
           "embeds" : getEnvironmentsList(userId),
         },
       });
