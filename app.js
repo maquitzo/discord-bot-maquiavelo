@@ -1031,14 +1031,12 @@ app.post('/interactions', async function (req, res) {
 
         setEnvironment(userId, environment, action, card);
 
-        const reserva = `\n El ambiente ${environment} fue reservado por <@${userId}>. \n\n\n`;
-
         await res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            content: reserva,
+            content: '',
             flags: InteractionResponseFlags.EPHEMERAL,
-            "embeds" : getEnvironmentsReserved(userId),
+            "embeds" : getEnvironmentsReserved(environment, userId),
           },
         });
       
@@ -1058,9 +1056,6 @@ app.post('/interactions', async function (req, res) {
         "description": `La disponiblidad de cada uno se muestra a continuación`,
         "color": 0x00FFFF,
         "fields": getEnvironmentsInfo(userId),
-        // "footer": {
-        //   "text": `Recordá usar "/environments" y luego "LISTAR" para ver disponibilidad.`
-        // }
         "footer" : { "text" : `` }
       }
   }
@@ -1068,12 +1063,11 @@ app.post('/interactions', async function (req, res) {
   function getEmbedReserve(environment, userId) {
     
       return {
+        "thumbnail": { url : "https://message.style/logo128.png" },
         "type": "rich",
         "title": `Enhorabuena`,
         "description": `El ambiente ${environment} fue reservado por <@${userId}>.`,
-        "color": 0x00FFFF,
-        //"fields": getEnvironmentsInfo(userId),
-        //"footer" : { "text" : `` }
+        "color": 0x0099ff,
       }
   }
   
@@ -1083,7 +1077,7 @@ app.post('/interactions', async function (req, res) {
     
   }
   
-  function getEnvironmentsReserved(userId, environment) {
+  function getEnvironmentsReserved(environment, userId) {
     
     return [
       getEmbedEnvironments(userId),
