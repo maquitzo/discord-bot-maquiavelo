@@ -846,8 +846,8 @@ app.post('/interactions', async function (req, res) {
       const environment = options[2];
       const reqbody = options[3];
       
-      console.log('options ', options);
-      console.log('endpoint ', endpoint);
+      //console.log('options ', options);
+      //console.log('endpoint ', endpoint);
 
       try {
         
@@ -860,11 +860,9 @@ app.post('/interactions', async function (req, res) {
               title: 'Reservando ' + environment.toUpperCase(),
               components: [
                 {
-                  // Text inputs must be inside of an action component
                   type: MessageComponentTypes.ACTION_ROW,
                   components: [
                     {
-                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
                       type: MessageComponentTypes.INPUT_TEXT,
                       custom_id: 'card',
                       style: 1,
@@ -874,11 +872,9 @@ app.post('/interactions', async function (req, res) {
                   ],
                 },
                 {
-                  // Text inputs must be inside of an action component
                   type: MessageComponentTypes.ACTION_ROW,
                   components: [
                     {
-                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
                       type: MessageComponentTypes.INPUT_TEXT,
                       custom_id: 'tester',
                       style: 1,
@@ -888,16 +884,15 @@ app.post('/interactions', async function (req, res) {
                   ],
                 },
                 {
-                  // Text inputs must be inside of an action component
                   type: MessageComponentTypes.ACTION_ROW,
                   components: [
                     {
-                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
                       type: MessageComponentTypes.INPUT_TEXT,
                       custom_id: 'branch',
                       style: 1,
                       label: 'Cual es la rama usada',                    
                       placeholder: 'feature/345-algoasdfs',
+                      required: 0
                     },
                   ],
                 }
@@ -1026,11 +1021,11 @@ app.post('/interactions', async function (req, res) {
           modalValues += `${inputComponent.value}|`;
         }
       
-      console.log(modalValues);
+        //console.log(modalValues);
 
-        const card = modalValues[0];
-        const tester = modalValues[1];
-        const branch = modalValues[2];
+        const card = modalValues.split('|')[0];
+        const tester = modalValues.split('|')[1];
+        const branch = modalValues.split('|')[2];
 
         const action = modalId.split('|')[1];
         const environment = modalId.split('|')[2];
@@ -1041,7 +1036,7 @@ app.post('/interactions', async function (req, res) {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             content: '',
-            flags: InteractionResponseFlags.EPHEMERAL,
+            //flags: InteractionResponseFlags.EPHEMERAL,
             "embeds" : getEnvironmentsReserved(environment, userId),
           },
         });
