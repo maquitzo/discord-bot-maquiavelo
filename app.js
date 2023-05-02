@@ -1031,47 +1031,16 @@ app.post('/interactions', async function (req, res) {
 
         setEnvironment(userId, environment, action, card);
 
-        const reserva = `El ambiente **${environment}** fue reservado por <@${userId}>.\n`;
+        const reserva = `\n El ambiente ${environment} fue reservado por <@${userId}>. \n\n\n`;
 
         await res.send({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
-            content: ``,
+            content: reserva,
             flags: InteractionResponseFlags.EPHEMERAL,
-            components:[
-              {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                      type: MessageComponentTypes.BUTTON,
-                      custom_id: `accept_button_${req.body.id}`,
-                      label: reserva,
-                      style: 5,
-                  },
-                ],
-              }
-            ],
             "embeds" : getEnvironmentsList(userId),
           },
-          
-          data: {
-            content: 'A message with a button',
-            // Buttons are inside of action rows
-            components: [
-              {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: [
-                  {
-                    type: MessageComponentTypes.BUTTON,
-                    // Value for your app to identify the button
-                    custom_id: 'my_button',
-                    label: 'Click',
-                    style: ButtonStyleTypes.PRIMARY,
-                  },
-                ],
-              },
-            ],
-          },
+        
           
         });
       
