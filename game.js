@@ -134,9 +134,22 @@ export function getRPSEnvironments() {
 }
 
 export function getRPSEnvironmentsAvailables() {
-  return Object.keys(RPSEnvironments).filter(e => e.state = 0);
-}
+  const allChoices = getRPSEnvironments();
+  const options = [];
 
+  for (let c of allChoices) {
+    // Formatted for select menus
+    // https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
+    if (RPSEnvironments[c]['state'] == 0)
+      options.push({
+        label: c,
+        value: c,
+        description: RPSEnvironments[c]['description'],
+      });
+  }
+
+  return options;
+}
 
 const RPSOptions = {
   list : {

@@ -367,11 +367,12 @@ app.post('/interactions', async function (req, res) {
         //   },
         // });
         
-        await res.send({
+        return res.send({
             type: InteractionResponseType.APPLICATION_MODAL,
             data: {
               custom_id: 'reserva_modal',
               title: 'Seleccione las opciones',
+              flags: InteractionResponseFlags.EPHEMERAL,
               components: [
                 {
                   // Text inputs must be inside of an action component
