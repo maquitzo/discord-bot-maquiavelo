@@ -55,6 +55,7 @@ app.post('/interactions', async function (req, res) {
    * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
    */
   if (type === InteractionType.APPLICATION_COMMAND) {
+    
     const { name } = data;
 
     // "test" guild command
@@ -300,6 +301,7 @@ app.post('/interactions', async function (req, res) {
       } catch (err) {
         console.error('Error sending message:', err);
       }
+      
     } else if (componentId.startsWith('select_choice_')) {
       // get the associated game ID
       const gameId = componentId.replace('select_choice_', '');
@@ -338,113 +340,7 @@ app.post('/interactions', async function (req, res) {
         }
       }
       
-    } else if (componentId.startsWith('environment_set')) {
-      // get the associated game ID
-      const setId = componentId.replace('environment_set_button_', '');
-      console.log('set ', setId);
-      // Delete message with token in request body
-      const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
-      try {
-        
-        // await res.send({
-        //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        //   data: {
-        //     // Fetches a random emoji to send from a helper function
-        //     content: 'Cual ambiente ?',
-        //     // Indicates it'll be an ephemeral message
-        //     flags: InteractionResponseFlags.EPHEMERAL,
-        //     components: [
-        //       {
-        //         type: MessageComponentTypes.ACTION_ROW,
-        //         components: [
-        //           {
-        //             type: MessageComponentTypes.STRING_SELECT,
-        //             // Append game ID
-        //             custom_id: `env_choice_${setId}`,
-        //             options: getShuffledOptions(),
-        //           },
-        //         ],
-        //       },
-        //     ],
-        //   },
-        // });
-        
-        return res.send({
-            type: InteractionResponseType.APPLICATION_MODAL,
-            data: {
-              custom_id: 'reserva_modal',
-              title: 'Seleccione las opciones',
-              flags: InteractionResponseFlags.EPHEMERAL,
-              components: [
-                {
-                  // Text inputs must be inside of an action component
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: [
-                    {
-                      // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
-                      type: MessageComponentTypes.INPUT_TEXT,
-                      custom_id: 'my_text',
-                      style: 1,
-                      label: 'Ingresá el número de la card a probar.',                    
-                      placeholder: '211',
-                    },
-                    {
-                      type: MessageComponentTypes.STRING_SELECT,
-                      // Append game ID
-                      custom_id: `env_choice_${setId}`,
-                      options: getRPSEnvironmentsAvailables(),
-                    },
-                  ],
-                }
-              ],
-            },
-        });
-        
-        
-        // Delete previous message
-        //await DiscordRequest(endpoint, { method: 'DELETE' });
-      } catch (err) {
-        console.error('Error sending message:', err);
-      }
-      
-    } else if (componentId.startsWith('env_choice_')) {
-      // get the associated set ID
-      const setId = componentId.replace('env_choice_', '');
-
-      if (activeGames[setId]) {
-        // Get user ID and object choice for responding user
-        const userId = req.body.member.user.id;
-        const objectName = data.values[0];
-        // Calculate result from helper function
-        const resultStr = getResult(activeGames[setId], {
-          id: userId,
-          objectName,
-        });
-
-        // Remove set from storage
-        delete activeGames[setId];
-        // Update message with token in request body
-        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
-
-        try {
-          // Send results
-          await res.send({
-            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-            data: { content: resultStr },
-          });
-          // Update ephemeral message
-          await DiscordRequest(endpoint, {
-            method: 'PATCH',
-            body: {
-              content: 'Nice choice ' + getRandomEmoji(),
-              components: []
-            }
-          });
-        } catch (err) {
-          console.error('Error sending message:', err);
-        }
-      }
-    }
+    } 
   }
   
   
@@ -936,6 +832,139 @@ app.post('/interactions', async function (req, res) {
         console.error('Error sending message:', err);
       }        
       
+    }
+    
+    if (componentId.startsWith('environment_set')) {
+      
+      console.log(req.body);
+
+      // Get selected option from payload
+      //const selectedOption = data.values[0];
+      const userId = req.body.member.user.id;
+      const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+      
+      // get the associated game ID
+      const setId = componentId.replace('environment_set_button_', '');
+      console.log('set ', setId);
+      // Delete message with token in request body
+      //const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+      
+      try {
+          await res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { 
+              content: '',
+              embeds : getEnvironmentsList(userId),
+            }
+          });
+      } catch (err) {
+        console.error('Error sending message:', err);
+      }
+      
+      
+      try {
+        
+        
+        // await res.send({
+        //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+        //   data: {
+        //     // Fetches a random emoji to send from a helper function
+        //     content: 'Cual ambiente ?',
+        //     // Indicates it'll be an ephemeral message
+        //     flags: InteractionResponseFlags.EPHEMERAL,
+        //     components: [
+        //       {
+        //         type: MessageComponentTypes.ACTION_ROW,
+        //         components: [
+        //           {
+        //             type: MessageComponentTypes.STRING_SELECT,
+        //             // Append game ID
+        //             custom_id: `env_choice_${setId}`,
+        //             options: getShuffledOptions(),
+        //           },
+        //         ],
+        //       },
+        //     ],
+        //   },
+        // });
+        
+        // await res.send({
+        //     type: InteractionResponseType.APPLICATION_MODAL,
+        //     data: {
+        //       custom_id: 'reserva_modal',
+        //       title: 'Seleccione las opciones',
+        //       flags: InteractionResponseFlags.EPHEMERAL,
+        //       components: [
+        //         {
+        //           // Text inputs must be inside of an action component
+        //           type: MessageComponentTypes.ACTION_ROW,
+        //           components: [
+        //             {
+        //               // See https://discord.com/developers/docs/interactions/message-components#text-inputs-text-input-structure
+        //               type: MessageComponentTypes.INPUT_TEXT,
+        //               custom_id: 'my_text',
+        //               style: 1,
+        //               label: 'Ingresá el número de la card a probar.',                    
+        //               placeholder: '211',
+        //             },
+        //             {
+        //               type: MessageComponentTypes.STRING_SELECT,
+        //               // Append game ID
+        //               custom_id: `env_choice_${setId}`,
+        //               options: getRPSEnvironmentsAvailables(),
+        //             },
+        //           ],
+        //         }
+        //       ],
+        //     },
+        // });
+        
+        
+        // Delete previous message
+        //await DiscordRequest(endpoint, { method: 'DELETE' });
+      } catch (err) {
+        console.error('Error sending message:', err);
+      }
+      
+    } 
+    
+    if (componentId.startsWith('env_choice_')) {
+      // get the associated set ID
+      const setId = componentId.replace('env_choice_', '');
+
+      if (activeGames[setId]) {
+        // Get user ID and object choice for responding user
+        const userId = req.body.member.user.id;
+        const objectName = data.values[0];
+        // Calculate result from helper function
+        const resultStr = getResult(activeGames[setId], {
+          id: userId,
+          objectName,
+        });
+
+        // Remove set from storage
+        delete activeGames[setId];
+        // Update message with token in request body
+        const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
+
+        try {
+          // Send results
+          await res.send({
+            type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+            data: { content: resultStr },
+          });
+          // Update ephemeral message
+          await DiscordRequest(endpoint, {
+            method: 'PATCH',
+            body: {
+              content: 'Nice choice ' + getRandomEmoji(),
+              components: []
+            }
+          });
+        } catch (err) {
+          console.error('Error sending message:', err);
+        }
+      }
     }
   }
 
