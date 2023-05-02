@@ -1077,13 +1077,42 @@ app.post('/interactions', async function (req, res) {
   
   function getEmbedEnvironmentsItem(env) {
     
-      return {
-        "type": "rich",
-        "title": env.value,
-        //"description": 'aaaa',
-        "fields": [getEnvironment(env)],
-        "color": 0x00FFFF,
-      }
+      const ICON_NOENV = ':blue_heart:';
+      const ICON_ENV = ':heart:';
+
+      if (env.state != 0)
+        return {
+          "type": "rich",
+          "title": `${ICON_ENV}   ${env.label} `,
+          "color": 0x00FFFF,
+          inline: true,
+          //"description": 'aaaa',
+          "fields": [
+            {
+              "name": `Probando: `,
+              "value": `${env.tester}`,
+            },
+            {
+              "name": `Desde: `,
+              "value": `${getTimestampFormat(env.timestamp)}`,
+            },
+                    {
+              "name": `Card: `,
+              "value": `#${env.card} \n`,
+            },
+          ],
+          
+        }
+    
+        return {
+          "type": "rich",
+          "title": `${ICON_NOENV}   ${env.label} `,
+          "color": 0x00FFFF,
+          inline: true,
+          //"description": 'aaaa',
+          "fields": [{"name": `Disponible`, "value": ''}],
+        }
+    
   }
   
   function getEmbedReserve(environment, userId) {
@@ -1162,31 +1191,45 @@ app.post('/interactions', async function (req, res) {
     const ICON_ENV = ':heart:';
 
     if (env.state != 0)
-      return [
-        {
+      return {
           "name": `${ICON_ENV}   ${env.label} `,
           "value": `Probando: ${env.tester} \nDesde: ${getTimestampFormat(env.timestamp)} \nCard: #${env.card} \n`,
-        },
-        {
-          "name": `Probando:`,
-          "value": ` ${env.tester} \n`,
-        },
-        {
-          "name": `Desde: `,
-          "value": `${getTimestampFormat(env.timestamp)} \nCard: #${env.card}`,
-        },
-        {
-          "name": `Card`,
-          "value": `#${env.card}`,
         }
-      ];
 
     return {
       "name": `${ICON_NOENV}  ${env.label}`,
       "value": 'Disponible',
     };
+ 
+  }
+  
+  function getEnvironmentX(env) {
+    
+    const ICON_NOENV = ':blue_heart:';
+    const ICON_ENV = ':heart:';
+
+    if (env.state != 0)
+      return [
+        {
+          "name": `Probando: `,
+          "value": `${env.tester}`,
+        },
+        {
+          "name": `Desde: `,
+          "value": `${getTimestampFormat(env.timestamp)}`,
+        },
+                {
+          "name": `Card: `,
+          "value": `#${env.card} \n`,
+        },
+      ]
+
+    return [{
+      "name": `Disponible`, "value": '',
+    }];
       
   }
+  
   
   function getEnvironmentsInfo(UserId) {
 
