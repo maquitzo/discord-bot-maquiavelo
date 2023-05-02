@@ -854,11 +854,9 @@ app.post('/interactions', async function (req, res) {
             data: {
               flags: InteractionResponseFlags.EPHEMERAL,
               components: [
-                {
                   type: MessageComponentTypes.ACTION_ROW,
-                  components: getEnvironmentsAvailables(),
-                },
-              ],
+                  components: [
+                getEnvironmentsAvailables(),
               embeds : [
                 {
                   "type": "rich",
@@ -996,21 +994,22 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsAvailables() {
     
-                {
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: getEnvironmentsAvailables(),
-                },
+    // por cada ambiente disponible
+    // damos la posibilidad de reservar
     
-    return getRPSEnvironmentsAvailables().map((element) => {
+    const p = getRPSEnvironmentsAvailables().map((element) => {
       
           return {
-              type: MessageComponentTypes.BUTTON,
-              custom_id: `environment_set_button_${element['label']}_${req.body.id}`,
-              label: `${element['label']}`,
-              style: ButtonStyleTypes.PRIMARY,
-          }
-      
+                type: MessageComponentTypes.BUTTON,
+                custom_id: `environment_set_button_${element['label']}_${req.body.id}`,
+                label: `${element['label']}`,
+                style: ButtonStyleTypes.PRIMARY,
+            }
     });
+    
+    console.log(p);
+    
+    return p;
     
   }
   

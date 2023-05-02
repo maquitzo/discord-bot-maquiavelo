@@ -103,25 +103,29 @@ export function getShuffledOptions() {
 }
 
 const RPSEnvironments = {
-  development : {
+  development: {
+    label:'Desarrollo',
     description: 'desarrollo',
     branch:'',
     card:'',
     state: 0
   },
-  test : {
+  test: {
+    label:'Testing   ',
     description: 'Release v1X.XX.XX',
     branch:'',
     card:'',
     state: 0
   },
-  staging : {
+  staging: {
+    label:'Stage     ',
     description: 'Staging',
     branch:'',
     card:'',
     state: 0
   },
-  demo : {
+  demo: {
+    label:'Demo.     ',
     description: 'Ambiente para una Demo en particular',
     branch:'',
     card:'',
@@ -142,13 +146,13 @@ export function getRPSEnvironmentsAvailables() {
     // https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
     if (RPSEnvironments[c]['state'] == 0)
       options.push({
-        label: c,
+        label: RPSEnvironments[c]['label'],
         value: c,
         description: RPSEnvironments[c]['description'],
       });
   }
 
-  console.log(options);
+  //console.log(options);
   return options;
 }
 
