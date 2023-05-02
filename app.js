@@ -359,26 +359,38 @@ app.post('/interactions', async function (req, res) {
             {
               type: MessageComponentTypes.ACTION_ROW,
               components: [
+                //{
+                  // type: MessageComponentTypes.STRING_SELECT,
+                  // custom_id: 'options_environment_select',
+                  // "placeholder": "Seleccionar opción",
+                  // "options": [
+                  //   {
+                  //     label: 'Reservar',
+                  //     value: 'set',
+                  //     description: 'Tomar un ambiente hasta terminar la prueba',
+                  //     "emoji": {
+                  //       "name": "heart",
+                  //       "id": "625891304081063986"
+                  //     }
+                  //   },
+                  //   {
+                  //     label: 'Liberar',
+                  //     value: 'release',
+                  //     description: 'Dejar libre el ambiente usado',
+                  //   },
+                  // ],
+                //},
                 {
-                  type: MessageComponentTypes.STRING_SELECT,
-                  custom_id: 'options_environment_select',
-                  "placeholder": "Seleccionar opción",
-                  "options": [
-                    {
-                      label: 'Reservar',
-                      value: 'set',
-                      description: 'Tomar un ambiente hasta terminar la prueba',
-                      "emoji": {
-                        "name": "heart",
-                        "id": "625891304081063986"
-                      }
-                    },
-                    {
-                      label: 'Liberar',
-                      value: 'release',
-                      description: 'Dejar libre el ambiente usado',
-                    },
-                  ],
+                    type: MessageComponentTypes.BUTTON,
+                    custom_id: `set_button_environment_${req.body.id}`,
+                    label: 'Quiero reservar uno libre',
+                    style: ButtonStyleTypes.PRIMARY,
+                },
+                {
+                    type: MessageComponentTypes.BUTTON,
+                    custom_id: `release_button_environment_${req.body.id}`,
+                    label: 'Liberar',
+                    style: ButtonStyleTypes.SECONDARY,
                 },
               ],
             }
