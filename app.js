@@ -1038,6 +1038,19 @@ app.post('/interactions', async function (req, res) {
           data: {
             content: ``,
             flags: InteractionResponseFlags.EPHEMERAL,
+            components:[
+              {
+                type: MessageComponentTypes.ACTION_ROW,
+                components: [
+                  {
+                      type: MessageComponentTypes.BUTTON,
+                      custom_id: `accept_button_${req.body.id}`,
+                      label: 'Accept',
+                      style: ButtonStyleTypes.PRIMARY,
+                  },
+                ],
+              }
+            ],
             "embeds" : getEnvironmentsList(userId),
           },
         });
