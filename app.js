@@ -1063,6 +1063,29 @@ app.post('/interactions', async function (req, res) {
       }
   }
   
+  function getEmbedEnvironmentsHeader(userId) {
+    
+      return {
+        "type": "rich",
+        "thumbnail": { url : "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png" },
+        "title": `Entornos`,
+        "description": `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
+        "color": 0x00FFFF,
+        "timestamp": getTimeStamp()
+      }
+  }
+  
+  function getEmbedEnvironmentsItem(title, descripcion) {
+    
+      return {
+        "type": "rich",
+        "title": title,
+        "description": descripcion,
+        "fields": getEnvironmentsInfo(userId),
+        "color": 0x00FFFF,
+      }
+  }
+  
   function getEmbedReserve(environment, userId) {
     
       return {
@@ -1079,7 +1102,10 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsList(userId) {
     
-    return [ getEmbedEnvironments(userId) ];
+    return [ 
+      getEmbedEnvironmentsHeader(userId),
+      getRPSEnvironments().map((element) => getEnvironmentsItem(element))
+    ];
     
   }
   
