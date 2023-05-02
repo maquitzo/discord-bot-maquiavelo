@@ -1038,19 +1038,7 @@ app.post('/interactions', async function (req, res) {
           data: {
             content: reserva,
             flags: InteractionResponseFlags.EPHEMERAL,
-            components: [
-              {
-                title:'aaa',
-                  type: MessageComponentTypes.ACTION_ROW,
-                  components: [{
-                      type: MessageComponentTypes.BUTTON,
-                      custom_id: `environment`,
-                      label: `reserva`,
-                      style: 2,
-                  }],
-              },
-            ],
-            "embeds" : getEnvironmentsList(userId),
+            "embeds" : getEnvironmentsReserved(userId),
           },
         });
       
@@ -1062,10 +1050,9 @@ app.post('/interactions', async function (req, res) {
   
   // commands
   
-  function getEnvironmentsList(userId) {
+  function getEmbedEnvironments(userId) {
     
-    return [
-      {
+      return {
         "type": "rich",
         "title": `Ambientes`,
         "description": `La disponiblidad de cada uno se muestra a continuación`,
@@ -1076,7 +1063,33 @@ app.post('/interactions', async function (req, res) {
         // }
         "footer" : { "text" : `` }
       }
+  }
+  
+  function getEmbedReserve(environment, userId) {
+    
+      return {
+        "type": "rich",
+        "title": `Enhorabuena`,
+        "description": `El ambiente ${environment} fue reservado por <@${userId}>.`,
+        "color": 0x00FFFF,
+        //"fields": getEnvironmentsInfo(userId),
+        //"footer" : { "text" : `` }
+      }
+  }
+  
+  function getEnvironmentsList(userId) {
+    
+    return [ getEmbedEnvironments(userId) ];
+    
+  }
+  
+  function getEnvironmentsReserved(userId, environment) {
+    
+    return [
+      getEmbedEnvironments(userId),
+      getEmbedReserve(environment, userId)
     ];
+    
   }
   
   function getEnvironmentsActions() {
