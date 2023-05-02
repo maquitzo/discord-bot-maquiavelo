@@ -99,11 +99,11 @@ function createCommandOptions() {
 }
 
 // Simple test command
-// export const TEST_COMMAND = {
-//   name: 'test',
-//   description: 'Basic guild command',
-//   type: 1,
-// };
+export const TEST_COMMAND = {
+  name: 'test',
+  description: 'Basic guild command',
+  type: 1,
+};
 
 export const MAQUITZO_COMMAND = {
   name: 'maquitzo',
@@ -119,20 +119,20 @@ export const TINCHO_COMMAND = {
 
 
 // Command containing options
-// export const CHALLENGE_COMMAND = {
-//   name: 'challenge',
-//   description: 'Challenge to a match of rock paper scissors',
-//   options: [
-//     {
-//       type: 3,
-//       name: 'object',
-//       description: 'Pick your object',
-//       required: true,
-//       choices: createCommandChoices(),
-//     },
-//   ],
-//   type: 1,
-// };
+export const CHALLENGE_COMMAND = {
+  name: 'challenge',
+  description: 'Challenge to a match of rock paper scissors',
+  options: [
+    {
+      type: 3,
+      name: 'object',
+      description: 'Pick your object',
+      required: true,
+      choices: createCommandChoices(),
+    },
+  ],
+  type: 1,
+};
 
 
 // export const INPUT_COMMAND = {

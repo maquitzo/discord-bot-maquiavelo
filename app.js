@@ -9,8 +9,8 @@ import {
 import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
 import { getShuffledOptions, getResult } from './game.js';
 import {
-  // CHALLENGE_COMMAND,
-  // TEST_COMMAND,
+  CHALLENGE_COMMAND,
+  TEST_COMMAND,
   ENV_COMMAND,
   EXPERTA_COMMAND,
   // INPUT_COMMAND,
@@ -1047,8 +1047,8 @@ app.listen(PORT, () => {
   console.log('Checking Guild Commands');
   // Check if guild commands from commands.json are installed (if not, install them)
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
-    //TEST_COMMAND,
-    //CHALLENGE_COMMAND,
+    TEST_COMMAND,
+    CHALLENGE_COMMAND,
     ENV_COMMAND,
     EXPERTA_COMMAND,
     //INPUT_COMMAND,
