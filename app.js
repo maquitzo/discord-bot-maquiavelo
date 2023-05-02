@@ -852,8 +852,6 @@ app.post('/interactions', async function (req, res) {
         await res.send({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
-              custom_id: 'reserva_modal',
-              title: 'Seleccione las opciones',
               flags: InteractionResponseFlags.EPHEMERAL,
               components: [
                 {
@@ -861,6 +859,18 @@ app.post('/interactions', async function (req, res) {
                   components: getEnvironmentsAvailables(),
                 },
               ],
+              embeds : [
+                {
+                  "type": "rich",
+                  "title": `Disponibilidad de entornos`,
+                  "description": `El estado de disponibilidad de cada uno`,
+                  "color": 0x00FFFF,
+                  //"fields": getEnvironmentsInfo(userId),
+                  // "footer": {
+                  //   "text": `Recordá usar "/environments" para ver disponibilidad.`
+                  // }
+                }
+              ]
             },
         });
         
@@ -986,24 +996,21 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsAvailables() {
     
-    const env = getRPSEnvironmentsAvailables();
+                {
+                  type: MessageComponentTypes.ACTION_ROW,
+                  components: getEnvironmentsAvailables(),
+                },
     
-    const buttons = env.map((element) => {
-      
-          console.log(buttons);
+    return getRPSEnvironmentsAvailables().map((element) => {
       
           return {
               type: MessageComponentTypes.BUTTON,
-              custom_id: `environment_set_button_${environments[element]}_${req.body.id}`,
-              label: `${environments[element]}`,
+              custom_id: `environment_set_button_${element['label']}_${req.body.id}`,
+              label: `${element['label']}`,
               style: ButtonStyleTypes.PRIMARY,
           }
       
     });
-    
-    
-    
-    return buttons;
     
   }
   
