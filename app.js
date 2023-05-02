@@ -850,10 +850,12 @@ app.post('/interactions', async function (req, res) {
 
       try {
         
+        if (action == 'set')
+          
           return res.send({
             type: InteractionResponseType.APPLICATION_MODAL,
             data: {
-              custom_id: 'modal_set|' + environment,
+              custom_id: 'popup_|' + action + '|' + environment,
               title: 'Reservando ' + environment.toUpperCase(),
               components: [
                 {
@@ -888,9 +890,11 @@ app.post('/interactions', async function (req, res) {
             },
           });
         
+        else 
+        
         
         // Delete previous message
-        //await DiscordRequest(endpoint, { method: 'DELETE' });
+        await DiscordRequest(endpoint, { method: 'DELETE' });
       } catch (err) {
         console.error('Error sending message:', err);
       }
@@ -987,7 +991,7 @@ app.post('/interactions', async function (req, res) {
       
     }
     
-     if (modalId.startsWith('modal_set')) {
+     if (modalId.startsWith('popup_')) {
        
         let modalValues = '';
 
@@ -999,13 +1003,15 @@ app.post('/interactions', async function (req, res) {
 
         const card = modalValues[0];
         const tester = modalValues[1];
-        const environment = modalId.split('|')[1];
+       
+        const action = modalId.split('|')[1];
+        const environment = modalId.split('|')[2];
        
         console.log(data);
 
         //cardSeleccionada = modalValues;
 
-        setEnvironment(userId, environment, 'set', card);
+        setEnvironment(userId, environment, action, card);
 
         // await res.send({
         //   type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -1164,30 +1170,36 @@ app.post('/interactions', async function (req, res) {
   function setEnvironment(userId, env, task, card) {
       
     let environment = getRPSEnvironments().filter(e => e.value == env);
+    let update = { ...environment[0], 
+      id:0,
+      card:'',
+      state: 0,
+      timestamp:''
+    };
     
-      if (task == 'release') {
-        delete environments[env];        
-      }
+    if (task == 'release') {
+      delete environments[env];        
+    }
 
-      if (task == 'set') {    
-        
-        environments[env] = {
-          id: userId,
-          timestamp: getTimeStamp(),
-          task, 
-          card
-        };  
-        
-        let update = { ...environment[0], 
-          id:userId,
-          card:card,
-          state: 1,
-          timestamp:getTimeStamp()
-        };
-        
-        
-      }   
-    
+    if (task == 'set') {    
+
+      environments[env] = {
+        id: userId,
+        timestamp: getTimeStamp(),
+        task, 
+        card
+      };  
+
+      update = { ...environment[0], 
+        id:userId,
+        card:card,
+        state: 1,
+        timestamp:getTimeStamp()
+      };
+
+
+    }   
+
     setRPSEnvironments(env, update);
 
   }
