@@ -7,7 +7,7 @@ import {
   ButtonStyleTypes,
 } from 'discord-interactions';
 import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
-import { getShuffledOptions, getResult, getRPSEnvironments, getRPSEnvironmentsAvailables } from './game.js';
+import { getShuffledOptions, getResult, getRPSEnvironments, getRPSEnvironmentsKeys, getRPSEnvironmentsAvailables } from './game.js';
 import {
   CHALLENGE_COMMAND,
   TEST_COMMAND,
@@ -854,13 +854,15 @@ app.post('/interactions', async function (req, res) {
             data: {
               flags: InteractionResponseFlags.EPHEMERAL,
               components: [
+                {
                   type: MessageComponentTypes.ACTION_ROW,
-                  components: [
-                getEnvironmentsAvailables(),
+                  components: getEnvironmentsState(0),
+                },
+              ],
               embeds : [
                 {
                   "type": "rich",
-                  "title": `Disponibilidad de entornos`,
+                  "title": `Disponibilidad de entornos `,
                   "description": `El estado de disponibilidad de cada uno`,
                   "color": 0x00FFFF,
                   //"fields": getEnvironmentsInfo(userId),
@@ -992,20 +994,25 @@ app.post('/interactions', async function (req, res) {
     ];
   }
   
-  function getEnvironmentsAvailables() {
+  function getEnvironmentsState(state) {
     
     // por cada ambiente disponible
     // damos la posibilidad de reservar
     
-    const p = getRPSEnvironmentsAvailables().map((element) => {
+    const buttons = (element) => {
       
-          return {
-                type: MessageComponentTypes.BUTTON,
-                custom_id: `environment_set_button_${element['label']}_${req.body.id}`,
-                label: `${element['label']}`,
-                style: ButtonStyleTypes.PRIMARY,
-            }
-    });
+      return {
+          type: MessageComponentTypes.BUTTON,
+          custom_id: `environment_set_button_${element['label']}_${req.body.id}`,
+          label: `${element['label']}`,
+          style: ButtonStyleTypes.PRIMARY,
+      }
+      
+    }
+    
+    const p = getRPSEnvironments()
+                .filter(e => e.state == 0)
+                .map(buttons);
     
     console.log(p);
     
@@ -1050,7 +1057,7 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsInfo(UserId) {
 
-    return getRPSEnvironments().map((element) => getEnvironment(element));
+    return getRPSEnvironmentsKeys().map((element) => getEnvironment(element));
     
     
 //     for(let i = 0; i < envs.length; i++) {

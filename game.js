@@ -102,7 +102,7 @@ export function getShuffledOptions() {
   return options.sort(() => Math.random() - 0.5);
 }
 
-const RPSEnvironments = {
+let RPSEnvironments = {
   development: {
     label:'Desarrollo',
     description: 'desarrollo',
@@ -133,8 +133,12 @@ const RPSEnvironments = {
   },
 }
 
-export function getRPSEnvironments() {
+export function getRPSEnvironmentsKeys() {
   return Object.keys(RPSEnvironments);
+}
+
+export function getRPSEnvironments() {
+  return RPSEnvironments;
 }
 
 export function getRPSEnvironmentsAvailables() {
@@ -154,6 +158,10 @@ export function getRPSEnvironmentsAvailables() {
 
   //console.log(options);
   return options;
+}
+
+export function setRPSEnvironments(env) {
+  RPSEnvironments = {...RPSEnvironments, env};
 }
 
 const RPSOptions = {
