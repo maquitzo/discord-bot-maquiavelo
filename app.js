@@ -1042,13 +1042,13 @@ app.post('/interactions', async function (req, res) {
     
       return {
         "type": "rich",
-        "title": `Reserva`,
-        "description": `El ambiente **${environment}** fue reservado por <@${userId}>.`,
+        "title": `Reserva confirmada`,
+        "description": `Gracias <@${userId}> por usar nuestros servicios, `,
         "color": 0x0099ff,
-        "footer" : { "text" : `` },
-        "timestamp": getTimeStamp()
+        // "footer" : { "text" : `Gracias <@${userId}> por usar nuestros servicios` },
+        "timestamp": getTimeStamp(),
         // "author": {
-        //     "name": `maquiavelus`,
+        //     "name": `<@${userId}>`,
         //     "icon_url": "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png"
         // },
       }
@@ -1158,11 +1158,12 @@ app.post('/interactions', async function (req, res) {
 
   function getTimeStamp(){
     
-      var now = new Date();
-      var offset = -3 * 3600 * 1000; //now.getTimezoneOffset();
-      //let d = new Date(new Date().toLocaleString("en-US", {timeZone: "timezone id"}));
-
-      return new Date(now.getTime() + offset);
+      const now = new Date();
+      const offset = -3 * 3600 * 1000; //now.getTimezoneOffset();
+      const timestamp = new Date(now.getTime() + offset); //let d = new Date(new Date().toLocaleString("en-US", {timeZone: "timezone id"}));
+      
+      console.log("timestamp:",timestamp);
+      return timestamp;
   }
   
   function setEnvironment(userId, env, task, card, tester) {
