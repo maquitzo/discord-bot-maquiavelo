@@ -360,9 +360,6 @@ app.post('/interactions', async function (req, res) {
     if (data.name === 'environments') {
       
       const userId = req.body.member.user.id;
-      
-      // let content = 'Estas en la selección de Entornos\n\nLos colores te indican si estan disponibles ';
-      // content += 'asi como la botonera que te indica si podras tomarlo o liberarlo\n\n';
 
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -1078,6 +1075,7 @@ app.post('/interactions', async function (req, res) {
     
   }
   
+  // buttons
   function getEnvironmentsActions() {
     
     // por cada ambiente disponible
@@ -1101,18 +1099,14 @@ app.post('/interactions', async function (req, res) {
     
   }
   
-  // END commands
-  
-  // TODO poner todo esto en utils
-  
+  function getEnvironmentsInfo(UserId) {
 
-  function getTimestampFormat (timestamp) {
-    
-    return new Date(timestamp).toUTCString().replace( / GMT$/, "" );
+    return getRPSEnvironments().map((element) => getEnvironmentState(element));
     
   }
   
-  function getEnvironment(env) {
+  // item state
+  function getEnvironmentState(env) {
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
@@ -1128,6 +1122,18 @@ app.post('/interactions', async function (req, res) {
       "value": '*Disponible*',
     };
  
+  }
+  
+  
+  // END commands
+  
+  // TODO poner todo esto en utils
+  
+
+  function getTimestampFormat (timestamp) {
+    
+    return new Date(timestamp).toUTCString().replace( / GMT$/, "" );
+    
   }
 
   function buildInputRow(custom_id, label, placeholder) {
@@ -1147,46 +1153,7 @@ app.post('/interactions', async function (req, res) {
         }
   }
   
-  function getEnvironmentsInfo(UserId) {
 
-    return getRPSEnvironments().map((element) => getEnvironment(element));
-    
-    
-//     for(let i = 0; i < envs.length; i++) {
-      
-//       const e = environments[envs[i]];
-      
-//       if (e) {
-//         icon = (e.task == 'set'? ICON_ENV : ICON_NOENV);
-//         //content += `> ${icon}   **${envs[i]}** used by <@${e.id}> since ${getTimestamp(e.timestamp)}\n`;
-        
-//         fields.push({
-//           "name": ` => ${envs[i]}  ${icon}`,
-//           "value": `Reservado para: <@${ e.id }> \n Desde: ${getTimestampFormat(e.timestamp)} \n Para probar la card: #${e.card} \n`,
-//         });
-      
-        
-//       }
-//       else {
-//         //content += `> ${ICON_NOENV}   **${envs[i]}** \n`;
-        
-//         fields.push({
-//             "name": ` => ${envs[i]}  ${ICON_NOENV}`,
-//             //"value": "\u200B"
-//             "value": 'Libre \n'
-//         });
-//       }
-
-//     };    
-    
-
-//     if (content == "") 
-//       content = ":man_facepalming: I Haven't any environment registered";
-    
- //   return fields;
-    
-  }
-  
   function getTimeStamp(){
     
       var now = new Date();

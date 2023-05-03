@@ -110,7 +110,8 @@ let RPSEnvironments = {
     tester:'',
     card:'',
     state: 0,
-    timestamp:''
+    timestamp:'',
+    user:{}
   },
   test: {
     label:'Testing',
@@ -119,7 +120,8 @@ let RPSEnvironments = {
     tester:'brokers',
     card:'',
     state: 1,
-    timestamp:'2020-04-03T13:49:01.767Z'
+    timestamp:'2020-04-03T13:49:01.767Z',
+    user:{}
   },
   staging: {
     label:'Staging',
@@ -128,7 +130,8 @@ let RPSEnvironments = {
     tester:'',
     card:'',
     state: 0,
-    timestamp:''
+    timestamp:'',
+    user:{}
   },
   demo: {
     label:'Demo',
@@ -137,7 +140,8 @@ let RPSEnvironments = {
     tester:'',
     card:'',
     state: 0,
-    timestamp:''
+    timestamp:'',
+    user:{}
   },
 }
 
