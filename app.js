@@ -1045,6 +1045,8 @@ app.post('/interactions', async function (req, res) {
         "title": `Reserva`,
         "description": `El ambiente **${environment}** fue reservado por <@${userId}>.`,
         "color": 0x0099ff,
+        "footer" : { "text" : `` },
+        "timestamp": getTimeStamp()
         // "author": {
         //     "name": `maquiavelus`,
         //     "icon_url": "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png"
