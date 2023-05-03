@@ -1101,15 +1101,10 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsInfo(UserId) {
 
-    return getRPSEnvironments().map((element) => 
-                         {
-      return
-      {
-        getEnvironmentState(element), 
-        { name: '\u200B', value: '\u200B' }
-      }
-    }
-  );
+    const fields = getRPSEnvironments().map((element) => getEnvironmentState(element));
+    const result = fields.flatMap((num, index) => ((index + 1) % 2 != 0 ? [num, { name: '\u200B', value: '\u200B' }] : num));
+    console.log(result);
+    return result;
     
   }
   
