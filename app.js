@@ -1101,11 +1101,8 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsInfo(UserId) {
 
-    const fields = getRPSEnvironments().map((element) => getEnvironmentState(element));
-    const result = fields.flatMap((num, index) => ((index + 1) % 2 != 0 ? [num, { name: '\u200B', value: '\u200B' }] : num));
-    console.log(result);
-    return result;
-    
+    return getRPSEnvironments().map((element) => getEnvironmentState(element));
+
   }
   
   // item state
@@ -1164,7 +1161,7 @@ app.post('/interactions', async function (req, res) {
       const timestamp = new Date(now.getTime() + offset); //let d = new Date(new Date().toLocaleString("en-US", {timeZone: "timezone id"}));
       
       console.log("timestamp:",timestamp);
-      return timestamp;
+      return new Date().toISOString();
   }
   
   function setEnvironment(userId, env, task, card, tester) {
