@@ -389,8 +389,8 @@ app.post('/interactions', async function (req, res) {
           embeds: [
             {
               "type": "rich",
-              "title": `No es por ahí rey !!! !!! `,
-              "description": `Mi corazonzito tiene otros colores`,
+              "title": `No es por ahí rey !`,
+              "description": `Mirá estos colores`,
               "color": 0x0099ff,
               "image": {
                 "url": getGiphy(),
