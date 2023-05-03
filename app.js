@@ -1055,6 +1055,7 @@ app.post('/interactions', async function (req, res) {
       }
   }
   
+  //wrapper para la nueva version
   function getEnvironmentsList(userId) {
     
     //legacy
@@ -1119,12 +1120,12 @@ app.post('/interactions', async function (req, res) {
     if (env.state != 0)
       return {
           "name": `${ICON_ENV}   ${env.label} `,
-          "value": `Probando: ${env.tester} \nDesde: ${getTimestampFormat(env.timestamp)} \nCard: #${env.card} \n`,
+          "value": `*Probando*: ${env.tester} \n*Desde*: ${getTimestampFormat(env.timestamp)} \n*Card*: #${env.card} \n`,
         }
 
     return {
       "name": `${ICON_NOENV}  ${env.label}`,
-      "value": 'Disponible',
+      "value": '*Disponible*',
     };
  
   }
