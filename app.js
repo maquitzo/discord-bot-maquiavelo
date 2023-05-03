@@ -12,8 +12,6 @@ import {
   getShuffledOptions, 
   getResult, 
   getRPSEnvironments, 
-  getRPSEnvironmentsKeys, 
-  getRPSEnvironmentsAvailables,
   setRPSEnvironments
 } from './game.js';
 
@@ -1042,8 +1040,8 @@ app.post('/interactions', async function (req, res) {
     
       return {
         "type": "rich",
-        "title": `Reserva confirmada`,
-        "description": `Gracias <@${userId}> por usar nuestros servicios, `,
+        "title": `Reserva de **${environment}**`,
+        "description": `Gracias <@${userId}> por usar nuestros servicios`,
         "color": 0x0099ff,
         // "footer" : { "text" : `Gracias <@${userId}> por usar nuestros servicios` },
         "timestamp": getTimeStamp(),
@@ -1103,7 +1101,15 @@ app.post('/interactions', async function (req, res) {
   
   function getEnvironmentsInfo(UserId) {
 
-    return getRPSEnvironments().map((element) => getEnvironmentState(element));
+    return getRPSEnvironments().map((element) => 
+                         {
+      return
+      {
+        getEnvironmentState(element), 
+        { name: '\u200B', value: '\u200B' }
+      }
+    }
+  );
     
   }
   

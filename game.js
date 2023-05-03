@@ -162,30 +162,12 @@ export function getRPSEnvironments() {
         ...RPSEnvironments[c]
       });
   }
-  return options;
-}
-
-export function getRPSEnvironmentsAvailables() {
-  const allChoices = getRPSEnvironmentsKeys();
-  const options = [];
-
-  for (let c of allChoices) {
-    // Formatted for select menus
-    // https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
-    if (RPSEnvironments[c]['state'] == 0)
-      options.push({
-        label: RPSEnvironments[c]['label'],
-        value: c,
-        description: RPSEnvironments[c]['description'],
-      });
-  }
-  return options;
   
+  console.log("environment:",options);
+  return options;
 }
 
 export function setRPSEnvironments(env,data) {
-  
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
-
 }
 
