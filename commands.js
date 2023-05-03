@@ -3,7 +3,7 @@ import { capitalize, DiscordRequest } from './utils.js';
 
 export async function HasGuildCommands(appId, guildId, commands) {
   
-  console.log(appId, " ", guildId);
+  console.log("appId:" + appId + " guildId:" + guildId);
   if (guildId === '' || appId === '') return;
 
   commands.forEach((c) => HasGuildCommand(appId, guildId, c));
