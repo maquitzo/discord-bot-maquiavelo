@@ -34,6 +34,8 @@ const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
 
+
+
 // Store for in-progress games. In production, you'd want to use a DB
 const activeGames = {};
 const environments = {};
@@ -49,7 +51,8 @@ var cardSeleccionada = '';
 app.post('/interactions', async function (req, res) {
   // Interaction type and data
   const { type, id, data } = req.body;
-
+  //database
+  
   /**
    * Handle verification requests
    */
