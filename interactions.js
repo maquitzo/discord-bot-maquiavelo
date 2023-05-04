@@ -12,6 +12,15 @@ import {
   DiscordRequest,
 } from "./utils.js";
 
+import { 
+  getShuffledOptions, 
+  getResult, 
+  initiliazeDB,
+  getRPSEnvironments, 
+  setRPSEnvironments,
+  setRPSEnvironmentsAsync
+} from './game.js';
+
 export function getInteractionMaquitzo() {
   return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -33,7 +42,7 @@ export function getInteractionMaquitzo() {
   };
 }
 
-export function getInteractionEnvironments() {
+export function getInteractionEnvironment(userId) {
   return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
@@ -45,7 +54,7 @@ export function getInteractionEnvironments() {
           components: getEnvironmentsActions(),
         },
       ],
-      embeds: getEnvironmentsList(userId),
+      embeds: [getEmbedEnvironments(userId)],
     },
   };
 }
@@ -169,8 +178,12 @@ function getEmbedHeader(userId) {
   };
 }
 
-function getEmbedEnvironments(userId) {
-  const result = {
+///
+/// Body de los estados de los environments
+///
+function getEmbedEnvironments(userId, db) {
+  
+  return {
     type: "rich",
     thumbnail: {
       url: "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png",
@@ -178,41 +191,11 @@ function getEmbedEnvironments(userId) {
     title: `Entornos`,
     description: `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
     color: 0x00ffff,
-    fields: getEnvironmentsInfo(userId),
+    fields: getRPSEnvironments(db).map((element) => getField(element)),
     footer: { text: `` },
     timestamp: getTimeStamp(),
   };
-  //console.log('result-environments ', result);
-  return result;
-}
 
-function getEmbedEnvironmentsItem(env) {
-  const ICON_NOENV = ":blue_heart:";
-  const ICON_ENV = ":heart:";
-
-  if (env.state != 0)
-    return {
-      type: "rich",
-      title: `${env.label}                                                            ${ICON_ENV} `,
-      color: 0xc0392b,
-      //"description": 'aaaa',
-      fields: [
-        {
-          name: ``,
-          value: `Probando: ${env.tester} \nDesde: ${getTimestampFormat(
-            env.timestamp
-          )} \nCard: #${env.card} \n`,
-        },
-      ],
-    };
-
-  return {
-    type: "rich",
-    title: `${env.label}                                                            ${ICON_NOENV} `,
-    color: 0x00ffff,
-    //"description": 'aaaa',
-    fields: [{ name: `Disponible`, value: "" }],
-  };
 }
 
 function getEmbedReserve(environment, userId) {
@@ -228,18 +211,6 @@ function getEmbedReserve(environment, userId) {
     //     "icon_url": "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png"
     // },
   };
-}
-
-//wrapper para la nueva version
-function getEnvironmentsList(userId) {
-  //legacy
-  return [getEmbedEnvironments(userId)];
-
-  // let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
-  // return [
-  //    getEmbedEnvironmentsHeader(userId),
-  //   ...items
-  // ];
 }
 
 function getEnvironmentsReserved(environment, userId) {
@@ -267,12 +238,14 @@ function getEnvironmentsActions() {
   return getRPSEnvironments(db).map(buttons);
 }
 
-function getEnvironmentsInfo(UserId) {
-  return getRPSEnvironments(db).map((element) => getEnvironmentState(element));
-}
+// function getEnvironmentsInfo(UserId, db) {
+//   return getRPSEnvironments(db).map((element) => getField(element));
+// }
 
-// item state
-function getEnvironmentState(env) {
+//
+// Field, valores separados por :
+//
+function getField(env) {
   //console.log('draw', env);
   const item = (element, value) => `*${element}*: ${value} \n`;
   const naming = () => `${env.state != 0 ? ":heart:" : ":blue_heart:"} ${env.label}`;
@@ -281,14 +254,11 @@ function getEnvironmentState(env) {
   if (env.state != 0)
     result = {
       name: naming(),
-      value: `${item("Probando", env.user.tester)} ${item("Desde",env.timestamp)} ${item("Branch", env.branch)} ${item("Card", env.card)} ${item("frontend",
-        env.url.frontend
-      )}`,
+      value: `${item("Probando", env.user.tester)} ${item("Desde",env.timestamp)} ${item("Branch", env.branch)} ${item("Card", env.card)} ${item("frontend",env.url.frontend)}`,
     };
 
   return result;
 }
-
 
 function buildInputRow(custom_id, label, placeholder) {
   {

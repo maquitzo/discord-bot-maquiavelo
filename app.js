@@ -9,6 +9,7 @@ import {
   MessageComponentTypes,
   ButtonStyleTypes,
 } from 'discord-interactions';
+
 import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js';
 
 import { 
@@ -46,8 +47,6 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
-
-
 
 // Store for in-progress games. In production, you'd want to use a DB
 const activeGames = {};
@@ -305,7 +304,9 @@ app.post('/interactions', async function (req, res) {
         console.error('Error sending message:', err);
       }
       
-    } else if (componentId.startsWith('select_choice_')) {
+    } 
+    
+    if (componentId.startsWith('select_choice_')) {
       // get the associated game ID
       const gameId = componentId.replace('select_choice_', '');
 
@@ -346,8 +347,6 @@ app.post('/interactions', async function (req, res) {
     } 
   }
   
-  
-  // BEGIN environments
   
   if (type === InteractionType.APPLICATION_COMMAND) {
     
@@ -658,7 +657,6 @@ app.post('/interactions', async function (req, res) {
     // user ID of member who filled out modal
     const userId = req.body.member.user.id;
     
-
     if (modalId === 'modal_card') {
       
       const endpoint = `webhooks/${process.env.APP_ID}/${req.body.token}/messages/${req.body.message.id}`;
@@ -728,9 +726,6 @@ app.post('/interactions', async function (req, res) {
     
   }  
   
-  // END environments
-  
-  // commands
   
 });
 
