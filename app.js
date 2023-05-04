@@ -1102,7 +1102,7 @@ app.post('/interactions', async function (req, res) {
           style: style(e.state),
         }
         
-        console.log('draw-button ', button);
+        //console.log('draw-button ', button);
       
         return button;
 
@@ -1121,20 +1121,18 @@ app.post('/interactions', async function (req, res) {
   // item state
   function getEnvironmentState(env) {
     
-    //console.log('draw', env);
-    
-    const ICON_NOENV = ':blue_heart:';
-    const ICON_ENV = ':heart:';
-    const item = (element,value) => `${element}: ${value} \n`;
+    console.log('draw', env);
+    const item = (element,value) => `*${element}*: ${value} \n`;
+    const naming = (available, label) => `${available !=0?':heart:':':blue_heart:'} ${label}`
 
     if (env.state != 0)
       return {
-          "name": `${ICON_ENV}   ${env.label} `,
-          "value": `*Probando*: ${env.tester} \n*Desde*: ${getTimestampFormat(env.timestamp)} \n*Card*: #${env.card} \n`,
+          "name": naming(env.state, env.label),
+          "value": `${item('Probando',env.tester)} ${item('Desde',env.timestamp)} ${item('Card',env.card)} ${item('front',env.url.frontend)}`,
         }
 
     return {
-      "name": `${ICON_NOENV}  ${env.label}`,
+      "name": naming(env.state, env.label),
       "value": '*Disponible*',
     };
  
