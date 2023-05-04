@@ -1086,7 +1086,7 @@ app.post('/interactions', async function (req, res) {
   }
   
   // buttons
-  function getEnvironmentsActions() {
+  async function getEnvironmentsActions() {
     
     // por cada ambiente disponible
     // damos la posibilidad de reservar
@@ -1096,34 +1096,43 @@ app.post('/interactions', async function (req, res) {
     
     const buttons = (e) => {
       
-        return {
+        const button = {
           type: MessageComponentTypes.BUTTON,
           custom_id: `environment_action|${isRelease(e.state)}|${e.id}|${req.body.id}`,
           label: `${e.label}`,
           style: style(e.state),
         }
+        
+        console.log('draw-button ', button);
+      
+        return button;
 
     }
     
     //return getRPSEnvironments(db).then(data => data.map(buttons));
-    getRPSEnvironments(db).then(data => {
-      console.log(data);
-      //data.map((element) => getEnvironmentState(element))
-    });
+    const data = await getRPSEnvironments(db);
+    
+    return data.map(buttons);
     
   }
   
-  function getEnvironmentsInfo(UserId) {
+  async function getEnvironmentsInfo(UserId) {
     
-    getRPSEnvironments(db).then(data => {
-      console.log(data);
-      //data.map((element) => getEnvironmentState(element))
-    });
+    // getRPSEnvironments(db).then(data => {
+    //   console.log(data);
+    //   //data.map((element) => getEnvironmentState(element))
+    // });
+    
+    const data = await getRPSEnvironments(db);
+    
+    data.map((element) => getEnvironmentState(element));
 
   }
   
   // item state
   function getEnvironmentState(env) {
+    
+    console.log('draw', env);
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';

@@ -218,11 +218,19 @@ async function rehytrate2(db) {
 }
 
 function rehytrate(db){
+  
     return new Promise((resolve, reject) => {
         db.find({}, (err, doc) => {
-            err ? reject(err) : resolve(doc);
+            if (err) 
+              reject(err) 
+            else 
+              { 
+                RPSEnvironments = doc; 
+                resolve(doc) 
+              };
         });
     });
+  
 }
 
 // export function getRPSEnvironmentsKeys() {
@@ -233,10 +241,7 @@ export async function getRPSEnvironments(db) {
   
   console.log('getting');
   
-  rehytrate(db).then(data => {
-    console.log('getted ',data);
-    return data;
-  });
+  return rehytrate(db);
   
   //return RPSEnvironments;
 }
