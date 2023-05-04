@@ -110,6 +110,7 @@ let RPSEnvironments = [
     label:'Dev',
     description: 'El ambiente del pueblo',
     card:'',
+    branch:'',
     state: 0,
     timestamp:'',
     user:{
@@ -127,6 +128,7 @@ let RPSEnvironments = [
     label:'Test',
     description: 'Siempre esta el Release v1X.00.00',
     card:'77',
+    branch:'feature/77_si-lo-tocas-hay-tabla',
     state: 1,
     timestamp:'2020-04-20 12:00',
     user:{
@@ -144,6 +146,7 @@ let RPSEnvironments = [
     label:'Staging',
     description: 'Es un pre-productivo',
     card:'',
+    branch:'',
     state: 0,
     timestamp:'',
     user:{
@@ -161,6 +164,7 @@ let RPSEnvironments = [
     label:'Demo',
     description: 'Usado para el dia de la Demo o Epica',
     card:'',
+    branch:'',
     state: 0,
     timestamp:'',
     user:{
