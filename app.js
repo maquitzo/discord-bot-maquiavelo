@@ -857,7 +857,7 @@ app.post('/interactions', async function (req, res) {
         if (action == 'set') {
           
         
-          await res.send({
+          return res.send({
             type: InteractionResponseType.APPLICATION_MODAL,
             data: {
               custom_id: 'popup_|' + action + '|' + environment,
@@ -1097,7 +1097,7 @@ app.post('/interactions', async function (req, res) {
       
         return {
           type: MessageComponentTypes.BUTTON,
-          custom_id: `environment_action|${isRelease(e.state)}|${e.id}|${req.body.id}`,
+          custom_id: `environment_action|${isRelease(e.state)}|${e.name}|${req.body.id}`,
           label: `${e.label}`,
           style: style(e.state),
         }

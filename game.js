@@ -185,17 +185,14 @@ export function initiliazeDB() {
     
     console.log('Check existing entries on file- >', count, " |err? ", err);
     
-    if (count == 0) {
-      
+    if (count == 0) 
+    {
       console.log('Inserting default values -> ', RPSEnvironments.length);
-      
       db.insert(RPSEnvironments);
-    
-    } else {
+    } 
+    else 
 
       rehytrate(db);
-      
-    }
 
   });
   
@@ -249,18 +246,12 @@ export function setRPSEnvironments(env,data,db) {
 }
 
 export async function setRPSEnvironmentsAsync(env,data,db) {
-  console.log(env,data);
+  //console.log(env,data);
   return new Promise((resolve, reject) => {
     db.update({ name:env }, { $set: data }, {}, (err, numReplaced) => {
-        
-      if (err) {
-          
-          reject(err) 
-        }
-        else {
-          resolve(rehytrate2(db))
-        }
-           
+        //console.log('saveasyncl',err, numReplaced);
+        err?reject(err):resolve(rehytrate2(db));
+            
       });
   });
   
