@@ -346,6 +346,7 @@ app.post('/interactions', async function (req, res) {
   
   if (type === InteractionType.APPLICATION_COMMAND) {
     
+    const { name } = data;
     const userId = req.body.member.user.id;
     
     if (name === 'maquitzo') {
@@ -354,7 +355,7 @@ app.post('/interactions', async function (req, res) {
     }
     
     if (data.name === 'environments') {
-      return res.send(getInteractionEnvironment(userId,db));
+      return res.send(getInteractionEnvironment(userId,db, req.body.id));
     }
     
     if (data.name === 'independiente') {

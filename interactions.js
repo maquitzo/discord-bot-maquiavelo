@@ -42,16 +42,16 @@ export function getInteractionMaquitzo() {
   };
 }
 
-export function getInteractionEnvironment(userId, db) {
+export function getInteractionEnvironment(userId, db, interactionId) {
   return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       //content: content,
-      //flags: InteractionResponseFlags.EPHEMERAL,
+      flags: InteractionResponseFlags.EPHEMERAL,
       components: [
         {
           type: MessageComponentTypes.ACTION_ROW,
-          components: getEnvironmentsActions(),
+          components: getEnvironmentsActions(db, interactionId),
         },
       ],
       embeds: [getEmbedEnvironments(userId, db)],
@@ -132,7 +132,7 @@ export function getInteractionFinal(environment, userId) {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
       content: "",
-      //flags: InteractionResponseFlags.EPHEMERAL,
+      flags: InteractionResponseFlags.EPHEMERAL,
       embeds: getEnvironmentsReserved(environment, userId),
     },
   };
@@ -166,12 +166,15 @@ export function getInteractionEnvironmentCommand(action, environment) {
 // DB
 
 // TODO pasar un objeto
-export function setEnvironment(userId, env, task, card, tester, branch, db) {
+//export function setEnvironment(userId, env, task, card, tester, branch, db) {
+export function setEnvironment(action, environment) {
   //console.log('teser',tester);
 
-  let environment = getRPSEnvironments(db).filter((e) => e.value == env);
+  //let environment = getRPSEnvironments(db).filter((e) => e.value == env);
+  
+  //release
+  
   let update = {
-    ...environment[0],
     card: "",
     state: 0,
     timestamp: "",
@@ -185,7 +188,7 @@ export function setEnvironment(userId, env, task, card, tester, branch, db) {
   //   delete environments[env];
   // }
 
-  if (task == "set") {
+  if (action == "set") {
     // environments[env] = {
     //   dev: userId,
     //   timestamp: getTimeStamp(),
@@ -194,13 +197,7 @@ export function setEnvironment(userId, env, task, card, tester, branch, db) {
     // };
 
     update = {
-      ...environment[0],
-      user: {
-        dev: userId,
-        tester: tester,
-      },
-      card: card,
-      branch: branch,
+      ...environment,
       state: 1,
       timestamp: getTimeStamp(),
     };
@@ -273,18 +270,15 @@ function getEnvironmentsReserved(environment, userId) {
 }
 
 // buttons
-function getEnvironmentsActions() {
-  // por cada ambiente disponible
-  // damos la posibilidad de reservar
+function getEnvironmentsActions(db, interactionid) {
+  
   const isRelease = (state) => (state == 0 ? "set" : "release");
-  // identificamos con el style si puede o no
-  const style = (state) =>
-    state == 0 ? ButtonStyleTypes.PRIMARY : ButtonStyleTypes.DANGER;
+  const style = (state) => state == 0 ? ButtonStyleTypes.PRIMARY : ButtonStyleTypes.DANGER;
 
   const buttons = (e) => {
     return {
       type: MessageComponentTypes.BUTTON,
-      custom_id: `environment_action|${isRelease(e.state)}|${e.name}|${req.body.id}`,
+      custom_id: `environment_action|${isRelease(e.state)}|${e.name}|${interactionid}`,
       label: `${e.label}`,
       style: style(e.state),
     };
