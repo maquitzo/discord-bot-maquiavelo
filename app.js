@@ -1,5 +1,5 @@
 import express from 'express';
-import DataStore from 'nedb';
+import Datastore from 'nedb';
 
 import {
   InteractionType,
@@ -58,7 +58,7 @@ app.post('/interactions', async function (req, res) {
   const { type, id, data } = req.body;
   
   //datastore
-  let db = new DataStore({ filename: './data/datastore.db', autoload: true });
+  const db = new Datastore({ filename: './data/datastore.db', autoload:true });
   
   /**
    * Handle verification requests

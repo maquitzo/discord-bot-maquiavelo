@@ -157,16 +157,16 @@ export function getRPSEnvironments(db) {
   
   db.count({ id:'demo'}, function (err, count) {
     
-    console.log('count', count);
+    console.log('count', count, "err ", err);
     
     if (count == 0) {
       
-      console.log('initializing insert all', getRPSEnvironmentsKeys().length);
+      console.log('insert all', getRPSEnvironmentsKeys().length);
       db.insert(RPSEnvironments);
     
     } else {
 
-      db.findOne({ _id: 'id1' }, function (err, env) {
+      db.find({}, function (err, env) {
         console.log('loading', env);
         RPSEnvironments = env;
       });
@@ -174,7 +174,7 @@ export function getRPSEnvironments(db) {
 
   });
   
-  const allChoices = getRPSEnvironmentsKeys();
+  const allChoices = getRPSEnvironments();
   const options = [];
 
   for (let c of allChoices) {
@@ -188,14 +188,16 @@ export function getRPSEnvironments(db) {
   }
   
   //console.log("environment:",options);
-  return options;
+  //return options;
+  
+  return RPSEnvironments;
 }
 
 export function setRPSEnvironments(env,data,db) {
   
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
   
-  db.update({ _id: 'id1' }, {environments: RPSEnvironments}, {}, function (err, numReplaced) {
+  db.update({env:data}, {env:data}, {}, function (err, numReplaced) {
     console.log('saving err ',err,' num:',numReplaced);
   });
   
