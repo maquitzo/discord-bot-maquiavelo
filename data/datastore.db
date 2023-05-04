@@ -1,5 +1,4 @@
-{"id":"desarrollo","label":"Desarrollo","description":"Desarrollo","dev":"","tester":"22","card":"","state":0,"timestamp":"","user":{},"_id":"OT6zsDMm8OHD0N2G"}
-{"id":"staging","label":"Staging","description":"Preprod","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"REkcieCxZBaAgCnf"}
-{"id":"testing","label":"Testing","description":"Release v14.00.XX","dev":808483336548253700,"tester":"brokers","card":"","state":1,"timestamp":"2020-04-03T13:49:01.767Z","user":{},"_id":"U8sNQcd5yIW2ntWL"}
-{"id":"demo","label":"Demo","description":"Ambiente para una Demo en particular ","dev":"808483336548253706","tester":"ssss","card":"sss","state":1,"timestamp":"2023-05-04T04:51:54.754Z","user":{},"_id":"j8umW4Fd4lOS3M93"}
-{"id":0,"label":"Demo","description":"Ambiente para una Demo en particular ","dev":"808483336548253706","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"j8umW4Fd4lOS3M93"}
+{"id":"staging","label":"Staging","description":"Es un pre-productivo","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"url":{"frontend":"","backend":""},"_id":"0ACXknJFSFoo2nyc"}
+{"id":"demo","label":"Demo","description":"Usado para el dia de la Demo o Epica","dev":"808483336548253706","tester":"555","card":"444","state":1,"timestamp":"2023-05-04T05:05:03.503Z","user":{},"url":{"frontend":"","backend":""},"_id":"0ns5Lmq88CkUEYt6"}
+{"id":"testing","label":"Testing","description":"Siempre esta el Release v1X.00.00","dev":808483336548253700,"tester":"brokers","card":"","state":1,"timestamp":"2020-04-03T13:49:01.767Z","user":{},"url":{"frontend":"","backend":""},"_id":"260NYxx161Y1Yhlw"}
+{"id":"desarrollo","label":"El ambiente del pueblo","description":"Desarrollo","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"url":{"frontend":"","backend":""},"_id":"wCWsa5wehigKIwb6"}

@@ -107,46 +107,62 @@ let RPSEnvironments = [
   {
     id:'desarrollo',
     label:'Desarrollo',
-    description: 'Desarrollo',
+    description: 'El ambiente del pueblo',
     dev:'',
     tester:'',
     card:'',
     state: 0,
     timestamp:'',
-    user:{}
+    user:{},
+    url : {
+      frontend:'',
+      backend:''
+    }
   },
   {
     id:'testing',
     label:'Testing',
-    description: 'Release v14.00.XX',
+    description: 'Siempre esta el Release v1X.00.00',
     dev: 808483336548253706,
     tester:'brokers',
     card:'',
     state: 1,
     timestamp:'2020-04-03T13:49:01.767Z',
-    user:{}
+    user:{},
+    url : {
+      frontend:'',
+      backend:''
+    }
   },
   {
     id:'staging',
     label:'Staging',
-    description: 'Preprod',
+    description: 'Es un pre-productivo',
     dev:'',
     tester:'',
     card:'',
     state: 0,
     timestamp:'',
-    user:{}
+    user:{},
+    url : {
+      frontend:'',
+      backend:''
+    }
   },
   {
     id:'demo',
     label:'Demo',
-    description: 'Ambiente para una Demo en particular ',
+    description: 'Usado para el dia de la Demo o Epica',
     dev:'',
     tester:'',
     card:'',
     state: 0,
     timestamp:'',
-    user:{}
+    user:{},
+    url : {
+      frontend:'',
+      backend:''
+    }
   },
 ]
 
@@ -183,16 +199,19 @@ function rehytrate(db) {
   db.find({}, function (err, env) {
     console.log('Rehidrate files', env);
     RPSEnvironments = env;
+    return RPSEnvironments;
   });
+
 }
 
+// export function getRPSEnvironmentsKeys() {
+//   return Object.keys(RPSEnvironments);
+// }
 
-export function getRPSEnvironmentsKeys() {
-  return Object.keys(RPSEnvironments);
-}
-
-export function getRPSEnvironments() {
-  console.log("getEnvironmesnt");
+export async function getRPSEnvironments(db) {
+  //console.log("getEnvironmesnt");
+  const result = await rehytrate(db);
+  return result;
   return RPSEnvironments;
 }
 
