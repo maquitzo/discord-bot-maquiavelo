@@ -195,25 +195,24 @@ export function initiliazeDB() {
   
 }
 
-async function rehytrate2(db) {
+function rehytrate2(db) {
   
-  //
-  // return db.find({}, function (err, env) {
-  //   console.log('Rehidrate files', env[0]);
-  //   RPSEnvironments = env;
-  //   return RPSEnvironments;
-  // });
-  //
+  return db.find({}, function (err, env) {
+    console.log('Rehidrate files', env[0]);
+    RPSEnvironments = env;
+    return RPSEnvironments;
+  });
   
-  let document;
-  try {
-    document = await db.find({});
-  } catch (err) {
-    console.error('Mongo error', err);
-    //return res.status(500).send();
-  }
+  
+//   let document;
+//   try {
+//     document = await db.find({});
+//   } catch (err) {
+//     console.error('Mongo error', err);
+//     //return res.status(500).send();
+//   }
 
-  return document;
+//   return document;
 
 }
 
@@ -237,7 +236,7 @@ function rehytrate(db){
 //   return Object.keys(RPSEnvironments);
 // }
 
-export async function getRPSEnvironments(db) {
+export function getRPSEnvironments(db) {
   
   console.log('getting');
   
@@ -253,9 +252,10 @@ export function setRPSEnvironments(env,data,db) {
   //RPSEnvironments = {...RPSEnvironments,  [env] : data };
   db.update({ id:env }, { $set: data }, {}, function (err, numReplaced) {
     console.log('saving err ',err,' num:',numReplaced);
+    rehytrate2(db);
   });
   
-  rehytrate(db);
+  //rehytrate(db);
   
 }
 

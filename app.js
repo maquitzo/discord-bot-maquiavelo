@@ -368,7 +368,7 @@ app.post('/interactions', async function (req, res) {
     if (data.name === 'environments') {
       
       const userId = req.body.member.user.id;
-      console.log('environment');
+      console.log('environment-start');
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -992,7 +992,7 @@ app.post('/interactions', async function (req, res) {
   
   function getEmbedEnvironments(userId) {
     
-      return {
+      const result = {
         "type": "rich",
         "thumbnail": { url : "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png" },
         "title": `Entornos`,
@@ -1002,6 +1002,8 @@ app.post('/interactions', async function (req, res) {
         "footer" : { "text" : `` },
         "timestamp": getTimeStamp()
       }
+      console.log('result-environments ', result);
+      return result;
   }
   
   function getEmbedEnvironmentsHeader(userId) {
