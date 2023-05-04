@@ -105,60 +105,67 @@ export function getShuffledOptions() {
 
 let RPSEnvironments = [
   {
-    id:'desarrollo',
+    id:1,
+    name:'desarrollo',
     label:'Desarrollo',
     description: 'El ambiente del pueblo',
-    dev:'',
-    tester:'',
     card:'',
     state: 0,
     timestamp:'',
-    user:{},
+    user:{
+      dev:'',
+      tester:'',
+    },
     url : {
       frontend:'http://cluster-test.art.com:20478/',
       backend:'http://cluster-test.art.com:20478/'
     }
   },
   {
-    id:'testing',
+    id:2,
+    name:'testing',
     label:'Testing',
     description: 'Siempre esta el Release v1X.00.00',
-    dev: 808483336548253706,
-    tester:'brokers',
-    card:'',
+    card:'77',
     state: 1,
-    timestamp:'2020-04-03T13:49:01.767Z',
-    user:{},
+    user:{
+      dev: 808483336548253706,
+      tester:'brokers',
+    },
     url : {
       frontend:'http://cluster-test.art.com:20536/',
       backend:'http://cluster-test.art.com:20536/'
     }
   },
   {
-    id:'staging',
+    id:3,
+    name:'staging',
     label:'Staging',
     description: 'Es un pre-productivo',
-    dev:'',
-    tester:'',
     card:'',
     state: 0,
     timestamp:'',
-    user:{},
+    user:{
+      dev:'',
+      tester:'',
+    },
     url : {
       frontend:'http://cluster-test.art.com:20283/',
       backend:'http://cluster-test.art.com:20283/'
     }
   },
   {
-    id:'demo',
+    id:4,
+    name:'demo',
     label:'Demo',
     description: 'Usado para el dia de la Demo o Epica',
-    dev:'',
-    tester:'',
     card:'',
     state: 0,
     timestamp:'',
-    user:{},
+    user:{
+      dev:'',
+      tester:'',
+    },
     url : {
       frontend:'http://cluster-test.art.com:20567/',
       backend:'http://cluster-test.art.com:20567/'
