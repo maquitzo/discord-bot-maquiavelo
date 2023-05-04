@@ -1,8 +1,4 @@
-{"id":"desarrollo","label":"Desarrollo","description":"Desarrollo","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"uNb8001f47q15t5O"}
-{"id":"testing","label":"Testing","description":"Release v14.00.XX","dev":808483336548253700,"tester":"brokers","card":"","state":1,"timestamp":"2020-04-03T13:49:01.767Z","user":{},"_id":"TC4escWbiNTUTbmu"}
-{"id":"staging","label":"Staging","description":"Preprod","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"WVk0DGOESmSaFFfd"}
-{"id":"demo","label":"Demo","description":"Ambiente para una Demo en particular ","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"oOcH94oZ10ObqNmi"}
-{"id":"desarrollo","label":"Desarrollo","description":"Desarrollo","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"cNeJx1spX20BeJlO"}
-{"id":"testing","label":"Testing","description":"Release v14.00.XX","dev":808483336548253700,"tester":"brokers","card":"","state":1,"timestamp":"2020-04-03T13:49:01.767Z","user":{},"_id":"BCWhIDj47HRvBYqd"}
-{"id":"staging","label":"Staging","description":"Preprod","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"Yh45pRY9z1LHZeNM"}
-{"id":"demo","label":"Demo","description":"Ambiente para una Demo en particular ","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"pSBgkmV3mKQ7lPkC"}
+{"id":"demo","label":"Demo","description":"Ambiente para una Demo en particular ","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"2rs6DacnlOjMGk4g"}
+{"id":"staging","label":"Staging","description":"Preprod","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"8QEL8WmBwvGMx1XH"}
+{"id":"testing","label":"Testing","description":"Release v14.00.XX","dev":808483336548253700,"tester":"brokers","card":"","state":1,"timestamp":"2020-04-03T13:49:01.767Z","user":{},"_id":"FVG23Z9mvIjUGYiy"}
+{"id":"desarrollo","label":"Desarrollo","description":"Desarrollo","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"nOxOJaV2ovrtOLls"}

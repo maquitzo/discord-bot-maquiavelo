@@ -1,5 +1,5 @@
 import express from 'express';
-import DataStore from 'nedb';
+
 
 import {
   InteractionType,
@@ -13,6 +13,7 @@ import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js
 import { 
   getShuffledOptions, 
   getResult, 
+  initiliazeDB,
   getRPSEnvironments, 
   setRPSEnvironments
 } from './game.js';
@@ -1106,13 +1107,13 @@ app.post('/interactions', async function (req, res) {
 
     }
     
-    return getRPSEnvironments(db).map(buttons);
+    return getRPSEnvironments().map(buttons);
     
   }
   
   function getEnvironmentsInfo(UserId) {
 
-    return getRPSEnvironments(db).map((element) => getEnvironmentState(element));
+    return getRPSEnvironments().map((element) => getEnvironmentState(element));
 
   }
   
@@ -1179,7 +1180,7 @@ app.post('/interactions', async function (req, res) {
     
     //console.log('teser',tester);
       
-    let environment = getRPSEnvironments(db).filter(e => e.value == env);
+    let environment = getRPSEnvironments().filter(e => e.value == env);
     let update = { ...environment[0], 
       id:0,
       card:'',
@@ -1235,17 +1236,8 @@ app.post('/interactions', async function (req, res) {
 app.listen(PORT, () => {
   console.log('Listening on port', PORT);
   console.log('Checking Guild Commands');
-  
-  //datastore
-  db = new DataStore({ filename: './data/datastore.db', autoload:true });
-  
-  db.remove({}, { multi: true }, function (err, numRemoved) { console.log('remove all') });
-  
-  db.count({ id:'demo'}, function (err, count) {
-      console.log('err',err,"count",count);
-  });
-  
 
+  initiliazeDB();
   
   // Check if guild commands from commands.json are installed (if not, install them)
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [

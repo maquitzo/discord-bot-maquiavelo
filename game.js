@@ -1,5 +1,7 @@
 import { capitalize } from './utils.js';
+import DataStore from 'nedb';
 
+let db = {};
 
 export function getResult(p1, p2) {
   let gameResult;
@@ -150,52 +152,45 @@ let RPSEnvironments = [
   },
 ]
 
-export function getRPSEnvironmentsKeys() {
-  return Object.keys(RPSEnvironments);
-}
-
-export function getRPSEnvironments(db) {
+export function initiliazeDB(db) {
+  
+    //datastore
+  db = new DataStore({ filename: './data/datastore.db', autoload:true });
+  
+  //db.remove({}, { multi: true }, function (err, numRemoved) { console.log('remove all') });
   
   db.count({ id:'demo'}, function (err, count) {
     
-    console.log('count', count, "err ", err);
+    console.log('Check existing entries on file- >', count, " |err? ", err);
     
     if (count == 0) {
       
-      console.log('insert all', getRPSEnvironmentsKeys().length);
+      console.log('Inserting default values -> ', getRPSEnvironmentsKeys().length);
       db.insert(RPSEnvironments);
     
     } else {
 
       db.find({}, function (err, env) {
-        console.log('loading', env);
+        console.log('Rehidrate files', env);
         RPSEnvironments = env;
       });
     }
 
   });
   
-//   const allChoices = getRPSEnvironments();
-//   const options = [];
+}
 
-//   for (let c of allChoices) {
-//     // Formatted for select menus
-//     // https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
-//       options.push({
-//         label: RPSEnvironments[c]['label'],
-//         value: c,
-//         ...RPSEnvironments[c]
-//       });
-//   }
-  console.log("--------------:");
-  console.log("environment:", RPSEnvironments);
-  
-  //return options;
-  
+
+export function getRPSEnvironmentsKeys() {
+  return Object.keys(RPSEnvironments);
+}
+
+export function getRPSEnvironments() {
+  console.log("getEnvironmesnt");
   return RPSEnvironments;
 }
 
-export function setRPSEnvironments(env,data,db) {
+export function setRPSEnvironments(env,data) {
   
   console.log(env,data);
   
