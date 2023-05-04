@@ -157,8 +157,8 @@ export function getRPSEnvironments(db) {
     
     if (count == 0) {
       
-      console.log('initializing insert all');
-      db.insert({ e: RPSEnvironments });
+      console.log('initializing insert all', getRPSEnvironmentsKeys().length);
+      db.insert({environments: RPSEnvironments });
     
     } else {
 
@@ -183,13 +183,15 @@ export function getRPSEnvironments(db) {
       });
   }
   
-  console.log("environment:",options);
+  //console.log("environment:",options);
   return options;
 }
 
 export function setRPSEnvironments(env,data,db) {
+  
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  db.update({ _id: 'id1' }, { e: RPSEnvironments }, {}, function (err, numReplaced) {
+  
+  db.update({ _id: 'id1' }, {environments: RPSEnvironments}, {}, function (err, numReplaced) {
     console.log('saving err ',err,' num:',numReplaced);
   });
   

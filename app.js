@@ -1,5 +1,5 @@
 import express from 'express';
-import Datastore from 'nedb';
+import DataStore from 'nedb';
 
 import {
   InteractionType,
@@ -58,7 +58,7 @@ app.post('/interactions', async function (req, res) {
   const { type, id, data } = req.body;
   
   //datastore
-  const db = new Datastore({ filename: './datastore.db', autoload: true });
+  let db = new DataStore({ filename: './data/datastore.db', autoload: true });
   
   /**
    * Handle verification requests
@@ -1176,7 +1176,7 @@ app.post('/interactions', async function (req, res) {
   
   function setEnvironment(userId, env, task, card, tester) {
     
-    console.log('teser',tester);
+    //console.log('teser',tester);
       
     let environment = getRPSEnvironments(db).filter(e => e.value == env);
     let update = { ...environment[0], 
