@@ -1,8 +1,6 @@
 import { capitalize } from './utils.js';
 import DataStore from 'nedb';
 
-let db = {};
-
 export function getResult(p1, p2) {
   let gameResult;
   if (RPSChoices[p1.objectName] && RPSChoices[p1.objectName][p2.objectName]) {
@@ -152,10 +150,10 @@ let RPSEnvironments = [
   },
 ]
 
-export function initiliazeDB(db) {
+export function initiliazeDB() {
   
     //datastore
-  db = new DataStore({ filename: './data/datastore.db', autoload:true });
+  const db = new DataStore({ filename: './data/datastore.db', autoload:true });
   
   //db.remove({}, { multi: true }, function (err, numRemoved) { console.log('remove all') });
   
@@ -178,6 +176,8 @@ export function initiliazeDB(db) {
 
   });
   
+  return db;
+  
 }
 
 
@@ -190,12 +190,12 @@ export function getRPSEnvironments() {
   return RPSEnvironments;
 }
 
-export function setRPSEnvironments(env,data) {
+export function setRPSEnvironments(env,data,db) {
   
   console.log(env,data);
   
-  RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  db.update({env:data}, { $set: {env:data} }, { multi: true }, function (err, numReplaced) {
+  //RPSEnvironments = {...RPSEnvironments,  [env] : data };
+  db.update({ id:env }, { $set: data }, { multi: true }, function (err, numReplaced) {
     console.log('saving err ',err,' num:',numReplaced);
   });
   

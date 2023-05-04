@@ -1,5 +1,6 @@
 import express from 'express';
 
+let db = {};
 
 import {
   InteractionType,
@@ -47,9 +48,6 @@ var accionSeleccionada = '';
 var ambienteSeleccionado = '';
 var usuarioReserva = 0;
 var cardSeleccionada = '';
-
-//database
-let db = {};
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
@@ -1237,7 +1235,7 @@ app.listen(PORT, () => {
   console.log('Listening on port', PORT);
   console.log('Checking Guild Commands');
 
-  initiliazeDB();
+  db = initiliazeDB();
   
   // Check if guild commands from commands.json are installed (if not, install them)
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
