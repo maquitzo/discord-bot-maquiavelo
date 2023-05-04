@@ -16,7 +16,8 @@ import {
   getResult, 
   initiliazeDB,
   getRPSEnvironments, 
-  setRPSEnvironments
+  setRPSEnvironments,
+  setRPSEnvironmentsAsync
 } from './game.js';
 
 import {
@@ -965,9 +966,10 @@ app.post('/interactions', async function (req, res) {
         const action = modalId.split('|')[1];
         const environment = modalId.split('|')[2];
 
-        setEnvironment(userId, environment, action, card, tester);
-
-        await res.send(getFinal(environment, userId));
+        setEnvironment(userId, environment, action, card, tester).then(algo => {
+          console.log('updated d');
+          return res.send(getFinal(environment, userId));
+        });
 
       }
     
@@ -1219,7 +1221,7 @@ app.post('/interactions', async function (req, res) {
 
     }   
 
-    setRPSEnvironments(env, update, db);
+    return setRPSEnvironmentsAsync(env, update, db);
 
   }
   

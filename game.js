@@ -240,3 +240,15 @@ export function setRPSEnvironments(env,data,db) {
   
 }
 
+export async function setRPSEnvironmentsAsync(env,data,db) {
+  
+  return new Promise((resolve, reject) => {
+    db.update({ id:env }, { $set: data }, {}, (err, numReplaced) => {
+        if (err) 
+          reject(err) 
+        else
+          resolve(rehytrate2(db)) 
+      });
+  });
+  
+}
