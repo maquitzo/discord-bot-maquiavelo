@@ -874,7 +874,7 @@ app.post('/interactions', async function (req, res) {
         } 
         
         else
-          setEnvironment(userId, environment, '', '').then(response => res.send(getFinal(environment, userId)));
+          setEnvironment(userId, environment, '', '', '').then(response => res.send(getFinal(environment, userId)));
           
         
         try {
@@ -964,7 +964,7 @@ app.post('/interactions', async function (req, res) {
         const action = modalId.split('|')[1];
         const environment = modalId.split('|')[2];
 
-        setEnvironment(userId, environment, action, card, tester).then(response => res.send(getFinal(environment, userId)));
+        setEnvironment(userId, environment, action, card, tester, branch).then(response => res.send(getFinal(environment, userId)));
 
       }
     
@@ -1173,7 +1173,7 @@ app.post('/interactions', async function (req, res) {
   }
   
   // TODO pasar un objeto
-  function setEnvironment(userId, env, task, card, tester) {
+  function setEnvironment(userId, env, task, card, tester, branch) {
     
     //console.log('teser',tester);
       
@@ -1207,6 +1207,7 @@ app.post('/interactions', async function (req, res) {
           tester: tester,
         },
         card:card,
+        branch:branch,
         state: 1,
         timestamp:getTimeStamp()
       };
