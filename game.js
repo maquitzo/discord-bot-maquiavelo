@@ -128,7 +128,7 @@ let RPSEnvironments = [
   },
   {
     id:'staging',
-    label:'testing',
+    label:'Staging',
     description: 'Staging',
     dev:'',
     tester:'',
@@ -139,7 +139,7 @@ let RPSEnvironments = [
   },
   {
     id:'demo',
-    label:'testing',
+    label:'Demo',
     description: 'Ambiente para una Demo en particular ',
     dev:'',
     tester:'',

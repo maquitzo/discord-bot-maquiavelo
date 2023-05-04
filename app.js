@@ -369,7 +369,7 @@ app.post('/interactions', async function (req, res) {
     if (data.name === 'environments') {
       
       const userId = req.body.member.user.id;
-
+      console.log('environment');
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -993,6 +993,8 @@ app.post('/interactions', async function (req, res) {
   
   function getEmbedEnvironments(userId) {
     
+    console.log('aa');
+    
       return {
         "type": "rich",
         "thumbnail": { url : "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png" },
@@ -1097,13 +1099,13 @@ app.post('/interactions', async function (req, res) {
     
     const buttons = (e) => {
       
-      return {
+        return {
           type: MessageComponentTypes.BUTTON,
-          custom_id: `environment_action|${isRelease(e.state)}|${e.value}|${req.body.id}`,
+          custom_id: `environment_action|${isRelease(e.state)}|${e.id}|${req.body.id}`,
           label: `${e.label}`,
           style: style(e.state),
-      }
-      
+        }
+
     }
     
     return getRPSEnvironments().map(buttons);
@@ -1118,6 +1120,8 @@ app.post('/interactions', async function (req, res) {
   
   // item state
   function getEnvironmentState(env) {
+    
+    console.log('ambiente',env);
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
@@ -1171,7 +1175,7 @@ app.post('/interactions', async function (req, res) {
       const offset = -3 * 3600 * 1000; //now.getTimezoneOffset();
       const timestamp = new Date(now.getTime() + offset); //let d = new Date(new Date().toLocaleString("en-US", {timeZone: "timezone id"}));
       
-      console.log("timestamp:",timestamp);
+      //console.log("timestamp:",timestamp);
       return new Date().toISOString();
   }
   
@@ -1195,14 +1199,14 @@ app.post('/interactions', async function (req, res) {
     if (task == 'set') {    
 
       environments[env] = {
-        id: userId,
+        dev: userId,
         timestamp: getTimeStamp(),
         task, 
         card
       };  
 
       update = { ...environment[0], 
-        id:userId,
+        dev:userId,
         card:card,
         state: 1,
         tester: tester,
