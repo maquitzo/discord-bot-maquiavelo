@@ -1,5 +1,5 @@
 import { capitalize } from './utils.js';
-import DataStore from 'nedb';
+
 
 export function getResult(p1, p2) {
   let gameResult;
@@ -117,7 +117,7 @@ let RPSEnvironments = [
   },
   {
     id:'testing',
-    label:'testing',
+    label:'Testing',
     description: 'Release v14.00.XX',
     dev: 808483336548253706,
     tester:'brokers',
@@ -129,7 +129,7 @@ let RPSEnvironments = [
   {
     id:'staging',
     label:'Staging',
-    description: 'Staging',
+    description: 'Preprod',
     dev:'',
     tester:'',
     card:'',
@@ -154,29 +154,26 @@ export function getRPSEnvironmentsKeys() {
   return Object.keys(RPSEnvironments);
 }
 
-export function getRPSEnvironments() {
+export function getRPSEnvironments(db) {
   
-  //datastore
-//   let db = new DataStore({ filename: './data/datastore.db', autoload:true });
-  
-//   db.count({ id:'demo'}, function (err, count) {
+  db.count({ id:'demo'}, function (err, count) {
     
-//     console.log('count', count, "err ", err);
+    console.log('count', count, "err ", err);
     
-//     if (count == 0) {
+    if (count == 0) {
       
-//       console.log('insert all', getRPSEnvironmentsKeys().length);
-//       db.insert(RPSEnvironments);
+      console.log('insert all', getRPSEnvironmentsKeys().length);
+      db.insert(RPSEnvironments);
     
-//     } else {
+    } else {
 
-//       db.find({}, function (err, env) {
-//         console.log('loading', env);
-//         RPSEnvironments = env;
-//       });
-//     }
+      db.find({}, function (err, env) {
+        console.log('loading', env);
+        RPSEnvironments = env;
+      });
+    }
 
-//   });
+  });
   
 //   const allChoices = getRPSEnvironments();
 //   const options = [];
@@ -198,16 +195,13 @@ export function getRPSEnvironments() {
   return RPSEnvironments;
 }
 
-export function setRPSEnvironments(env,data) {
+export function setRPSEnvironments(env,data,db) {
   
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
   
-  //datastore
-//  let db = new DataStore({ filename: './data/datastore.db', autoload:true });
-  
-//   db.update({env:data}, {env:data}, {}, function (err, numReplaced) {
-//     console.log('saving err ',err,' num:',numReplaced);
-//   });
+  db.update({env:data}, {env:data}, {}, function (err, numReplaced) {
+    console.log('saving err ',err,' num:',numReplaced);
+  });
   
 }
 

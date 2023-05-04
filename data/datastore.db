@@ -1,0 +1,8 @@
+{"id":"demo","label":"Demo","description":"Ambiente para una Demo en particular ","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"5VKGEmZRfOFBUMjM"}
+{"id":"testing","label":"Testing","description":"Release v14.00.XX","dev":808483336548253700,"tester":"brokers","card":"","state":1,"timestamp":"2020-04-03T13:49:01.767Z","user":{},"_id":"7WpW2criVeIHouBT"}
+{"id":"desarrollo","label":"Desarrollo","description":"Desarrollo","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"7j8UmK2vvFQerkbe"}
+{"id":"staging","label":"Staging","description":"Preprod","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"B0U8IUl8dWuKvATW"}
+{"id":"testing","label":"Testing","description":"Release v14.00.XX","dev":808483336548253700,"tester":"brokers","card":"","state":1,"timestamp":"2020-04-03T13:49:01.767Z","user":{},"_id":"QS8U7Zigq8kFs8Jk"}
+{"id":"desarrollo","label":"Desarrollo","description":"Desarrollo","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"WJg14yFlyseydczS"}
+{"id":"demo","label":"Demo","description":"Ambiente para una Demo en particular ","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"dJmENG9fwPDHxFUu"}
+{"id":"staging","label":"Staging","description":"Preprod","dev":"","tester":"","card":"","state":0,"timestamp":"","user":{},"_id":"iYBTkIKQcwkJzqip"}

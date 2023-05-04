@@ -1,4 +1,5 @@
 import express from 'express';
+import DataStore from 'nedb';
 
 import {
   InteractionType,
@@ -47,13 +48,12 @@ var usuarioReserva = 0;
 var cardSeleccionada = '';
 
 //database
-
+let db = {};
 
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
 app.post('/interactions', async function (req, res) {
-  
   
   console.log('interactions ');
   
@@ -993,8 +993,6 @@ app.post('/interactions', async function (req, res) {
   
   function getEmbedEnvironments(userId) {
     
-    console.log('aa');
-    
       return {
         "type": "rich",
         "thumbnail": { url : "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png" },
@@ -1108,20 +1106,18 @@ app.post('/interactions', async function (req, res) {
 
     }
     
-    return getRPSEnvironments().map(buttons);
+    return getRPSEnvironments(db).map(buttons);
     
   }
   
   function getEnvironmentsInfo(UserId) {
 
-    return getRPSEnvironments().map((element) => getEnvironmentState(element));
+    return getRPSEnvironments(db).map((element) => getEnvironmentState(element));
 
   }
   
   // item state
   function getEnvironmentState(env) {
-    
-    console.log('ambiente',env);
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
@@ -1183,7 +1179,7 @@ app.post('/interactions', async function (req, res) {
     
     //console.log('teser',tester);
       
-    let environment = getRPSEnvironments().filter(e => e.value == env);
+    let environment = getRPSEnvironments(db).filter(e => e.value == env);
     let update = { ...environment[0], 
       id:0,
       card:'',
@@ -1216,7 +1212,7 @@ app.post('/interactions', async function (req, res) {
 
     }   
 
-    setRPSEnvironments(env, update);
+    setRPSEnvironments(env, update, db);
 
   }
   
@@ -1239,6 +1235,14 @@ app.post('/interactions', async function (req, res) {
 app.listen(PORT, () => {
   console.log('Listening on port', PORT);
   console.log('Checking Guild Commands');
+  
+  //datastore
+  db = new DataStore({ filename: './data/datastore.db', autoload:true });
+  
+  db.count({ id:'demo'}, function (err, count) {
+      console.log('err',err,"count",count);
+  });
+  
   // Check if guild commands from commands.json are installed (if not, install them)
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
     TEST_COMMAND,
