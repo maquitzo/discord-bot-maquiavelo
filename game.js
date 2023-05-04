@@ -164,20 +164,26 @@ export function initiliazeDB() {
     if (count == 0) {
       
       console.log('Inserting default values -> ', getRPSEnvironmentsKeys().length);
+      
       db.insert(RPSEnvironments);
     
     } else {
 
-      db.find({}, function (err, env) {
-        console.log('Rehidrate files', env);
-        RPSEnvironments = env;
-      });
+      rehytrate(db);
+      
     }
 
   });
   
   return db;
   
+}
+
+function rehytrate(db) {
+  db.find({}, function (err, env) {
+    console.log('Rehidrate files', env);
+    RPSEnvironments = env;
+  });
 }
 
 
@@ -195,9 +201,11 @@ export function setRPSEnvironments(env,data,db) {
   console.log(env,data);
   
   //RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  db.update({ id:env }, { $set: data }, { multi: true }, function (err, numReplaced) {
+  db.update({ id:env }, { $set: data }, {}, function (err, numReplaced) {
     console.log('saving err ',err,' num:',numReplaced);
   });
+  
+  rehytrate(db);
   
 }
 
