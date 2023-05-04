@@ -1179,31 +1179,35 @@ app.post('/interactions', async function (req, res) {
       
     let environment = getRPSEnvironments(db).filter(e => e.value == env);
     let update = { ...environment[0], 
-      id:0,
       card:'',
       state: 0,
       timestamp:'',
-      tester: '',
+      user : {
+        tester: '',
+        dev:''
+      }
     };
     
-    if (task == 'release') {
-      delete environments[env];        
-    }
+    // if (task == 'release') {
+    //   delete environments[env];        
+    // }
 
     if (task == 'set') {    
 
-      environments[env] = {
-        dev: userId,
-        timestamp: getTimeStamp(),
-        task, 
-        card
-      };  
+      // environments[env] = {
+      //   dev: userId,
+      //   timestamp: getTimeStamp(),
+      //   task, 
+      //   card
+      // };  
 
       update = { ...environment[0], 
-        dev:userId,
+        user: {
+          dev:userId,
+          tester: tester,
+        },
         card:card,
         state: 1,
-        tester: tester,
         timestamp:getTimeStamp()
       };
 

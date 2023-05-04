@@ -107,7 +107,7 @@ let RPSEnvironments = [
   {
     id:1,
     name:'desarrollo',
-    label:'Desarrollo',
+    label:'Dev',
     description: 'El ambiente del pueblo',
     card:'',
     state: 0,
@@ -124,10 +124,11 @@ let RPSEnvironments = [
   {
     id:2,
     name:'testing',
-    label:'Testing',
+    label:'Test',
     description: 'Siempre esta el Release v1X.00.00',
     card:'77',
     state: 1,
+    timestamp:'2020-04-20 12:00',
     user:{
       dev: 808483336548253706,
       tester:'brokers',
@@ -180,7 +181,7 @@ export function initiliazeDB() {
   
   //db.remove({}, { multi: true }, function (err, numRemoved) { console.log('remove all') });
   
-  db.count({ id:'demo'}, function (err, count) {
+  db.count({}, function (err, count) {
     
     console.log('Check existing entries on file- >', count, " |err? ", err);
     
@@ -240,7 +241,7 @@ export function setRPSEnvironments(env,data,db) {
   
   //console.log(env,data);
   //RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  db.update({ id:env }, { $set: data }, {}, function (err, numReplaced) {
+  db.update({ name:env }, { $set: data }, {}, function (err, numReplaced) {
     console.log('saving err ',err,' num:',numReplaced);
     rehytrate(db);
   });
@@ -248,13 +249,18 @@ export function setRPSEnvironments(env,data,db) {
 }
 
 export async function setRPSEnvironmentsAsync(env,data,db) {
-  
+  console.log(env,data);
   return new Promise((resolve, reject) => {
-    db.update({ id:env }, { $set: data }, {}, (err, numReplaced) => {
-        if (err) 
+    db.update({ name:env }, { $set: data }, {}, (err, numReplaced) => {
+        
+      if (err) {
+          
           reject(err) 
-        else
-          resolve(rehytrate2(db)) 
+        }
+        else {
+          resolve(rehytrate2(db))
+        }
+           
       });
   });
   
