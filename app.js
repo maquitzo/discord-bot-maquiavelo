@@ -1095,17 +1095,13 @@ app.post('/interactions', async function (req, res) {
     
     const buttons = (e) => {
       
-        const button = {
+        return {
           type: MessageComponentTypes.BUTTON,
           custom_id: `environment_action|${isRelease(e.state)}|${e.id}|${req.body.id}`,
           label: `${e.label}`,
           style: style(e.state),
         }
         
-        //console.log('draw-button ', button);
-      
-        return button;
-
     }
     
     return getRPSEnvironments(db).map(buttons);
@@ -1121,20 +1117,18 @@ app.post('/interactions', async function (req, res) {
   // item state
   function getEnvironmentState(env) {
     
-    console.log('draw', env);
+    //console.log('draw', env);
     const item = (element,value) => `*${element}*: ${value} \n`;
-    const naming = (available, label) => `${available !=0?':heart:':':blue_heart:'} ${label}`
+    const naming = () => `${ env.state !=0?':heart:':':blue_heart:'} ${env.label}`;
+    let result = { "name": naming(), "value": '*Disponible*'};
 
-    if (env.state != 0)
-      return {
-          "name": naming(env.state, env.label),
-          "value": `${item('Probando',env.tester)} ${item('Desde',env.timestamp)} ${item('Card',env.card)} ${item('front',env.url.frontend)}`,
-        }
+    if(env.state != 0)
+      result = {
+        "name": naming(),
+        "value": `${item('Probando',env.tester)} ${item('Desde',env.timestamp)} ${item('Card',env.card)} ${item('frontend',env.url.frontend)}`,
+      }
 
-    return {
-      "name": naming(env.state, env.label),
-      "value": '*Disponible*',
-    };
+    return result;
  
   }
   
