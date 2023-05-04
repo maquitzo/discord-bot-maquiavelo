@@ -51,7 +51,10 @@ var cardSeleccionada = '';
 app.post('/interactions', async function (req, res) {
   // Interaction type and data
   const { type, id, data } = req.body;
+  
   //database
+  var Datastore = require('nedb')
+  , db = new Datastore({ filename: 'maquiavelo.db', autoload: true });
   
   /**
    * Handle verification requests

@@ -149,7 +149,7 @@ export function getRPSEnvironmentsKeys() {
   return Object.keys(RPSEnvironments);
 }
 
-export function getRPSEnvironments() {
+export function getRPSEnvironments(db) {
   const allChoices = getRPSEnvironmentsKeys();
   const options = [];
 
