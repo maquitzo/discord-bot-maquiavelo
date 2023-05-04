@@ -1,4 +1,6 @@
 import express from 'express';
+import Datastore from 'nedb';
+
 import {
   InteractionType,
   InteractionResponseType,
@@ -45,6 +47,9 @@ var ambienteSeleccionado = '';
 var usuarioReserva = 0;
 var cardSeleccionada = '';
 
+//database
+
+
 /**
  * Interactions endpoint URL where Discord will send HTTP requests
  */
@@ -52,9 +57,8 @@ app.post('/interactions', async function (req, res) {
   // Interaction type and data
   const { type, id, data } = req.body;
   
-  //database
-  var Datastore = require('nedb')
-  , db = new Datastore({ filename: 'maquiavelo.db', autoload: true });
+  //datastore
+  const db = new Datastore({ filename: 'datastore.db', autoload: true });
   
   /**
    * Handle verification requests

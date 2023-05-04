@@ -152,10 +152,12 @@ export function getRPSEnvironmentsKeys() {
 export function getRPSEnvironments(db) {
   
   db.count({ e: RPSEnvironments }, function (err, count) {
-  
-    if (count == 0) 
+    console.log('count', count);
+    if (count == 0) {
+      console.log('initialize', count);
       setRPSEnvironments('demo', { label:'Demos'});
-    
+    } 
+
   });
   
   const allChoices = getRPSEnvironmentsKeys();
