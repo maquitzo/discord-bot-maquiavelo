@@ -195,9 +195,9 @@ export function initiliazeDB() {
   
 }
 
-function rehytrate(db) {
+async function rehytrate(db) {
   db.find({}, function (err, env) {
-    console.log('Rehidrate files', env);
+    console.log('Rehidrate files', env[0]);
     RPSEnvironments = env;
     return RPSEnvironments;
   });
@@ -209,15 +209,18 @@ function rehytrate(db) {
 // }
 
 export async function getRPSEnvironments(db) {
-  //console.log("getEnvironmesnt");
-  const result = await rehytrate(db);
-  return result;
-  return RPSEnvironments;
+  
+  return rehytrate(db).then(data => {
+    console.log('get',data);
+    return data
+  });
+  
+  //return RPSEnvironments;
 }
 
 export function setRPSEnvironments(env,data,db) {
   
-  console.log(env,data);
+  //console.log(env,data);
   
   //RPSEnvironments = {...RPSEnvironments,  [env] : data };
   db.update({ id:env }, { $set: data }, {}, function (err, numReplaced) {
