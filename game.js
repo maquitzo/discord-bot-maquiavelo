@@ -197,21 +197,23 @@ export function initiliazeDB() {
 
 async function rehytrate(db) {
   
-  return db.find({}, function (err, env) {
-    console.log('Rehidrate files', env[0]);
-    RPSEnvironments = env;
-    return RPSEnvironments;
-  });
+  //
+  // return db.find({}, function (err, env) {
+  //   console.log('Rehidrate files', env[0]);
+  //   RPSEnvironments = env;
+  //   return RPSEnvironments;
+  // });
+  //
   
   let document;
   try {
     document = await db.find({});
   } catch (err) {
     console.error('Mongo error', err);
-    return res.status(500).send();
+    //return res.status(500).send();
   }
 
-  executeLogic(document, req, res);
+  return document;
 
 }
 
