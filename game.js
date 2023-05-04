@@ -117,7 +117,7 @@ let RPSEnvironments = [
   {
     id:'testing',
     label:'testing',
-    description: 'Release v1X.XX.XX',
+    description: 'Release v14.00.XX',
     dev: 808483336548253706,
     tester:'brokers',
     card:'',

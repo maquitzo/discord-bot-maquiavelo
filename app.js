@@ -1,5 +1,5 @@
 import express from 'express';
-import Datastore from 'nedb';
+import DataStore from 'nedb';
 
 import {
   InteractionType,
@@ -58,7 +58,13 @@ app.post('/interactions', async function (req, res) {
   const { type, id, data } = req.body;
   
   //datastore
-  const db = new Datastore({ filename: './data/datastore.db', autoload:true });
+  let db = new DataStore({ filename: './data/datastore.db', autoload:true });
+  
+  if (db) {
+      db.count({ id:'demo'}, function (err, count) {
+        console.log('count', count, "err ", err);
+      });
+  }
   
   /**
    * Handle verification requests
