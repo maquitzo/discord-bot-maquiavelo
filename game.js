@@ -202,6 +202,16 @@ async function rehytrate(db) {
     RPSEnvironments = env;
     return RPSEnvironments;
   });
+  
+  let document;
+  try {
+    document = await db.find({});
+  } catch (err) {
+    console.error('Mongo error', err);
+    return res.status(500).send();
+  }
+
+  executeLogic(document, req, res);
 
 }
 
