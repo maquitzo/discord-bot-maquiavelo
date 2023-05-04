@@ -1174,7 +1174,7 @@ app.post('/interactions', async function (req, res) {
     
     console.log('teser',tester);
       
-    let environment = getRPSEnvironments().filter(e => e.value == env);
+    let environment = getRPSEnvironments(db).filter(e => e.value == env);
     let update = { ...environment[0], 
       id:0,
       card:'',

@@ -150,6 +150,14 @@ export function getRPSEnvironmentsKeys() {
 }
 
 export function getRPSEnvironments(db) {
+  
+  db.count({ e: RPSEnvironments }, function (err, count) {
+  
+    if (count == 0) 
+      setRPSEnvironments('demo', { label:'Demos'});
+    
+  });
+  
   const allChoices = getRPSEnvironmentsKeys();
   const options = [];
 
@@ -167,7 +175,8 @@ export function getRPSEnvironments(db) {
   return options;
 }
 
-export function setRPSEnvironments(env,data) {
+export function setRPSEnvironments(env,data,db) {
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
+  db.update({e:RPSEnvironments});
 }
 
