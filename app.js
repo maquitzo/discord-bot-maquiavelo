@@ -1002,7 +1002,7 @@ app.post('/interactions', async function (req, res) {
         "footer" : { "text" : `` },
         "timestamp": getTimeStamp()
       }
-      console.log('result-environments ', result);
+      //console.log('result-environments ', result);
       return result;
   }
   
@@ -1088,7 +1088,7 @@ app.post('/interactions', async function (req, res) {
   }
   
   // buttons
-  async function getEnvironmentsActions() {
+  function getEnvironmentsActions() {
     
     // por cada ambiente disponible
     // damos la posibilidad de reservar
@@ -1111,30 +1111,20 @@ app.post('/interactions', async function (req, res) {
 
     }
     
-    //return getRPSEnvironments(db).then(data => data.map(buttons));
-    const data = await getRPSEnvironments(db);
-    
-    return data.map(buttons);
+    return getRPSEnvironments(db).map(buttons);
     
   }
   
-  async function getEnvironmentsInfo(UserId) {
+  function getEnvironmentsInfo(UserId) {
     
-    // getRPSEnvironments(db).then(data => {
-    //   console.log(data);
-    //   //data.map((element) => getEnvironmentState(element))
-    // });
-    
-    const data = await getRPSEnvironments(db);
-    
-    data.map((element) => getEnvironmentState(element));
+    return getRPSEnvironments(db).map((element) => getEnvironmentState(element));
 
   }
   
   // item state
   function getEnvironmentState(env) {
     
-    console.log('draw', env);
+    //console.log('draw', env);
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';

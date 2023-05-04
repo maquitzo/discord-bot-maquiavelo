@@ -179,7 +179,7 @@ export function initiliazeDB() {
     
     if (count == 0) {
       
-      console.log('Inserting default values -> ', getRPSEnvironmentsKeys().length);
+      console.log('Inserting default values -> ', RPSEnvironments.length);
       
       db.insert(RPSEnvironments);
     
@@ -195,28 +195,17 @@ export function initiliazeDB() {
   
 }
 
-function rehytrate2(db) {
+function rehytrate(db) {
   
   return db.find({}, function (err, env) {
     console.log('Rehidrate files', env[0]);
     RPSEnvironments = env;
     return RPSEnvironments;
   });
-  
-  
-//   let document;
-//   try {
-//     document = await db.find({});
-//   } catch (err) {
-//     console.error('Mongo error', err);
-//     //return res.status(500).send();
-//   }
-
-//   return document;
 
 }
 
-function rehytrate(db){
+function rehytrate2(db){
   
     return new Promise((resolve, reject) => {
         db.find({}, (err, doc) => {
@@ -237,25 +226,17 @@ function rehytrate(db){
 // }
 
 export function getRPSEnvironments(db) {
-  
-  console.log('getting');
-  
-  return rehytrate(db);
-  
-  //return RPSEnvironments;
+  return RPSEnvironments;
 }
 
 export function setRPSEnvironments(env,data,db) {
   
   //console.log(env,data);
-  
   //RPSEnvironments = {...RPSEnvironments,  [env] : data };
   db.update({ id:env }, { $set: data }, {}, function (err, numReplaced) {
     console.log('saving err ',err,' num:',numReplaced);
-    rehytrate2(db);
+    rehytrate(db);
   });
-  
-  //rehytrate(db);
   
 }
 
