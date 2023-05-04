@@ -187,8 +187,8 @@ export function getRPSEnvironments(db) {
 //         ...RPSEnvironments[c]
 //       });
 //   }
-  
-  //console.log("environment:",options);
+  console.log("--------------:");
+  console.log("environment:", RPSEnvironments);
   
   //return options;
   
@@ -197,9 +197,10 @@ export function getRPSEnvironments(db) {
 
 export function setRPSEnvironments(env,data,db) {
   
-  RPSEnvironments = {...RPSEnvironments,  [env] : data };
+  console.log(env,data);
   
-  db.update({env:data}, {env:data}, {}, function (err, numReplaced) {
+  RPSEnvironments = {...RPSEnvironments,  [env] : data };
+  db.update({env:data}, { $set: {env:data} }, { multi: true }, function (err, numReplaced) {
     console.log('saving err ',err,' num:',numReplaced);
   });
   

@@ -1239,9 +1239,13 @@ app.listen(PORT, () => {
   //datastore
   db = new DataStore({ filename: './data/datastore.db', autoload:true });
   
+  db.remove({}, { multi: true }, function (err, numRemoved) { console.log('remove all') });
+  
   db.count({ id:'demo'}, function (err, count) {
       console.log('err',err,"count",count);
   });
+  
+
   
   // Check if guild commands from commands.json are installed (if not, install them)
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
