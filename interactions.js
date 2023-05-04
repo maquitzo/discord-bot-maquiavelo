@@ -42,7 +42,7 @@ export function getInteractionMaquitzo() {
   };
 }
 
-export function getInteractionEnvironment(userId) {
+export function getInteractionEnvironment(userId, db) {
   return {
     type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
     data: {
@@ -54,7 +54,7 @@ export function getInteractionEnvironment(userId) {
           components: getEnvironmentsActions(),
         },
       ],
-      embeds: [getEmbedEnvironments(userId)],
+      embeds: [getEmbedEnvironments(userId, db)],
     },
   };
 }
@@ -127,6 +127,17 @@ export function getInteractionTincho(userId) {
   };
 }
 
+export function getInteractionFinal(environment, userId) {
+  return {
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      content: "",
+      //flags: InteractionResponseFlags.EPHEMERAL,
+      embeds: getEnvironmentsReserved(environment, userId),
+    },
+  };
+}
+
 //COMMANDS
 
 export function getInteractionEnvironmentCommand(action, environment) {
@@ -152,31 +163,69 @@ export function getInteractionEnvironmentCommand(action, environment) {
   };
 }
 
+// DB
+
+// TODO pasar un objeto
+export function setEnvironment(userId, env, task, card, tester, branch, db) {
+  //console.log('teser',tester);
+
+  let environment = getRPSEnvironments(db).filter((e) => e.value == env);
+  let update = {
+    ...environment[0],
+    card: "",
+    state: 0,
+    timestamp: "",
+    user: {
+      tester: "",
+      dev: "",
+    },
+  };
+
+  // if (task == 'release') {
+  //   delete environments[env];
+  // }
+
+  if (task == "set") {
+    // environments[env] = {
+    //   dev: userId,
+    //   timestamp: getTimeStamp(),
+    //   task,
+    //   card
+    // };
+
+    update = {
+      ...environment[0],
+      user: {
+        dev: userId,
+        tester: tester,
+      },
+      card: card,
+      branch: branch,
+      state: 1,
+      timestamp: getTimeStamp(),
+    };
+  }
+
+  return setRPSEnvironmentsAsync(env, update, db);
+}
+
+
 // helpers ============================================
 
-function getFinal(environment, userId) {
-  return {
-    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-    data: {
-      content: "",
-      //flags: InteractionResponseFlags.EPHEMERAL,
-      embeds: getEnvironmentsReserved(environment, userId),
-    },
-  };
-}
 
-function getEmbedHeader(userId) {
-  return {
-    type: "rich",
-    thumbnail: {
-      url: "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png",
-    },
-    title: `Entornos`,
-    description: `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
-    color: 0x00ffff,
-    timestamp: getTimeStamp(),
-  };
-}
+
+// function getEmbedHeader(userId) {
+//   return {
+//     type: "rich",
+//     thumbnail: {
+//       url: "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png",
+//     },
+//     title: `Entornos`,
+//     description: `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
+//     color: 0x00ffff,
+//     timestamp: getTimeStamp(),
+//   };
+// }
 
 ///
 /// Body de los estados de los environments
@@ -198,6 +247,9 @@ function getEmbedEnvironments(userId, db) {
 
 }
 
+///
+/// Body de los el mensaje de reserva realizado
+///
 function getEmbedReserve(environment, userId) {
   return {
     type: "rich",
@@ -214,7 +266,10 @@ function getEmbedReserve(environment, userId) {
 }
 
 function getEnvironmentsReserved(environment, userId) {
-  return [getEmbedEnvironments(userId), getEmbedReserve(environment, userId)];
+  return [
+    getEmbedEnvironments(userId), 
+    getEmbedReserve(environment, userId)
+  ];
 }
 
 // buttons
@@ -288,50 +343,6 @@ function getTimeStamp() {
 
 function getTimestampFormat(timestamp) {
   return new Date(timestamp).toUTCString().replace(/ GMT$/, "");
-}
-
-// TODO pasar un objeto
-function setEnvironment(userId, env, task, card, tester, branch) {
-  //console.log('teser',tester);
-
-  let environment = getRPSEnvironments(db).filter((e) => e.value == env);
-  let update = {
-    ...environment[0],
-    card: "",
-    state: 0,
-    timestamp: "",
-    user: {
-      tester: "",
-      dev: "",
-    },
-  };
-
-  // if (task == 'release') {
-  //   delete environments[env];
-  // }
-
-  if (task == "set") {
-    // environments[env] = {
-    //   dev: userId,
-    //   timestamp: getTimeStamp(),
-    //   task,
-    //   card
-    // };
-
-    update = {
-      ...environment[0],
-      user: {
-        dev: userId,
-        tester: tester,
-      },
-      card: card,
-      branch: branch,
-      state: 1,
-      timestamp: getTimeStamp(),
-    };
-  }
-
-  return setRPSEnvironmentsAsync(env, update, db);
 }
 
 function getGiphy() {

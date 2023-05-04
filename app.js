@@ -37,7 +37,9 @@ import {
   getInteractionMaquitzo,
   getInteractionEnvironment,
   getInteractionIndependiente,
-  getInteractionEnvironmentCommand
+  getInteractionEnvironmentCommand,
+  getInteractionFinal,
+  setEnvironment
 } from './interactions.js';
 
 
@@ -83,7 +85,6 @@ app.post('/interactions', async function (req, res) {
     
     const { name } = data;
 
-    // "test" guild command
     if (name === 'test') {
       // Send a message into the channel where command was triggered from
       return res.send({
@@ -95,7 +96,6 @@ app.post('/interactions', async function (req, res) {
       });
     }
     
-    // "challenge" guild command
     if (name === 'challenge' && id) {
         const userId = req.body.member.user.id;
         // User's object choice
@@ -130,7 +130,6 @@ app.post('/interactions', async function (req, res) {
         });
     }
     
-
     if (name === 'experta') {
       
         /*return res.send({
@@ -214,8 +213,6 @@ app.post('/interactions', async function (req, res) {
     
     }
 
-    
-    // "experta" guild command
     if (name === 'input' && id) {
         const userId = req.body.member.user.id;
         // User's object choice
@@ -261,7 +258,6 @@ app.post('/interactions', async function (req, res) {
           },
         });
     }
-    
     
   }
   
@@ -358,7 +354,7 @@ app.post('/interactions', async function (req, res) {
     }
     
     if (data.name === 'environments') {
-      return res.send(getInteractionEnvironment(userId));
+      return res.send(getInteractionEnvironment(userId,db));
     }
     
     if (data.name === 'independiente') {
@@ -634,10 +630,9 @@ app.post('/interactions', async function (req, res) {
       const reqbody = options[3];
       
       if (action == 'set') 
-        return res.send(getInteractionEnvironmentCommand(action,environment));
+        return res.send(getInteractionEnvironmentCommand(action,environment,db));
       else
-        setEnvironment(userId, environment, '', '', '').then(response => res.send(getFinal(environment, userId)));
-
+        setRPSEnvironmentsAsync(userId, environment, '', '', '').then(response => res.send(getInteractionFinal(environment, userId)));
 
       try {
         // Update ephemeral message
@@ -720,7 +715,7 @@ app.post('/interactions', async function (req, res) {
         const action = modalId.split('|')[1];
         const environment = modalId.split('|')[2];
 
-        setEnvironment(userId, environment, action, card, tester, branch).then(response => res.send(getFinal(environment, userId)));
+        setEnvironment(userId, environment, action, card, tester, branch, db).then(response => res.send(getInteractionFinal(environment, userId)));
 
       }
     
