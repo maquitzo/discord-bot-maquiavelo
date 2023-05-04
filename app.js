@@ -374,7 +374,7 @@ app.post('/interactions', async function (req, res) {
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
           //content: content,
-          flags: InteractionResponseFlags.EPHEMERAL,
+          //flags: InteractionResponseFlags.EPHEMERAL,
           components: [
             {
                 type: MessageComponentTypes.ACTION_ROW,
@@ -980,7 +980,7 @@ app.post('/interactions', async function (req, res) {
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
             content: '',
-            flags: InteractionResponseFlags.EPHEMERAL,
+            //flags: InteractionResponseFlags.EPHEMERAL,
             "embeds" : getEnvironmentsReserved(environment, userId),
           },
       };
