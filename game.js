@@ -1,4 +1,5 @@
 import { capitalize } from './utils.js';
+import DataStore from 'nedb';
 
 export function getResult(p1, p2) {
   let gameResult;
@@ -153,53 +154,60 @@ export function getRPSEnvironmentsKeys() {
   return Object.keys(RPSEnvironments);
 }
 
-export function getRPSEnvironments(db) {
+export function getRPSEnvironments() {
   
-  db.count({ id:'demo'}, function (err, count) {
+  //datastore
+//   let db = new DataStore({ filename: './data/datastore.db', autoload:true });
+  
+//   db.count({ id:'demo'}, function (err, count) {
     
-    console.log('count', count, "err ", err);
+//     console.log('count', count, "err ", err);
     
-    if (count == 0) {
+//     if (count == 0) {
       
-      console.log('insert all', getRPSEnvironmentsKeys().length);
-      db.insert(RPSEnvironments);
+//       console.log('insert all', getRPSEnvironmentsKeys().length);
+//       db.insert(RPSEnvironments);
     
-    } else {
+//     } else {
 
-      db.find({}, function (err, env) {
-        console.log('loading', env);
-        RPSEnvironments = env;
-      });
-    }
+//       db.find({}, function (err, env) {
+//         console.log('loading', env);
+//         RPSEnvironments = env;
+//       });
+//     }
 
-  });
+//   });
   
-  const allChoices = getRPSEnvironments();
-  const options = [];
+//   const allChoices = getRPSEnvironments();
+//   const options = [];
 
-  for (let c of allChoices) {
-    // Formatted for select menus
-    // https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
-      options.push({
-        label: RPSEnvironments[c]['label'],
-        value: c,
-        ...RPSEnvironments[c]
-      });
-  }
+//   for (let c of allChoices) {
+//     // Formatted for select menus
+//     // https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
+//       options.push({
+//         label: RPSEnvironments[c]['label'],
+//         value: c,
+//         ...RPSEnvironments[c]
+//       });
+//   }
   
   //console.log("environment:",options);
+  
   //return options;
   
   return RPSEnvironments;
 }
 
-export function setRPSEnvironments(env,data,db) {
+export function setRPSEnvironments(env,data) {
   
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
   
-  db.update({env:data}, {env:data}, {}, function (err, numReplaced) {
-    console.log('saving err ',err,' num:',numReplaced);
-  });
+  //datastore
+//  let db = new DataStore({ filename: './data/datastore.db', autoload:true });
+  
+//   db.update({env:data}, {env:data}, {}, function (err, numReplaced) {
+//     console.log('saving err ',err,' num:',numReplaced);
+//   });
   
 }
 
