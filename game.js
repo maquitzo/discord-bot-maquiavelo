@@ -102,48 +102,52 @@ export function getShuffledOptions() {
   return options.sort(() => Math.random() - 0.5);
 }
 
-let RPSEnvironments = {
-  development: {
+let RPSEnvironments = [
+  {
+    id:'desarrollo',
     label:'Desarrollo',
-    description: 'desarrollo',
-    id:'',
+    description: 'Desarrollo',
+    dev:'',
     tester:'',
     card:'',
     state: 0,
     timestamp:'',
     user:{}
   },
-  test: {
-    label:'Testing',
+  {
+    id:'testing',
+    label:'testing',
     description: 'Release v1X.XX.XX',
-    id: 808483336548253706,
+    dev: 808483336548253706,
     tester:'brokers',
     card:'',
     state: 1,
     timestamp:'2020-04-03T13:49:01.767Z',
     user:{}
   },
-  staging: {
-    label:'Staging',
+  {
+    id:'staging',
+    label:'testing',
     description: 'Staging',
-    id:'',
+    dev:'',
     tester:'',
     card:'',
     state: 0,
     timestamp:'',
     user:{}
   },
-  demo: {
-    label:'Demo',
+  {
+    id:'demo',
+    label:'testing',
     description: 'Ambiente para una Demo en particular ',
-    id:'',
+    dev:'',
     tester:'',
     card:'',
     state: 0,
     timestamp:'',
     user:{}
   },
-}
+]
 
 export function getRPSEnvironmentsKeys() {
   return Object.keys(RPSEnvironments);
@@ -151,14 +155,14 @@ export function getRPSEnvironmentsKeys() {
 
 export function getRPSEnvironments(db) {
   
-  db.count({_id:'id1'}, function (err, count) {
+  db.count({ id:'demo'}, function (err, count) {
     
     console.log('count', count);
     
     if (count == 0) {
       
       console.log('initializing insert all', getRPSEnvironmentsKeys().length);
-      db.insert({environments: RPSEnvironments });
+      db.insert(RPSEnvironments);
     
     } else {
 
