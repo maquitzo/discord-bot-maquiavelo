@@ -151,13 +151,22 @@ export function getRPSEnvironmentsKeys() {
 
 export function getRPSEnvironments(db) {
   
-  db.count({ e: RPSEnvironments }, function (err, count) {
+  db.count({_id:'id1'}, function (err, count) {
+    
     console.log('count', count);
     
     if (count == 0) {
-      console.log('initialize', count);
+      
+      console.log('initializing insert all');
       db.insert({ e: RPSEnvironments });
-    } 
+    
+    } else {
+
+      db.findOne({ _id: 'id1' }, function (err, env) {
+        console.log('loading', env);
+        RPSEnvironments = env;
+      });
+    }
 
   });
   
@@ -180,6 +189,9 @@ export function getRPSEnvironments(db) {
 
 export function setRPSEnvironments(env,data,db) {
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  db.update({ _id: 1 }, { e: RPSEnvironments });
+  db.update({ _id: 'id1' }, { e: RPSEnvironments }, {}, function (err, numReplaced) {
+    console.log('saving err ',err,' num:',numReplaced);
+  });
+  
 }
 

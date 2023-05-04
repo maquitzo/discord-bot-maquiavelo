@@ -58,7 +58,7 @@ app.post('/interactions', async function (req, res) {
   const { type, id, data } = req.body;
   
   //datastore
-  const db = new Datastore({ filename: 'datastore.db', autoload: true });
+  const db = new Datastore({ filename: './datastore.db', autoload: true });
   
   /**
    * Handle verification requests
