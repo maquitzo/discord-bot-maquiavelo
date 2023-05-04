@@ -153,9 +153,10 @@ export function getRPSEnvironments(db) {
   
   db.count({ e: RPSEnvironments }, function (err, count) {
     console.log('count', count);
+    
     if (count == 0) {
       console.log('initialize', count);
-      setRPSEnvironments('demo', { label:'Demos'});
+      db.insert({ e: RPSEnvironments });
     } 
 
   });
@@ -179,6 +180,6 @@ export function getRPSEnvironments(db) {
 
 export function setRPSEnvironments(env,data,db) {
   RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  db.update({e:RPSEnvironments});
+  db.update({ _id: 1 }, { e: RPSEnvironments });
 }
 

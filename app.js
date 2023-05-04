@@ -1105,13 +1105,13 @@ app.post('/interactions', async function (req, res) {
       
     }
     
-    return getRPSEnvironments().map(buttons);
+    return getRPSEnvironments(db).map(buttons);
     
   }
   
   function getEnvironmentsInfo(UserId) {
 
-    return getRPSEnvironments().map((element) => getEnvironmentState(element));
+    return getRPSEnvironments(db).map((element) => getEnvironmentState(element));
 
   }
   
@@ -1211,7 +1211,7 @@ app.post('/interactions', async function (req, res) {
 
     }   
 
-    setRPSEnvironments(env, update);
+    setRPSEnvironments(env, update, db);
 
   }
   
