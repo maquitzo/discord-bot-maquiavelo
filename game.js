@@ -115,8 +115,8 @@ let RPSEnvironments = [
     timestamp:'',
     user:{},
     url : {
-      frontend:'',
-      backend:''
+      frontend:'http://cluster-test.art.com:20478/',
+      backend:'http://cluster-test.art.com:20478/'
     }
   },
   {
@@ -130,8 +130,8 @@ let RPSEnvironments = [
     timestamp:'2020-04-03T13:49:01.767Z',
     user:{},
     url : {
-      frontend:'',
-      backend:''
+      frontend:'http://cluster-test.art.com:20536/',
+      backend:'http://cluster-test.art.com:20536/'
     }
   },
   {
@@ -145,8 +145,8 @@ let RPSEnvironments = [
     timestamp:'',
     user:{},
     url : {
-      frontend:'',
-      backend:''
+      frontend:'http://cluster-test.art.com:20283/',
+      backend:'http://cluster-test.art.com:20283/'
     }
   },
   {
@@ -160,8 +160,8 @@ let RPSEnvironments = [
     timestamp:'',
     user:{},
     url : {
-      frontend:'',
-      backend:''
+      frontend:'http://cluster-test.art.com:20567/',
+      backend:'http://cluster-test.art.com:20567/'
     }
   },
 ]
@@ -198,7 +198,7 @@ export function initiliazeDB() {
 function rehytrate(db) {
   
   return db.find({}, function (err, env) {
-    console.log('Rehidrate files', env[0]);
+    //console.log('Rehidrate files', env[0]);
     RPSEnvironments = env;
     return RPSEnvironments;
   });

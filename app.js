@@ -871,13 +871,11 @@ app.post('/interactions', async function (req, res) {
           });
            
           
-        } else {
+        } 
+        
+        else
+          setEnvironment(userId, environment, '', '').then(response => res.send(getFinal(environment, userId)));
           
-            setEnvironment(userId, environment, '', '');
-          
-            await res.send(getFinal(environment, userId));
-          
-        }
         
         try {
           // Update ephemeral message
@@ -966,10 +964,7 @@ app.post('/interactions', async function (req, res) {
         const action = modalId.split('|')[1];
         const environment = modalId.split('|')[2];
 
-        setEnvironment(userId, environment, action, card, tester).then(algo => {
-          console.log('updated d');
-          return res.send(getFinal(environment, userId));
-        });
+        setEnvironment(userId, environment, action, card, tester).then(response => res.send(getFinal(environment, userId)));
 
       }
     
@@ -1130,6 +1125,7 @@ app.post('/interactions', async function (req, res) {
     
     const ICON_NOENV = ':blue_heart:';
     const ICON_ENV = ':heart:';
+    const item = (element,value) => `${element}: ${value} \n`;
 
     if (env.state != 0)
       return {
@@ -1184,6 +1180,7 @@ app.post('/interactions', async function (req, res) {
       return new Date().toISOString();
   }
   
+  // TODO pasar un objeto
   function setEnvironment(userId, env, task, card, tester) {
     
     //console.log('teser',tester);
