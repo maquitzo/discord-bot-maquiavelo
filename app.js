@@ -32,6 +32,13 @@ import {
   HasGuildCommands,
 } from './commands.js';
 
+import {
+  getInteractionMaquitzo,
+  getInteractionEnvironment,
+  getInteractionIndependiente
+} from './interactions.js';
+
+
 // Create an express app
 const app = express();
 // Get port, or default to 3000
@@ -87,29 +94,6 @@ app.post('/interactions', async function (req, res) {
         },
       });
     }
-    
-    if (name === 'maquitzo') {
-      // Send a message into the channel where command was triggered from
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          // Fetches a random emoji to send from a helper function
-          content: '',
-          embeds: [
-            {
-              "type": "rich",
-              "title": `Hice este lindo emoji ${getRandomEmoji()} pensando en vos ... `,
-              "description": ``,
-              "color": 0x00FFFF,
-              "footer": {
-                "text": `(es mentira lo busque en fontawesome, copy paste, pero la intencion es lo que vale)`
-              }
-            }
-          ]
-        },
-      });
-    }
-  
     
     // "challenge" guild command
     if (name === 'challenge' && id) {
@@ -366,101 +350,23 @@ app.post('/interactions', async function (req, res) {
   
   if (type === InteractionType.APPLICATION_COMMAND) {
     
+    const userId = req.body.member.user.id;
+    
+    if (name === 'maquitzo') {
+      // Send a message into the channel where command was triggered from
+      return res.send(getInteractionMaquitzo());
+    }
+    
     if (data.name === 'environments') {
-      
-      const userId = req.body.member.user.id;
-      console.log('environment-start');
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          //content: content,
-          //flags: InteractionResponseFlags.EPHEMERAL,
-          components: [
-            {
-                type: MessageComponentTypes.ACTION_ROW,
-                components: getEnvironmentsActions(),
-            },
-          ],
-          "embeds" : getEnvironmentsList(userId),
-        },
-      });
-      
+      return res.send(getInteractionEnvironment(userId));
     }
     
     if (data.name === 'independiente') {
-      
-      const userId = req.body.member.user.id;
-      
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: {
-          content: '',
-          embeds: [
-            {
-              "type": "rich",
-              "title": `No es por ahí rey !!! !!! `,
-              "description": `Mi corazonzito tiene otros colores`,
-              "color": 0x0099ff,
-              "image": {
-                "url": getGiphy(),
-                "height": null,
-                "width": null
-              }
-            }
-          ]
-        },
-      });
+      return res.send(getInteractionIndependiente(userId));
     }
         
-    if (data.name === 'tincho') {
-      
-      const userId = req.body.member.user.id;      
-    
-      // Send results
-      return res.send({
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: { 
-          content: '',
-          components: [
-            {
-              type: MessageComponentTypes.ACTION_ROW,
-              components: [
-                {
-                  type: MessageComponentTypes.STRING_SELECT,
-                  custom_id: 'tincho_options_environment_select',
-                  "placeholder": "Haz una selección",
-                  options: [
-                    {
-                      label: 'RESERVAR',
-                      value: 'set',
-                      description: 'Reserválo con pesos, si lo liberáss en un rato te devuelvo la guita',
-                    },
-                    {
-                      label: 'LIBERAR',
-                      value: 'release',
-                      description: 'FreeWilly pero con el ambiente',
-                    },
-                  ],
-                },
-              ],
-            }
-          ],
-          embeds : [
-            {
-              "type": "rich",
-              "title": `Disponibilidad de entornos`,
-              "description": `El estado de disponibilidad de cada uno`,
-              "color": 0x00FFFF,
-              "fields": getEnvironmentsInfo(userId),
-              "footer": {
-                "text": `Recordá usar "/environments" para ver disponibilidad.`
-              }
-            }
-          ]
-        },
-      });      
-      
-      
+    if (data.name === 'tincho') {     
+      return res.send(getInteractionTincho(userId));      
     }
   }
   
