@@ -196,7 +196,8 @@ export function initiliazeDB() {
 }
 
 async function rehytrate(db) {
-  db.find({}, function (err, env) {
+  
+  return db.find({}, function (err, env) {
     console.log('Rehidrate files', env[0]);
     RPSEnvironments = env;
     return RPSEnvironments;
@@ -210,10 +211,13 @@ async function rehytrate(db) {
 
 export async function getRPSEnvironments(db) {
   
-  return rehytrate(db).then(data => {
-    console.log('get',data);
-    return data
-  });
+  console.log('getting');
+  
+  const data = await rehytrate(db);
+  
+  console.log('getted ',data);
+  
+  return data;
   
   //return RPSEnvironments;
 }
