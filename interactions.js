@@ -73,49 +73,306 @@ export function getInteractionIndependiente(userId) {
 }
 
 export function getInteractionTincho(userId) {
-  
   return {
-        type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
-        data: { 
-          content: '',
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      content: "",
+      components: [
+        {
+          type: MessageComponentTypes.ACTION_ROW,
           components: [
             {
-              type: MessageComponentTypes.ACTION_ROW,
-              components: [
+              type: MessageComponentTypes.STRING_SELECT,
+              custom_id: "tincho_options_environment_select",
+              placeholder: "Haz una selección",
+              options: [
                 {
-                  type: MessageComponentTypes.STRING_SELECT,
-                  custom_id: 'tincho_options_environment_select',
-                  "placeholder": "Haz una selección",
-                  options: [
-                    {
-                      label: 'RESERVAR',
-                      value: 'set',
-                      description: 'Reserválo con pesos, si lo liberáss en un rato te devuelvo la guita',
-                    },
-                    {
-                      label: 'LIBERAR',
-                      value: 'release',
-                      description: 'FreeWilly pero con el ambiente',
-                    },
-                  ],
+                  label: "RESERVAR",
+                  value: "set",
+                  description:
+                    "Reserválo con pesos, si lo liberáss en un rato te devuelvo la guita",
+                },
+                {
+                  label: "LIBERAR",
+                  value: "release",
+                  description: "FreeWilly pero con el ambiente",
                 },
               ],
-            }
+            },
           ],
-          embeds : [
-            {
-              "type": "rich",
-              "title": `Disponibilidad de entornos`,
-              "description": `El estado de disponibilidad de cada uno`,
-              "color": 0x00FFFF,
-              "fields": getEnvironmentsInfo(userId),
-              "footer": {
-                "text": `Recordá usar "/environments" para ver disponibilidad.`
-              }
-            }
-          ]
         },
-      };
+      ],
+      embeds: [
+        {
+          type: "rich",
+          title: `Disponibilidad de entornos`,
+          description: `El estado de disponibilidad de cada uno`,
+          color: 0x00ffff,
+          fields: getEnvironmentsInfo(userId),
+          footer: {
+            text: `Recordá usar "/environments" para ver disponibilidad.`,
+          },
+        },
+      ],
+    },
+  };
 }
 
-// helpers
+//COMMANDS
+
+export function getInteractionEnvironmentCommand(action, environment) {
+  return {
+    type: InteractionResponseType.APPLICATION_MODAL,
+    data: {
+      custom_id: "popup_|" + action + "|" + environment,
+      title: "Reservando " + environment.toUpperCase(),
+      components: [
+        buildInputRow("card", "Numero de Card", "42"),
+        buildInputRow(
+          "tester",
+          "Quien la va a estar probando ?.",
+          "Grace, Mati, Roque, Maqui, Gus, Pablo White ..."
+        ),
+        buildInputRow(
+          "branch",
+          "Cual es la rama / funcionalidad",
+          "feature/345-algoasdfs"
+        ),
+      ],
+    },
+  };
+}
+
+// helpers ============================================
+
+function getFinal(environment, userId) {
+  return {
+    type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+    data: {
+      content: "",
+      //flags: InteractionResponseFlags.EPHEMERAL,
+      embeds: getEnvironmentsReserved(environment, userId),
+    },
+  };
+}
+
+function getEmbedHeader(userId) {
+  return {
+    type: "rich",
+    thumbnail: {
+      url: "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png",
+    },
+    title: `Entornos`,
+    description: `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
+    color: 0x00ffff,
+    timestamp: getTimeStamp(),
+  };
+}
+
+function getEmbedEnvironments(userId) {
+  const result = {
+    type: "rich",
+    thumbnail: {
+      url: "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png",
+    },
+    title: `Entornos`,
+    description: `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
+    color: 0x00ffff,
+    fields: getEnvironmentsInfo(userId),
+    footer: { text: `` },
+    timestamp: getTimeStamp(),
+  };
+  //console.log('result-environments ', result);
+  return result;
+}
+
+function getEmbedEnvironmentsItem(env) {
+  const ICON_NOENV = ":blue_heart:";
+  const ICON_ENV = ":heart:";
+
+  if (env.state != 0)
+    return {
+      type: "rich",
+      title: `${env.label}                                                            ${ICON_ENV} `,
+      color: 0xc0392b,
+      //"description": 'aaaa',
+      fields: [
+        {
+          name: ``,
+          value: `Probando: ${env.tester} \nDesde: ${getTimestampFormat(
+            env.timestamp
+          )} \nCard: #${env.card} \n`,
+        },
+      ],
+    };
+
+  return {
+    type: "rich",
+    title: `${env.label}                                                            ${ICON_NOENV} `,
+    color: 0x00ffff,
+    //"description": 'aaaa',
+    fields: [{ name: `Disponible`, value: "" }],
+  };
+}
+
+function getEmbedReserve(environment, userId) {
+  return {
+    type: "rich",
+    title: `Reserva de **${environment}**`,
+    description: `Gracias <@${userId}> por usar nuestros servicios`,
+    color: 0x0099ff,
+    // "footer" : { "text" : `Gracias <@${userId}> por usar nuestros servicios` },
+    timestamp: getTimeStamp(),
+    // "author": {
+    //     "name": `<@${userId}>`,
+    //     "icon_url": "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png"
+    // },
+  };
+}
+
+//wrapper para la nueva version
+function getEnvironmentsList(userId) {
+  //legacy
+  return [getEmbedEnvironments(userId)];
+
+  // let items = getRPSEnvironments().map((element) => getEmbedEnvironmentsItem(element));
+  // return [
+  //    getEmbedEnvironmentsHeader(userId),
+  //   ...items
+  // ];
+}
+
+function getEnvironmentsReserved(environment, userId) {
+  return [getEmbedEnvironments(userId), getEmbedReserve(environment, userId)];
+}
+
+// buttons
+function getEnvironmentsActions() {
+  // por cada ambiente disponible
+  // damos la posibilidad de reservar
+  const isRelease = (state) => (state == 0 ? "set" : "release");
+  // identificamos con el style si puede o no
+  const style = (state) =>
+    state == 0 ? ButtonStyleTypes.PRIMARY : ButtonStyleTypes.DANGER;
+
+  const buttons = (e) => {
+    return {
+      type: MessageComponentTypes.BUTTON,
+      custom_id: `environment_action|${isRelease(e.state)}|${e.name}|${req.body.id}`,
+      label: `${e.label}`,
+      style: style(e.state),
+    };
+  };
+
+  return getRPSEnvironments(db).map(buttons);
+}
+
+function getEnvironmentsInfo(UserId) {
+  return getRPSEnvironments(db).map((element) => getEnvironmentState(element));
+}
+
+// item state
+function getEnvironmentState(env) {
+  //console.log('draw', env);
+  const item = (element, value) => `*${element}*: ${value} \n`;
+  const naming = () => `${env.state != 0 ? ":heart:" : ":blue_heart:"} ${env.label}`;
+  let result = { name: naming(), value: "*Disponible*" };
+
+  if (env.state != 0)
+    result = {
+      name: naming(),
+      value: `${item("Probando", env.user.tester)} ${item("Desde",env.timestamp)} ${item("Branch", env.branch)} ${item("Card", env.card)} ${item("frontend",
+        env.url.frontend
+      )}`,
+    };
+
+  return result;
+}
+
+
+function buildInputRow(custom_id, label, placeholder) {
+  {
+    return {
+      type: MessageComponentTypes.ACTION_ROW,
+      components: [
+        {
+          type: MessageComponentTypes.INPUT_TEXT,
+          custom_id: custom_id,
+          style: 1,
+          label: label,
+          placeholder: placeholder,
+        },
+      ],
+    };
+  }
+}
+
+function getTimeStamp() {
+  // const now = new Date();
+  // const offset = -3 * 3600 * 1000; 
+  // const timestamp = new Date(now.getTime() + offset); 
+
+  //console.log("timestamp:",timestamp);
+  return new Date().toISOString();
+}
+
+function getTimestampFormat(timestamp) {
+  return new Date(timestamp).toUTCString().replace(/ GMT$/, "");
+}
+
+// TODO pasar un objeto
+function setEnvironment(userId, env, task, card, tester, branch) {
+  //console.log('teser',tester);
+
+  let environment = getRPSEnvironments(db).filter((e) => e.value == env);
+  let update = {
+    ...environment[0],
+    card: "",
+    state: 0,
+    timestamp: "",
+    user: {
+      tester: "",
+      dev: "",
+    },
+  };
+
+  // if (task == 'release') {
+  //   delete environments[env];
+  // }
+
+  if (task == "set") {
+    // environments[env] = {
+    //   dev: userId,
+    //   timestamp: getTimeStamp(),
+    //   task,
+    //   card
+    // };
+
+    update = {
+      ...environment[0],
+      user: {
+        dev: userId,
+        tester: tester,
+      },
+      card: card,
+      branch: branch,
+      state: 1,
+      timestamp: getTimeStamp(),
+    };
+  }
+
+  return setRPSEnvironmentsAsync(env, update, db);
+}
+
+function getGiphy() {
+  const gifs = [
+    "https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blt0bf817df67665b1d/60dd2709fd14d30f3eb31356/09707a11ec4943062b5446f04ebe7a3a4959c2c9.jpg?auto=webp&fit=crop&format=jpg&height=800&quality=60&width=1200",
+    "https://pm1.narvii.com/6617/90112fae9b68e6c7dbee4768ab23998099e3d2e7_hq.jpg",
+    "https://www.ole.com.ar/images/2022/04/02/Jbg5N_LoQ_340x340__1.jpg",
+    "https://media.tycsports.com/files/2021/08/24/323286/estadio-racing-cilindro_862x485.jpg",
+  ];
+
+  const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+
+  return randomGif;
+}
