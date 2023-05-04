@@ -1,4 +1,7 @@
 import express from 'express';
+
+let db = {};
+
 import {
   InteractionType,
   InteractionResponseType,
@@ -11,10 +14,10 @@ import { VerifyDiscordRequest, getRandomEmoji, DiscordRequest } from './utils.js
 import { 
   getShuffledOptions, 
   getResult, 
+  initiliazeDB,
   getRPSEnvironments, 
-  getRPSEnvironmentsKeys, 
-  getRPSEnvironmentsAvailables,
-  setRPSEnvironments
+  setRPSEnvironments,
+  setRPSEnvironmentsAsync
 } from './game.js';
 
 import {
@@ -36,6 +39,8 @@ const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
 
+
+
 // Store for in-progress games. In production, you'd want to use a DB
 const activeGames = {};
 const environments = {};
@@ -49,9 +54,13 @@ var cardSeleccionada = '';
  * Interactions endpoint URL where Discord will send HTTP requests
  */
 app.post('/interactions', async function (req, res) {
+  
+  console.log('interactions ');
+  
   // Interaction type and data
   const { type, id, data } = req.body;
 
+  
   /**
    * Handle verification requests
    */
@@ -360,7 +369,7 @@ app.post('/interactions', async function (req, res) {
     if (data.name === 'environments') {
       
       const userId = req.body.member.user.id;
-
+      console.log('environment-start');
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -862,13 +871,11 @@ app.post('/interactions', async function (req, res) {
           });
            
           
-        } else {
+        } 
+        
+        else
+          setEnvironment(userId, environment, '', '').then(response => res.send(getFinal(environment, userId)));
           
-            setEnvironment(userId, environment, '', '');
-          
-            await res.send(getFinal(environment, userId));
-          
-        }
         
         try {
           // Update ephemeral message
@@ -957,9 +964,7 @@ app.post('/interactions', async function (req, res) {
         const action = modalId.split('|')[1];
         const environment = modalId.split('|')[2];
 
-        setEnvironment(userId, environment, action, card, tester);
-
-        await res.send(getFinal(environment, userId));
+        setEnvironment(userId, environment, action, card, tester).then(response => res.send(getFinal(environment, userId)));
 
       }
     
@@ -984,7 +989,7 @@ app.post('/interactions', async function (req, res) {
   
   function getEmbedEnvironments(userId) {
     
-      return {
+      const result = {
         "type": "rich",
         "thumbnail": { url : "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png" },
         "title": `Entornos`,
@@ -994,6 +999,8 @@ app.post('/interactions', async function (req, res) {
         "footer" : { "text" : `` },
         "timestamp": getTimeStamp()
       }
+      //console.log('result-environments ', result);
+      return result;
   }
   
   function getEmbedEnvironmentsHeader(userId) {
@@ -1042,11 +1049,13 @@ app.post('/interactions', async function (req, res) {
     
       return {
         "type": "rich",
-        "title": `Reserva`,
-        "description": `El ambiente **${environment}** fue reservado por <@${userId}>.`,
+        "title": `Reserva de **${environment}**`,
+        "description": `Gracias <@${userId}> por usar nuestros servicios`,
         "color": 0x0099ff,
+        // "footer" : { "text" : `Gracias <@${userId}> por usar nuestros servicios` },
+        "timestamp": getTimeStamp(),
         // "author": {
-        //     "name": `maquiavelus`,
+        //     "name": `<@${userId}>`,
         //     "icon_url": "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png"
         // },
       }
@@ -1086,41 +1095,40 @@ app.post('/interactions', async function (req, res) {
     
     const buttons = (e) => {
       
-      return {
+        return {
           type: MessageComponentTypes.BUTTON,
-          custom_id: `environment_action|${isRelease(e.state)}|${e.value}|${req.body.id}`,
+          custom_id: `environment_action|${isRelease(e.state)}|${e.id}|${req.body.id}`,
           label: `${e.label}`,
           style: style(e.state),
-      }
-      
+        }
+        
     }
     
-    return getRPSEnvironments().map(buttons);
+    return getRPSEnvironments(db).map(buttons);
     
   }
   
   function getEnvironmentsInfo(UserId) {
-
-    return getRPSEnvironments().map((element) => getEnvironmentState(element));
     
+    return getRPSEnvironments(db).map((element) => getEnvironmentState(element));
+
   }
   
   // item state
   function getEnvironmentState(env) {
     
-    const ICON_NOENV = ':blue_heart:';
-    const ICON_ENV = ':heart:';
+    //console.log('draw', env);
+    const item = (element,value) => `*${element}*: ${value} \n`;
+    const naming = () => `${ env.state !=0?':heart:':':blue_heart:'} ${env.label}`;
+    let result = { "name": naming(), "value": '*Disponible*'};
 
-    if (env.state != 0)
-      return {
-          "name": `${ICON_ENV}   ${env.label} `,
-          "value": `*Probando*: ${env.tester} \n*Desde*: ${getTimestampFormat(env.timestamp)} \n*Card*: #${env.card} \n`,
-        }
+    if(env.state != 0)
+      result = {
+        "name": naming(),
+        "value": `${item('Probando',env.tester)} ${item('Desde',env.timestamp)} ${item('Card',env.card)} ${item('frontend',env.url.frontend)}`,
+      }
 
-    return {
-      "name": `${ICON_NOENV}  ${env.label}`,
-      "value": '*Disponible*',
-    };
+    return result;
  
   }
   
@@ -1156,18 +1164,20 @@ app.post('/interactions', async function (req, res) {
 
   function getTimeStamp(){
     
-      var now = new Date();
-      var offset = -3 * 3600 * 1000; //now.getTimezoneOffset();
-      //let d = new Date(new Date().toLocaleString("en-US", {timeZone: "timezone id"}));
-
-      return new Date(now.getTime() + offset);
+      const now = new Date();
+      const offset = -3 * 3600 * 1000; //now.getTimezoneOffset();
+      const timestamp = new Date(now.getTime() + offset); //let d = new Date(new Date().toLocaleString("en-US", {timeZone: "timezone id"}));
+      
+      //console.log("timestamp:",timestamp);
+      return new Date().toISOString();
   }
   
+  // TODO pasar un objeto
   function setEnvironment(userId, env, task, card, tester) {
     
-    console.log('teser',tester);
+    //console.log('teser',tester);
       
-    let environment = getRPSEnvironments().filter(e => e.value == env);
+    let environment = getRPSEnvironments(db).filter(e => e.value == env);
     let update = { ...environment[0], 
       id:0,
       card:'',
@@ -1183,14 +1193,14 @@ app.post('/interactions', async function (req, res) {
     if (task == 'set') {    
 
       environments[env] = {
-        id: userId,
+        dev: userId,
         timestamp: getTimeStamp(),
         task, 
         card
       };  
 
       update = { ...environment[0], 
-        id:userId,
+        dev:userId,
         card:card,
         state: 1,
         tester: tester,
@@ -1200,7 +1210,7 @@ app.post('/interactions', async function (req, res) {
 
     }   
 
-    setRPSEnvironments(env, update);
+    return setRPSEnvironmentsAsync(env, update, db);
 
   }
   
@@ -1223,6 +1233,9 @@ app.post('/interactions', async function (req, res) {
 app.listen(PORT, () => {
   console.log('Listening on port', PORT);
   console.log('Checking Guild Commands');
+
+  db = initiliazeDB();
+  
   // Check if guild commands from commands.json are installed (if not, install them)
   HasGuildCommands(process.env.APP_ID, process.env.GUILD_ID, [
     TEST_COMMAND,

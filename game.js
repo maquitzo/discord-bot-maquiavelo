@@ -1,4 +1,5 @@
 import { capitalize } from './utils.js';
+import DataStore from 'nedb';
 
 export function getResult(p1, p2) {
   let gameResult;
@@ -102,90 +103,152 @@ export function getShuffledOptions() {
   return options.sort(() => Math.random() - 0.5);
 }
 
-let RPSEnvironments = {
-  development: {
+let RPSEnvironments = [
+  {
+    id:'desarrollo',
     label:'Desarrollo',
-    description: 'desarrollo',
-    id:'',
+    description: 'El ambiente del pueblo',
+    dev:'',
     tester:'',
     card:'',
     state: 0,
     timestamp:'',
-    user:{}
+    user:{},
+    url : {
+      frontend:'http://cluster-test.art.com:20478/',
+      backend:'http://cluster-test.art.com:20478/'
+    }
   },
-  test: {
+  {
+    id:'testing',
     label:'Testing',
-    description: 'Release v1X.XX.XX',
-    id: 808483336548253706,
+    description: 'Siempre esta el Release v1X.00.00',
+    dev: 808483336548253706,
     tester:'brokers',
     card:'',
     state: 1,
     timestamp:'2020-04-03T13:49:01.767Z',
-    user:{}
+    user:{},
+    url : {
+      frontend:'http://cluster-test.art.com:20536/',
+      backend:'http://cluster-test.art.com:20536/'
+    }
   },
-  staging: {
+  {
+    id:'staging',
     label:'Staging',
-    description: 'Staging',
-    id:'',
+    description: 'Es un pre-productivo',
+    dev:'',
     tester:'',
     card:'',
     state: 0,
     timestamp:'',
-    user:{}
+    user:{},
+    url : {
+      frontend:'http://cluster-test.art.com:20283/',
+      backend:'http://cluster-test.art.com:20283/'
+    }
   },
-  demo: {
+  {
+    id:'demo',
     label:'Demo',
-    description: 'Ambiente para una Demo en particular ',
-    id:'',
+    description: 'Usado para el dia de la Demo o Epica',
+    dev:'',
     tester:'',
     card:'',
     state: 0,
     timestamp:'',
-    user:{}
+    user:{},
+    url : {
+      frontend:'http://cluster-test.art.com:20567/',
+      backend:'http://cluster-test.art.com:20567/'
+    }
   },
-}
+]
 
-export function getRPSEnvironmentsKeys() {
-  return Object.keys(RPSEnvironments);
-}
+export function initiliazeDB() {
+  
+    //datastore
+  const db = new DataStore({ filename: './data/datastore.db', autoload:true });
+  
+  //db.remove({}, { multi: true }, function (err, numRemoved) { console.log('remove all') });
+  
+  db.count({ id:'demo'}, function (err, count) {
+    
+    console.log('Check existing entries on file- >', count, " |err? ", err);
+    
+    if (count == 0) {
+      
+      console.log('Inserting default values -> ', RPSEnvironments.length);
+      
+      db.insert(RPSEnvironments);
+    
+    } else {
 
-export function getRPSEnvironments() {
-  const allChoices = getRPSEnvironmentsKeys();
-  const options = [];
+      rehytrate(db);
+      
+    }
 
-  for (let c of allChoices) {
-    // Formatted for select menus
-    // https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
-      options.push({
-        label: RPSEnvironments[c]['label'],
-        value: c,
-        ...RPSEnvironments[c]
-      });
-  }
-  return options;
-}
-
-export function getRPSEnvironmentsAvailables() {
-  const allChoices = getRPSEnvironmentsKeys();
-  const options = [];
-
-  for (let c of allChoices) {
-    // Formatted for select menus
-    // https://discord.com/developers/docs/interactions/message-components#select-menu-object-select-option-structure
-    if (RPSEnvironments[c]['state'] == 0)
-      options.push({
-        label: RPSEnvironments[c]['label'],
-        value: c,
-        description: RPSEnvironments[c]['description'],
-      });
-  }
-  return options;
+  });
+  
+  return db;
   
 }
 
-export function setRPSEnvironments(env,data) {
+function rehytrate(db) {
   
-  RPSEnvironments = {...RPSEnvironments,  [env] : data };
+  return db.find({}, function (err, env) {
+    //console.log('Rehidrate files', env[0]);
+    RPSEnvironments = env;
+    return RPSEnvironments;
+  });
 
 }
 
+function rehytrate2(db){
+  
+    return new Promise((resolve, reject) => {
+        db.find({}, (err, doc) => {
+            if (err) 
+              reject(err) 
+            else 
+              { 
+                RPSEnvironments = doc; 
+                resolve(doc) 
+              };
+        });
+    });
+  
+}
+
+// export function getRPSEnvironmentsKeys() {
+//   return Object.keys(RPSEnvironments);
+// }
+
+export function getRPSEnvironments(db) {
+  return RPSEnvironments;
+}
+
+export function setRPSEnvironments(env,data,db) {
+  
+  //console.log(env,data);
+  //RPSEnvironments = {...RPSEnvironments,  [env] : data };
+  db.update({ id:env }, { $set: data }, {}, function (err, numReplaced) {
+    console.log('saving err ',err,' num:',numReplaced);
+    rehytrate(db);
+  });
+  
+}
+
+export async function setRPSEnvironmentsAsync(env,data,db) {
+  
+  return new Promise((resolve, reject) => {
+    db.update({ id:env }, { $set: data }, {}, (err, numReplaced) => {
+        if (err) 
+          reject(err) 
+        else
+          resolve(rehytrate2(db)) 
+      });
+  });
+  
+}
