@@ -105,60 +105,72 @@ export function getShuffledOptions() {
 
 let RPSEnvironments = [
   {
-    id:'desarrollo',
-    label:'Desarrollo',
+    id:1,
+    name:'desarrollo',
+    label:'Dev',
     description: 'El ambiente del pueblo',
-    dev:'',
-    tester:'',
     card:'',
+    branch:'',
     state: 0,
     timestamp:'',
-    user:{},
+    user:{
+      dev:'',
+      tester:'',
+    },
     url : {
       frontend:'http://cluster-test.art.com:20478/',
       backend:'http://cluster-test.art.com:20478/'
     }
   },
   {
-    id:'testing',
-    label:'Testing',
+    id:2,
+    name:'testing',
+    label:'Test',
     description: 'Siempre esta el Release v1X.00.00',
-    dev: 808483336548253706,
-    tester:'brokers',
-    card:'',
+    card:'77',
+    branch:'feature/77_si-lo-tocas-hay-tabla',
     state: 1,
-    timestamp:'2020-04-03T13:49:01.767Z',
-    user:{},
+    timestamp:'2020-04-20 12:00',
+    user:{
+      dev: 808483336548253706,
+      tester:'brokers',
+    },
     url : {
       frontend:'http://cluster-test.art.com:20536/',
       backend:'http://cluster-test.art.com:20536/'
     }
   },
   {
-    id:'staging',
+    id:3,
+    name:'staging',
     label:'Staging',
     description: 'Es un pre-productivo',
-    dev:'',
-    tester:'',
     card:'',
+    branch:'',
     state: 0,
     timestamp:'',
-    user:{},
+    user:{
+      dev:'',
+      tester:'',
+    },
     url : {
       frontend:'http://cluster-test.art.com:20283/',
       backend:'http://cluster-test.art.com:20283/'
     }
   },
   {
-    id:'demo',
+    id:4,
+    name:'demo',
     label:'Demo',
     description: 'Usado para el dia de la Demo o Epica',
-    dev:'',
-    tester:'',
     card:'',
+    branch:'',
     state: 0,
     timestamp:'',
-    user:{},
+    user:{
+      dev:'',
+      tester:'',
+    },
     url : {
       frontend:'http://cluster-test.art.com:20567/',
       backend:'http://cluster-test.art.com:20567/'
@@ -173,21 +185,18 @@ export function initiliazeDB() {
   
   //db.remove({}, { multi: true }, function (err, numRemoved) { console.log('remove all') });
   
-  db.count({ id:'demo'}, function (err, count) {
+  db.count({}, function (err, count) {
     
     console.log('Check existing entries on file- >', count, " |err? ", err);
     
-    if (count == 0) {
-      
+    if (count == 0) 
+    {
       console.log('Inserting default values -> ', RPSEnvironments.length);
-      
       db.insert(RPSEnvironments);
-    
-    } else {
+    } 
+    else 
 
       rehytrate(db);
-      
-    }
 
   });
   
@@ -221,10 +230,6 @@ function rehytrate2(db){
   
 }
 
-// export function getRPSEnvironmentsKeys() {
-//   return Object.keys(RPSEnvironments);
-// }
-
 export function getRPSEnvironments(db) {
   return RPSEnvironments;
 }
@@ -233,7 +238,7 @@ export function setRPSEnvironments(env,data,db) {
   
   //console.log(env,data);
   //RPSEnvironments = {...RPSEnvironments,  [env] : data };
-  db.update({ id:env }, { $set: data }, {}, function (err, numReplaced) {
+  db.update({ name:env }, { $set: data }, {}, function (err, numReplaced) {
     console.log('saving err ',err,' num:',numReplaced);
     rehytrate(db);
   });
@@ -241,13 +246,12 @@ export function setRPSEnvironments(env,data,db) {
 }
 
 export async function setRPSEnvironmentsAsync(env,data,db) {
-  
+  //console.log(env,data);
   return new Promise((resolve, reject) => {
-    db.update({ id:env }, { $set: data }, {}, (err, numReplaced) => {
-        if (err) 
-          reject(err) 
-        else
-          resolve(rehytrate2(db)) 
+    db.update({ name:env }, { $set: data }, {}, (err, numReplaced) => {
+        //console.log('saveasyncl',err, numReplaced);
+        err?reject(err):resolve(rehytrate2(db));
+            
       });
   });
   
