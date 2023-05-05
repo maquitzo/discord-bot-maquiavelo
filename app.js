@@ -35,6 +35,7 @@ import {
 
 import {
   getInteractionMaquitzo,
+  getInteractionTincho,
   getInteractionEnvironment,
   getInteractionIndependiente,
   getInteractionEnvironmentCommand,
@@ -633,8 +634,21 @@ app.post('/interactions', async function (req, res) {
       if (action == 'set') 
         return res.send(getInteractionEnvironmentCommand(action,environment,db));
       else
-        setRPSEnvironmentsAsync(userId, environment, '', '', '').then(response => res.send(getInteractionFinal(environment, userId)));
+        {
+          const env = {
+            name: modalId.split('|')[2],
+            branch: modalValues.split('|')[2],
+            card: modalValues.split('|')[0],
+            user: {
+              tester: modalValues.split('|')[1],
+              dev: userId,
+            },
+        };
+        }
+        
 
+      
+      setEnvironment(action, environment, db).then(response => res.send(getInteractionFinal(environment, userId)));
       try {
         // Update ephemeral message
         await DiscordRequest(endpoint, { method: 'DELETE' });          
@@ -709,14 +723,19 @@ app.post('/interactions', async function (req, res) {
           modalValues += `${inputComponent.value}|`;
         }
 
-        const card = modalValues.split('|')[0];
-        const tester = modalValues.split('|')[1];
-        const branch = modalValues.split('|')[2];
-
         const action = modalId.split('|')[1];
-        const environment = modalId.split('|')[2];
+      
+        const environment = {
+          name: modalId.split('|')[2],
+          branch: modalValues.split('|')[2],
+          card: modalValues.split('|')[0],
+          user: {
+            tester: modalValues.split('|')[1],
+            dev: userId,
+          },
+        };
 
-        setEnvironment(userId, environment, action, card, tester, branch, db).then(response => res.send(getInteractionFinal(environment, userId)));
+        setEnvironment(action, environment, db).then(response => res.send(getInteractionFinal(environment, userId)));
 
       }
     

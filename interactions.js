@@ -164,46 +164,28 @@ export function getInteractionEnvironmentCommand(action, environment) {
 }
 
 // DB
+export function setEnvironment(action, environment, db) {
 
-// TODO pasar un objeto
-//export function setEnvironment(userId, env, task, card, tester, branch, db) {
-export function setEnvironment(action, environment) {
-  //console.log('teser',tester);
-
-  //let environment = getRPSEnvironments(db).filter((e) => e.value == env);
-  
-  //release
-  
-  let update = {
-    card: "",
-    state: 0,
-    timestamp: "",
-    user: {
-      tester: "",
-      dev: "",
-    },
-  };
-
-  // if (task == 'release') {
-  //   delete environments[env];
-  // }
-
-  if (action == "set") {
-    // environments[env] = {
-    //   dev: userId,
-    //   timestamp: getTimeStamp(),
-    //   task,
-    //   card
-    // };
-
-    update = {
+  const update = (action == "set") ?
+    {
       ...environment,
       state: 1,
       timestamp: getTimeStamp(),
-    };
-  }
+    }
+  :
+    {
+      card: "",
+      state: 0,
+      timestamp: "",
+      user: {
+        tester: "",
+        dev: "",
+      },
+      timestamp: getTimeStamp(),
+    }
 
-  return setRPSEnvironmentsAsync(env, update, db);
+  return setRPSEnvironmentsAsync(environment.name, update, db);
+  
 }
 
 
