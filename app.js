@@ -627,6 +627,7 @@ app.post('/interactions', async function (req, res) {
       
       // get the associated game ID
       const options = componentId.replace('environment_action', '').split('|');
+      
       const action = options[1];
       const environment = options[2];
       const reqbody = options[3];
@@ -634,21 +635,9 @@ app.post('/interactions', async function (req, res) {
       if (action == 'set') 
         return res.send(getInteractionEnvironmentCommand(action,environment,db));
       else
-        {
-          const env = {
-            name: modalId.split('|')[2],
-            branch: modalValues.split('|')[2],
-            card: modalValues.split('|')[0],
-            user: {
-              tester: modalValues.split('|')[1],
-              dev: userId,
-            },
-        };
-        }
+        setEnvironment(action, {name:environment}, db).then(response => res.send(getInteractionFinal(environment, userId)));
         
-
-      
-      setEnvironment(action, environment, db).then(response => res.send(getInteractionFinal(environment, userId)));
+        
       try {
         // Update ephemeral message
         await DiscordRequest(endpoint, { method: 'DELETE' });          

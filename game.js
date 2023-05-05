@@ -230,10 +230,6 @@ function rehytrate2(db){
   
 }
 
-// export function getRPSEnvironmentsKeys() {
-//   return Object.keys(RPSEnvironments);
-// }
-
 export function getRPSEnvironments(db) {
   return RPSEnvironments;
 }

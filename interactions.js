@@ -174,6 +174,7 @@ export function setEnvironment(action, environment, db) {
     }
   :
     {
+      ...environment,
       card: "",
       state: 0,
       timestamp: "",
@@ -232,7 +233,7 @@ function getEmbedEnvironments(userId, db) {
 function getEmbedReserve(environment, userId) {
   return {
     type: "rich",
-    title: `Reserva de **${environment}**`,
+    title: `Reserva de **${environment.name}**`,
     description: `Gracias <@${userId}> por usar nuestros servicios`,
     color: 0x0099ff,
     // "footer" : { "text" : `Gracias <@${userId}> por usar nuestros servicios` },
