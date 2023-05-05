@@ -54,7 +54,7 @@ export function getInteractionEnvironment(userId, db, interactionId) {
           components: getEnvironmentsActions(db, interactionId),
         },
       ],
-      embeds: [getEmbedEnvironments(userId, db)],
+      embeds: getEnvironmentsState(userId, db),
     },
   };
 }
@@ -117,7 +117,7 @@ export function getInteractionTincho(userId) {
           title: `Disponibilidad de entornos`,
           description: `El estado de disponibilidad de cada uno`,
           color: 0x00ffff,
-          fields: getEnvironmentsInfo(userId),
+          fields: getEnvironmentsState(userId,db),
           footer: {
             text: `Recordá usar "/environments" para ver disponibilidad.`,
           },
@@ -147,16 +147,18 @@ export function getInteractionEnvironmentCommand(action, environment) {
       custom_id: "popup_|" + action + "|" + environment,
       title: "Reservando " + environment.toUpperCase(),
       components: [
-        buildInputRow("card", "Numero de Card", "42"),
+        buildInputRow("card", "Numero de Card", "42", 1),
         buildInputRow(
           "tester",
           "Quien la va a estar probando ?.",
-          "Grace, Mati, Roque, Maqui, Gus, Pablo White ..."
+          "Grace, Mati, Roque, Maqui, Gus, Pablo White ...",
+          1
         ),
         buildInputRow(
           "branch",
           "Cual es la rama / funcionalidad",
-          "feature/345-algoasdfs"
+          "feature/345-algoasdfs",
+          0
         ),
       ],
     },
@@ -191,21 +193,6 @@ export function setEnvironment(action, environment, db) {
 
 
 // helpers ============================================
-
-
-
-// function getEmbedHeader(userId) {
-//   return {
-//     type: "rich",
-//     thumbnail: {
-//       url: "https://storage.googleapis.com/m-infra.appspot.com/public/res/expertaseguros/20220214-iIMS5r0Obpb7cF67t7sMh5CqZny1-XNF1X-.png",
-//     },
-//     title: `Entornos`,
-//     description: `La disponiblidad de los ambientes es la siguiente, podras reservar todos aquellos que no esten en rojo, a menos que san maratea nos salve`,
-//     color: 0x00ffff,
-//     timestamp: getTimeStamp(),
-//   };
-// }
 
 ///
 /// Body de los estados de los environments
@@ -245,6 +232,9 @@ function getEmbedReserve(environment, userId) {
   };
 }
 
+///
+/// Body compuesto final de la reserva
+///
 function getEnvironmentsReserved(environment, userId) {
   return [
     getEmbedEnvironments(userId), 
@@ -252,7 +242,18 @@ function getEnvironmentsReserved(environment, userId) {
   ];
 }
 
-// buttons
+///
+/// Body simple de estado general
+///
+function getEnvironmentsState(userId,db) {
+  return [
+    getEmbedEnvironments(userId, db)
+  ];
+}
+
+///
+/// buttons
+///
 function getEnvironmentsActions(db, interactionid) {
   
   const isRelease = (state) => (state == 0 ? "set" : "release");
@@ -269,10 +270,6 @@ function getEnvironmentsActions(db, interactionid) {
 
   return getRPSEnvironments(db).map(buttons);
 }
-
-// function getEnvironmentsInfo(UserId, db) {
-//   return getRPSEnvironments(db).map((element) => getField(element));
-// }
 
 //
 // Field, valores separados por :
@@ -292,7 +289,7 @@ function getField(env) {
   return result;
 }
 
-function buildInputRow(custom_id, label, placeholder) {
+function buildInputRow(custom_id, label, placeholder, required) {
   {
     return {
       type: MessageComponentTypes.ACTION_ROW,
@@ -303,6 +300,7 @@ function buildInputRow(custom_id, label, placeholder) {
           style: 1,
           label: label,
           placeholder: placeholder,
+          required: required
         },
       ],
     };
