@@ -1,4 +1,5 @@
 import express from 'express';
+import 'dotenv/config'
 
 let db = {};
 
@@ -43,13 +44,15 @@ import {
   setEnvironment
 } from './interactions.js';
 
-
 // Create an express app
 const app = express();
+// variables
+
 // Get port, or default to 3000
 const PORT = process.env.PORT || 3000;
 // Parse request body and verifies incoming requests using discord-interactions package
 app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }));
+
 
 // Store for in-progress games. In production, you'd want to use a DB
 const activeGames = {};

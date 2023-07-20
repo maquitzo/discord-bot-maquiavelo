@@ -277,13 +277,14 @@ function getEnvironmentsActions(db, interactionid) {
 function getField(env) {
   //console.log('draw', env);
   const item = (element, value) => `*${element}*: ${value} \n`;
+  const space = () => `____________________________________\n`;
   const naming = () => `${env.state != 0 ? ":heart:" : ":blue_heart:"} ${env.label}`;
-  let result = { name: naming(), value: "*Disponible*" };
+  let result = { name: naming(), value: `*Disponible*\n ${space()} `};
 
   if (env.state != 0)
     result = {
       name: naming(),
-      value: `${item("Probando", env.user.tester)} ${item("Desde",env.timestamp)} ${item("Branch", env.branch)} ${item("Card", env.card)} ${item("frontend",env.url.frontend)}`,
+      value: `${item("Probando", env.user.tester)} ${item("Desde",env.timestamp)} ${item("Branch", env.branch)} ${item("Card", env.card)} ${item("frontend",env.url.frontend)} ${space()}`,
     };
 
   return result;
