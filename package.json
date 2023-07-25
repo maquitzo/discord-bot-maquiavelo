@@ -19,7 +19,9 @@
     "dotenv": "^16.3.1",
     "express": "^4.17.3",
     "nedb": "^1.8.0",
-    "node-fetch": "^3.2.3"
+    "node-fetch": "^3.2.3",
+    "nodemon": "^2.0.4",
+    "pino-colada": "^2.0.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
